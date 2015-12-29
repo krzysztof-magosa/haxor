@@ -1,0 +1,38 @@
+#! /usr/bin/env ruby
+
+require_relative '../lib/haxor'
+require 'optparse'
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: hld [options] [file.hax.u] [...]'
+
+  opts.on('-o', '--output FILENAME', 'Write output to FILENAME') do |v|
+    options[:output] = v
+  end
+
+  opts.on('-s', '--stack SIZE', OptionParser::DecimalInteger, 'Stack size in bytes') do |v|
+    options[:stack] = v
+  end
+
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts opts
+    exit
+  end
+end
+
+parser.parse!
+
+unless options.key?(:output) && !ARGV.empty?
+  puts 'You must specify output filename and at least one .hax.u file to be linked.'
+  puts parser
+  exit
+end
+
+linker = Haxor::Linker.new
+ARGV.map do |x|
+  linker.load_unit File.absolute_path(x)
+end
+
+linker.stack = options[:stack] if options.key? :stack
+linker.link options[:output]

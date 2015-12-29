@@ -1,0 +1,100 @@
+section .data
+dw welcome_msg,  "Simple 'Guess the number' game. Powered by Haxor VM.", 10, 0
+dw generate_msg, "I will pick a number between %d and %d, your job is to guess it in smallest number of tries.", 10, 0
+dw question_msg, 10, "What is the number? ", 0
+dw bigger_msg,   "Sorry, but my number is bigger.", 10, 0
+dw smaller_msg,  "Sorry, but my number is smaller.", 10, 0
+dw win_msg,      "Yeah! You guessed my number after %d tries!", 10, 0
+dw invalid_msg,  "Man, do you need definition of a number?! Try wikipedia then ;)", 10, 0
+dw answer_fmt,   "%d", 0
+dw min,          1
+dw max,          1000
+
+section .bss
+dw number,       0
+dw answer,       0
+dw tries,        0
+
+section .text
+label bigger
+mov sc, 02h
+lea r01, bigger_msg
+push r01
+push 1
+syscall
+jmp question
+
+label smaller
+mov sc, 02h
+lea r01, smaller_msg
+push r01
+push 1
+syscall
+jmp question
+
+label win
+mov sc, 02h
+push tries
+lea r01, win_msg
+push r01
+push 1
+syscall
+jmp exit
+
+label invalid_number
+mov sc, 02h
+lea r01, invalid_msg
+push r01
+push 1
+syscall
+jmp question
+
+label main
+
+label welcome
+mov sc, 02h
+lea r01, welcome_msg
+push r01
+push 1
+syscall
+
+label generate
+mov sc, 02h
+push max
+push min
+lea r01, generate_msg
+push r01
+push 1
+syscall
+mov sc, 04h
+push max
+push min
+syscall
+pop number
+
+label question
+mov sc, 02h
+lea r01, question_msg
+push r01
+push 1
+syscall
+mov sc, 03h
+lea r01, answer
+push r01
+lea r01, answer_fmt
+push r01
+push 0
+syscall
+cmp sc, -1
+je invalid_number
+inc tries
+
+cmp number, answer
+je win
+jg bigger
+jl smaller
+
+label exit
+mov sc, 01h
+push 0
+syscall

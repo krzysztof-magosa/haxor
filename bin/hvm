@@ -1,0 +1,17 @@
+#! /usr/bin/env ruby
+
+require_relative '../lib/haxor'
+
+if ARGV[0].nil?
+  puts "You must specify .hax.e file to be run."
+  exit 1
+end
+
+vm = Haxor::Vm::Core.new
+
+filename = ARGV[0]
+# make life easier ;)
+filename += '.e' if filename.end_with? '.hax'
+
+vm.load_program filename
+vm.execute

@@ -1,0 +1,11 @@
+/examples/*.hax.u
+/examples/*.hax.e
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
