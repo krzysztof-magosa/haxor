@@ -405,6 +405,7 @@ Generates random integer from specified range.
 Arguments:
 * minimum (inclusive)
 * maximum (inclusive)
+
 Generated number is pushed onto stack.
 ```
 mov sc, 04h
