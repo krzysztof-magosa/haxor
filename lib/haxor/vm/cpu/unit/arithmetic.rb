@@ -38,16 +38,16 @@ module Haxor
         def op_div
           a = operand
           av = @vm.subsystem(:mem).read a
-          arv = @vm.subsystem(:mem).read 'ar'
-          @vm.subsystem(:mem).write 'ar', (arv / av)
-          @vm.subsystem(:mem).write 'dr', (arv % av)
+          arv = @vm.subsystem(:registers).read 'ar'
+          @vm.subsystem(:registers).write 'ar', (arv / av)
+          @vm.subsystem(:registers).write 'dr', (arv % av)
         end
 
         def op_mul
           a = operand
           av = @vm.subsystem(:mem).read a
-          arv = @vm.subsystem(:mem).read 'ar'
-          @vm.subsystem(:mem).write 'ar', (arv * av)
+          arv = @vm.subsystem(:registers).read 'ar'
+          @vm.subsystem(:registers).write 'ar', (arv * av)
         end
 
         def op_inc
@@ -67,23 +67,9 @@ module Haxor
           av = @vm.subsystem(:mem).read a
           bv = @vm.subsystem(:mem).read b
           v = av - bv
-          fr_set Consts::FR_ZERO, (v == 0)
-          fr_set Consts::FR_SIGN, v < 0
-        end
 
-        def fr_set(b, enable)
-          flags = fetch_cell 'fr'
-          if enable
-            flags |= b
-          else
-            flags &= ~b
-          end
-          replace_cell 'fr', flags
-        end
-
-        def fr_if(b)
-          flags = fetch_cell 'fr'
-          (flags & b) > 0
+          @vm.subsystem(:registers).flag Consts::FR_ZERO, v == 0
+          @vm.subsystem(:registers).flag Consts::FR_SIGN, v < 0
         end
       end
     end

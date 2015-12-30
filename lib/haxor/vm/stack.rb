@@ -7,9 +7,9 @@ module Haxor
       end
 
       def push_value(value)
-        sp = @vm.subsystem(:mem).read 'sp'
+        sp = @vm.subsystem(:registers).read 'sp'
         sp -= Consts::WORD_SIZE
-        @vm.subsystem(:mem).write 'sp', sp
+        @vm.subsystem(:registers).write 'sp', sp
         @vm.subsystem(:mem).write sp, value
       end
 
@@ -19,10 +19,10 @@ module Haxor
       end
 
       def pop_value
-        sp = @vm.subsystem(:mem).read 'sp'
+        sp = @vm.subsystem(:registers).read 'sp'
         value = @vm.subsystem(:mem).read sp
         sp += Consts::WORD_SIZE
-        @vm.subsystem(:mem).write 'sp', sp
+        @vm.subsystem(:registers).write 'sp', sp
 
         value
       end

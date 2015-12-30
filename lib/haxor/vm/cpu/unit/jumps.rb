@@ -37,11 +37,6 @@ module Haxor
           bind_opcode OP_IRET,   :op_iret
         end
 
-        def fr_if(b)
-          flags = fetch_cell 'fr'
-          (flags & b) > 0
-        end
-
         def op_call
           a = operand
           @vm.subsystem(:stack).push 'ip'
@@ -55,52 +50,52 @@ module Haxor
 
         def op_je
           a = operand
-          jmp a if fr_if Consts::FR_ZERO
+          jmp a if @vm.subsystem(:registers).check_flag Consts::FR_ZERO
         end
 
         def op_jg
           a = operand
-          jmp a if !fr_if(Consts::FR_ZERO) && !fr_if(Consts::FR_SIGN)
+          jmp a if !@vm.subsystem(:registers).check_flag(Consts::FR_ZERO) && !@vm.subsystem(:registers).check_flag(Consts::FR_SIGN)
         end
 
         def op_jge
           a = operand
-          jmp a if !fr_if(Consts::FR_SIGN) || fr_if(Consts::FR_ZERO)
+          jmp a if !@vm.subsystem(:registers).check_flag(Consts::FR_SIGN) || @vm.subsystem(:registers).check_flag(Consts::FR_ZERO)
         end
 
         def op_jl
           a = operand
-          jmp a if !fr_if(Consts::FR_ZERO) && fr_if(Consts::FR_SIGN)
+          jmp a if !@vm.subsystem(:registers).check_flag(Consts::FR_ZERO) && @vm.subsystem(:registers).check_flag(Consts::FR_SIGN)
         end
 
         def op_jle
           a = operand
-          jmp a if fr_if(Consts::FR_SIGN) || fr_if(Consts::FR_ZERO)
+          jmp a if @vm.subsystem(:registers).check_flag(Consts::FR_SIGN) || @vm.subsystem(:registers).check_flag(Consts::FR_ZERO)
         end
 
         def op_jne
           a = operand
-          jmp a unless fr_if Consts::FR_ZERO
+          jmp a unless @vm.subsystem(:registers).check_flag Consts::FR_ZERO
         end
 
         def op_jng
           a = operand
-          jmp a unless !fr_if(Consts::FR_ZERO) && !fr_if(Consts::FR_SIGN)
+          jmp a unless !@vm.subsystem(:registers).check_flag(Consts::FR_ZERO) && !@vm.subsystem(:registers).check_flag(Consts::FR_SIGN)
         end
 
         def op_jnge
           a = operand
-          jmp a unless !fr_if(Consts::FR_SIGN) || fr_if(Consts::FR_ZERO)
+          jmp a unless !@vm.subsystem(:registers).check_flag(Consts::FR_SIGN) || @vm.subsystem(:registers).check_flag(Consts::FR_ZERO)
         end
 
         def op_jnl
           a = operand
-          jmp a unless !fr_if(Consts::FR_ZERO) && fr_if(Consts::FR_SIGN)
+          jmp a unless !@vm.subsystem(:registers).check_flag(Consts::FR_ZERO) && @vm.subsystem(:registers).check_flag(Consts::FR_SIGN)
         end
 
         def op_jnle
           a = operand
-          jmp a unless fr_if(Consts::FR_SIGN) || fr_if(Consts::FR_ZERO)
+          jmp a unless @vm.subsystem(:registers).check_flag(Consts::FR_SIGN) || @vm.subsystem(:registers).check_flag(Consts::FR_ZERO)
         end
 
         def op_ret
@@ -114,7 +109,7 @@ module Haxor
         private
 
         def jmp(addr)
-          @vm.subsystem(:mem).write 'ip', addr
+          @vm.subsystem(:registers).write 'ip', addr
         end
       end
     end
