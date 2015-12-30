@@ -19,6 +19,11 @@ parser = OptionParser.new do |opts|
     puts opts
     exit
   end
+
+  opts.on_tail('-v', '--version', 'Show version') do
+    puts "Haxor, version #{Haxor::Consts::GEM_VERSION}, version id #{Haxor::Consts::VERSION}."
+    exit
+  end
 end
 
 parser.parse!

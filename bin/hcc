@@ -1,10 +1,28 @@
 #! /usr/bin/env ruby
 
 require_relative '../lib/haxor'
+require 'optparse'
 
-if ARGV[0].nil?
-  puts "You must specify .hax file to be compiled."
-  exit 1
+parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: hcc [options] [file.hax]'
+
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts opts
+    exit
+  end
+
+  opts.on_tail('-v', '--version', 'Show version') do
+    puts "Haxor, version #{Haxor::Consts::GEM_VERSION}, version id #{Haxor::Consts::VERSION}."
+    exit
+  end
+end
+
+parser.parse!
+
+if ARGV.empty?
+  puts 'You must specify .hax file to be compiled.'
+  puts parser
+  exit
 end
 
 source = File.absolute_path ARGV[0]
