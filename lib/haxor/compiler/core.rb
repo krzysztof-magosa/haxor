@@ -120,10 +120,15 @@ module Haxor
         end
       end
 
-      def offset_flags(a, b = nil)
+      def offset_flags(*operands)
         result = 0
-        result |= Consts::OPCODE_FLG_DA if offset?(a)
-        result |= Consts::OPCODE_FLG_DB if offset?(b)
+        flag = Consts::OPERAND_DEREFERENCE << Consts::OPCODE_FLG_OFFSET
+
+        operands.each do |operand|
+          result |= flag if offset?(operand)
+          flag << Consts::OPERAND_FLAGS
+        end
+
         result
       end
 

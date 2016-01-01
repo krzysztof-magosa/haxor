@@ -48,22 +48,22 @@ module Haxor
         end
 
         def operand
-          flg = (subsystem(:mem).read 'op') & Consts::OPCODE_FLG_MASK
-          a = subsystem(:mem).next_cell
-          a = subsystem(:mem).read a if (flg & Consts::OPCODE_FLG_DA != 0)
-          a
+          operands(1)[0]
         end
 
-        def operands
-          flg = (subsystem(:mem).read 'op') & Consts::OPCODE_FLG_MASK
+        def operands(n = 2)
+          flg = subsystem(:mem).read('op') & Consts::OPCODE_FLG_MASK
+          flg >> Consts::OPCODE_FLG_OFFSET
 
-          a = subsystem(:mem).next_cell
-          a = subsystem(:mem).read a if (flg & Consts::OPCODE_FLG_DA != 0)
+          result = []
+          n.times do
+            v = subsystem(:mem).next_cell
+            v = subsystem(:mem).read a if (flg & Consts::OPERAND_DEREFERENCE != 0)
+            result << v
+            flg << Consts::OPERAND_FLAGS
+          end
 
-          b = subsystem(:mem).next_cell
-          b = subsystem(:mem).read b if (flg & Consts::OPCODE_FLG_DB != 0)
-
-          [a, b]
+          result
         end
 
         private
