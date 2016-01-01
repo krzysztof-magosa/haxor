@@ -2,14 +2,17 @@ module Haxor
   module Compiler
     class Unit
       attr_reader :section
+      attr_reader :hash
 
-      def initialize
+      def initialize(filename)
         @section = :text
         @sections = {
           text: [],
           data: [],
           bss: []
         }
+        @filename = filename
+        @hash = Digest::SHA1.hexdigest filename
       end
 
       def add(item)

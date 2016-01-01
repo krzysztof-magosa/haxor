@@ -2,6 +2,7 @@
 require 'json'
 require 'io/console'
 require 'scanf'
+require 'digest'
 
 require_relative 'haxor/consts'
 require_relative 'haxor/header'

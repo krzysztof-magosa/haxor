@@ -55,7 +55,7 @@ module Haxor
       def compile(filename)
         input = File.read(filename, encoding: 'ASCII-8BIT')
 
-        @unit = Unit.new
+        @unit = Unit.new filename
 
         input.lines.map(&:chomp).each_with_index do |line, index|
           next if line.empty?
@@ -106,7 +106,7 @@ module Haxor
         begin
           number = parse_number(value)
           @autolabel += 1
-          label = "__autolabel_#{@autolabel}"
+          label = "__autolabel_#{@unit.hash}_#{@autolabel}"
 
           old_section = @unit.section
           @unit.section = :data
