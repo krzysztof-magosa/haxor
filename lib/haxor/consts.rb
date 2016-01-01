@@ -18,8 +18,8 @@ module Haxor
     OPCODE_CMD_MASK = 0x0000_0000_0000_00ff
     OPCODE_FLG_MASK = 0xffff_ffff_ffff_ff00
     OPCODE_FLG_OFFSET = 8
-    OPCODE_FLG_DA = 1 << OPCODE_FLG_OFFSET # dereference A operand
-    OPCODE_FLG_DB = 2 << OPCODE_FLG_OFFSET # dereference B operand
+    OPCODE_FLG_DA = (1 << 0) << OPCODE_FLG_OFFSET # dereference A operand
+    OPCODE_FLG_DB = (1 << 1) << OPCODE_FLG_OFFSET # dereference B operand
 
     # Flags Registry Flags
     FR_ZERO    = 1 << 0 # a-b == 0
