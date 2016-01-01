@@ -23,71 +23,59 @@ module Haxor
         end
 
         def cmd_call(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_CALL | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_CALL, a
         end
 
         def cmd_ret(*_args)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_RET)
+          add_cmd Vm::Cpu::Unit::Jumps::OP_RET
         end
 
         def cmd_iret(*_args)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_IRET)
+          add_cmd Vm::Cpu::Unit::Jumps::OP_IRET
         end
 
         def cmd_jmp(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JMP | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JMP, a
         end
 
         def cmd_je(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JE, a
         end
 
         def cmd_jg(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JG)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JG, a
         end
 
         def cmd_jge(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JGE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JGE, a
         end
 
         def cmd_jl(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JL)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JL, a
         end
 
         def cmd_jle(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JLE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JLE, a
         end
 
         def cmd_jne(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JNE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JNE, a
         end
 
         def cmd_jng(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JNG)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JNG, a
         end
 
         def cmd_jnge(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JNGE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JNGE, a
         end
 
         def cmd_jnl(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JNL)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JNL, a
         end
 
         def cmd_jnle(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Jumps::OP_JNLE)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Jumps::OP_JNLE, a
         end
       end
     end

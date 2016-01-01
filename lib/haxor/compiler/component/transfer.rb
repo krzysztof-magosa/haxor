@@ -9,19 +9,15 @@ module Haxor
         end
 
         def cmd_push(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Transfer::OP_PUSH | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Transfer::OP_PUSH, a
         end
 
         def cmd_pop(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Transfer::OP_POP | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Transfer::OP_POP, a
         end
 
         def cmd_mov(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Transfer::OP_MOV | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Transfer::OP_MOV, a, b
         end
       end
     end

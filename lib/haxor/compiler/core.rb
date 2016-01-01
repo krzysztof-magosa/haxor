@@ -76,6 +76,13 @@ module Haxor
         @unit.add token
       end
 
+      def add_cmd(opcode, a = nil, b = nil)
+        opcode |= offset_flags(a, b)
+        add Token::Cmd.new(opcode)
+        parse_value a unless a.nil?
+        parse_value b unless b.nil?
+      end
+
       def parse_number(value)
         md = value.match(/\A([-+]?[0-9]+[0-9A-F]*)([bhd]?)\z/)
         fail if md.nil?

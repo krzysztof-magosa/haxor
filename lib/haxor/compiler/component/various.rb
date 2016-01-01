@@ -10,22 +10,19 @@ module Haxor
         end
 
         def cmd_nop(*_args)
-          add Token::Cmd.new(Vm::Cpu::Unit::Various::OP_NOP)
+          add_cmd Vm::Cpu::Unit::Various::OP_NOP
         end
 
         def cmd_lea(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Various::OP_LEA | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Various::OP_LEA, a, b
         end
 
         def cmd_int(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Various::OP_INT)
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Various::OP_INT, a
         end
 
         def cmd_syscall
-          add Token::Cmd.new(Vm::Cpu::Unit::Various::OP_SYSCALL)
+          add_cmd Vm::Cpu::Unit::Various::OP_SYSCALL
         end
       end
     end

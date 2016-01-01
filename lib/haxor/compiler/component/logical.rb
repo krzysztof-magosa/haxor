@@ -11,31 +11,23 @@ module Haxor
         end
 
         def cmd_and(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Logical::OP_AND | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Logical::OP_AND, a, b
         end
 
         def cmd_neg(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Logical::OP_NEG | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Logical::OP_NEG, a
         end
 
         def cmd_not(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Logical::OP_NOT | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Logical::OP_NOT, a
         end
 
         def cmd_or(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Logical::OP_OR | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Logical::OP_OR, a, b
         end
 
         def cmd_xor(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Logical::OP_XOR | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Logical::OP_XOR, a, b
         end
       end
     end

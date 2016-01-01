@@ -16,6 +16,10 @@ module Haxor
           compiler.add token
         end
 
+        def add_cmd(opcode, a = nil, b = nil)
+          compiler.add_cmd opcode, a, b
+        end
+
         def parse_value(value)
           compiler.parse_value value
         end

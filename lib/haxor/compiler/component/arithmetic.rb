@@ -13,41 +13,31 @@ module Haxor
         end
 
         def cmd_add(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_ADD | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_ADD, a, b
         end
 
         def cmd_sub(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_SUB | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_SUB, a, b
         end
 
         def cmd_div(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_DIV | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_DIV, a
         end
 
         def cmd_mul(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_MUL | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_MUL, a
         end
 
         def cmd_cmp(a, b)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_CMP | offset_flags(a, b))
-          parse_value a
-          parse_value b
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_CMP, a, b
         end
 
         def cmd_inc(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_INC | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_INC, a
         end
 
         def cmd_dec(a)
-          add Token::Cmd.new(Vm::Cpu::Unit::Arithmetic::OP_DEC | offset_flags(a))
-          parse_value a
+          add_cmd Vm::Cpu::Unit::Arithmetic::OP_DEC, a
         end
       end
     end
