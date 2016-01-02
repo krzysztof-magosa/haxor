@@ -8,6 +8,8 @@ module Haxor
           bind_cmd 'not', :cmd_not
           bind_cmd 'or',  :cmd_or
           bind_cmd 'xor', :cmd_xor
+          bind_cmd 'shl', :cmd_shl
+          bind_cmd 'shr', :cmd_shr
         end
 
         def cmd_and(a, b)
@@ -28,6 +30,14 @@ module Haxor
 
         def cmd_xor(a, b)
           add_cmd Vm::Cpu::Unit::Logical::OP_XOR, a, b
+        end
+
+        def cmd_shl(a, b)
+          add_cmd Vm::Cpu::Unit::Logical::OP_SHL, a, b
+        end
+
+        def cmd_shr(a, b)
+          add_cmd Vm::Cpu::Unit::Logical::OP_SHR, a, b
         end
       end
     end

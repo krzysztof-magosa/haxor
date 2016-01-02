@@ -9,6 +9,8 @@ module Haxor
         OP_NOT     = 0x42 # not a
         OP_OR      = 0x43 # or a, b
         OP_XOR     = 0x44 # xor a, b
+        OP_SHL     = 0x45 # shl a, b
+        OP_SHR     = 0x46 # shr a, b
         #            0x5f
 
         def register
@@ -17,6 +19,8 @@ module Haxor
           bind_opcode OP_NOT,     :op_not
           bind_opcode OP_OR,      :op_or
           bind_opcode OP_XOR,     :op_xor
+          bind_opcode OP_SHL,     :op_shl
+          bind_opcode OP_SHR,     :op_shr
         end
 
         def op_and
@@ -51,6 +55,20 @@ module Haxor
           av = @vm.subsystem(:mem).read a
           bv = @vm.subsystem(:mem).read b
           @vm.subsystem(:mem).write a, (av ^ bv)
+        end
+
+        def op_shl
+          a, b = operands
+          av = @vm.subsystem(:mem).read a
+          bv = @vm.subsystem(:mem).read b
+          @vm.subsystem(:mem).write a, (av << bv)
+        end
+
+        def op_shr
+          a, b = operands
+          av = @vm.subsystem(:mem).read a
+          bv = @vm.subsystem(:mem).read b
+          @vm.subsystem(:mem).write a, (av >> bv)
         end
       end
     end

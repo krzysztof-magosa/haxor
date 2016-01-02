@@ -185,6 +185,20 @@ OpCode: 0x44.
 xor A, B
 ```
 
+#### shl
+Left shift, moves _A_ bits by _B_ positions.
+OpCode: 0x45.
+```
+shl A, B
+```
+
+#### shr
+Right shift, moves _A_ bits by _B_ positions.
+OpCode: 0x46.
+```
+shr A, B
+```
+
 ### Transfer
 #### mov
 Moves data from _B_ to _A_.
