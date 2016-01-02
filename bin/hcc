@@ -28,12 +28,4 @@ end
 source = File.absolute_path ARGV[0]
 
 compiler = Haxor::Compiler::Core.new
-compiler.register_unit Haxor::Compiler::Component::Arithmetic.new
-compiler.register_unit Haxor::Compiler::Component::Data.new
-compiler.register_unit Haxor::Compiler::Component::Jumps.new
-compiler.register_unit Haxor::Compiler::Component::Logical.new
-compiler.register_unit Haxor::Compiler::Component::Other.new
-compiler.register_unit Haxor::Compiler::Component::Transfer.new
-compiler.register_unit Haxor::Compiler::Component::Various.new
-
 compiler.compile source

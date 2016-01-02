@@ -3,28 +3,98 @@ module Haxor
     class Core
       def initialize
         @units = []
-        @cmds = {}
+        @cmds = []
         @autolabel = 0
         @prev_sections = []
 
-        bind_cmd 'section', self, :cmd_section
+        init_cmds
       end
 
-      def register_unit(unit)
-        @units << unit
-        unit.compiler = self
-        unit.register
+      def init_cmds
+        bind_cmd 'section', [:any],       :cmd_section
+        bind_cmd 'label',   [:any],       :cmd_label
+        bind_cmd 'dw',      [:wildcard],  :cmd_dw
+        bind_cmd 'resw',    [:any],       :cmd_resw
+        bind_cmd '#',       [:wildcard],  :cmd_rem
+        bind_cmd 'rem',     [:wildcard],  :cmd_rem
+        bind_cmd 'mov',     [:any, :any], Vm::Cpu::Unit::Transfer::OP_MOV
+        bind_cmd 'push',    [:any],       Vm::Cpu::Unit::Transfer::OP_PUSH
+        bind_cmd 'pop',     [:any],       Vm::Cpu::Unit::Transfer::OP_POP
+        bind_cmd 'and',     [:any, :any], Vm::Cpu::Unit::Logical::OP_AND
+        bind_cmd 'neg',     [:any],       Vm::Cpu::Unit::Logical::OP_NEG
+        bind_cmd 'not',     [:any],       Vm::Cpu::Unit::Logical::OP_NOT
+        bind_cmd 'or',      [:any, :any], Vm::Cpu::Unit::Logical::OP_OR
+        bind_cmd 'xor',     [:any, :any], Vm::Cpu::Unit::Logical::OP_XOR
+        bind_cmd 'shl',     [:any, :any], Vm::Cpu::Unit::Logical::OP_SHL
+        bind_cmd 'shr',     [:any, :any], Vm::Cpu::Unit::Logical::OP_SHR
+        bind_cmd 'nop',     [],           Vm::Cpu::Unit::Various::OP_NOP
+        bind_cmd 'lea',     [:any, :any], Vm::Cpu::Unit::Various::OP_LEA
+        bind_cmd 'int',     [:any],       Vm::Cpu::Unit::Various::OP_INT
+        bind_cmd 'syscall', [],           Vm::Cpu::Unit::Various::OP_SYSCALL
+        bind_cmd 'call',    [:any],       Vm::Cpu::Unit::Jumps::OP_CALL
+        bind_cmd 'ret',     [],           Vm::Cpu::Unit::Jumps::OP_RET
+        bind_cmd 'iret',    [],           Vm::Cpu::Unit::Jumps::OP_IRET
+        bind_cmd 'jmp',     [:any],       Vm::Cpu::Unit::Jumps::OP_JMP
+        bind_cmd 'je',      [:any],       Vm::Cpu::Unit::Jumps::OP_JE
+        bind_cmd 'jg',      [:any],       Vm::Cpu::Unit::Jumps::OP_JG
+        bind_cmd 'jge',     [:any],       Vm::Cpu::Unit::Jumps::OP_JGE
+        bind_cmd 'jl',      [:any],       Vm::Cpu::Unit::Jumps::OP_JL
+        bind_cmd 'jle',     [:any],       Vm::Cpu::Unit::Jumps::OP_JLE
+        bind_cmd 'jne',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNE
+        bind_cmd 'jng',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNG
+        bind_cmd 'jnge',    [:any],       Vm::Cpu::Unit::Jumps::OP_JNGE
+        bind_cmd 'jnl',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNL
+        bind_cmd 'jnle',    [:any],       Vm::Cpu::Unit::Jumps::OP_JNLE
+        bind_cmd 'inc',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_INC
+        bind_cmd 'dec',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_DEC
+        bind_cmd 'add',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_ADD
+        bind_cmd 'sub',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_SUB
+        bind_cmd 'div',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_DIV
+        bind_cmd 'mul',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_MUL
+        bind_cmd 'cmp',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_CMP
       end
 
-      def bind_cmd(cmd, object, method)
-        @cmds[cmd] = {
-          object: object,
-          method: method
+      def bind_cmd(cmd, args, opcode)
+        @cmds << {
+          cmd: cmd,
+          args: args,
+          opcode: opcode
         }
       end
 
       def cmd_section(name)
         @unit.section = name[1..-1].to_sym
+      end
+
+      def cmd_dw(*args)
+        add Token::Label.new(args[0])
+
+        if args.size == 1
+          add Token::Int64.new(0)
+        else
+          (1...args.size).each do |i|
+            begin
+              add Token::Int64.new(Integer(args[i]))
+            rescue
+              args[i][1...-1].each_char do |c|
+                add Token::Int64.new(c.ord)
+              end
+            end
+          end
+        end
+      end
+
+      def cmd_label(name)
+        add Token::Label.new(name)
+      end
+
+      def cmd_resw(*args)
+        (1..args[0].to_i).each do
+          add Token::Int64.new(0)
+        end
+      end
+
+      def cmd_rem(*)
       end
 
       # this is ugly and must be reworked
@@ -52,6 +122,23 @@ module Haxor
         args.map!(&:strip).delete_if { |x| x.length == 0 }
       end
 
+      def process_cmd(cmd, args)
+        @cmds.each do |item|
+          next if item[:cmd] != cmd
+
+          if item[:opcode].is_a? Symbol
+            send(item[:opcode], *args)
+            return
+          end
+
+          add_cmd item[:opcode], args
+          return
+        end
+
+        puts cmd
+        fail
+      end
+
       def compile(filename)
         input = File.read(filename, encoding: 'ASCII-8BIT')
 
@@ -64,9 +151,7 @@ module Haxor
           cmd = tmp[0]
           args = split_arguments(tmp[1] || '')
 
-          fail "Unknown command #{cmd} in line #{index}." unless @cmds.key? cmd
-
-          @cmds[cmd][:object].send(@cmds[cmd][:method], *args)
+          process_cmd(cmd, args)
         end
 
         @unit.save(filename + '.u')
@@ -76,11 +161,11 @@ module Haxor
         @unit.add token
       end
 
-      def add_cmd(opcode, a = nil, b = nil)
-        opcode |= offset_flags(a, b)
+      def add_cmd(opcode, args = [])
+        opcode |= offset_flags(args[0], args[1])
         add Token::Cmd.new(opcode)
-        parse_value a unless a.nil?
-        parse_value b unless b.nil?
+        parse_value args[0] unless args[0].nil?
+        parse_value args[1] unless args[1].nil?
       end
 
       def parse_number(value)

@@ -25,14 +25,6 @@ require_relative 'haxor/vm/cpu/unit/transfer'
 # compiler
 require_relative 'haxor/compiler/unit'
 require_relative 'haxor/compiler/core'
-require_relative 'haxor/compiler/component/base'
-require_relative 'haxor/compiler/component/logical'
-require_relative 'haxor/compiler/component/arithmetic'
-require_relative 'haxor/compiler/component/jumps'
-require_relative 'haxor/compiler/component/various'
-require_relative 'haxor/compiler/component/transfer'
-require_relative 'haxor/compiler/component/data'
-require_relative 'haxor/compiler/component/other'
 
 # linker
 require_relative 'haxor/linker'
