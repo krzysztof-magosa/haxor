@@ -6,6 +6,7 @@ require 'digest'
 
 require_relative 'haxor/consts'
 require_relative 'haxor/header'
+require_relative 'haxor/utils'
 
 # vm
 require_relative 'haxor/vm/core'
