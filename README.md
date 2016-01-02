@@ -92,54 +92,99 @@ command A, B
 Sums _A_ and _B_, result goes to _A_.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x01.
+
+Example:
 ```
 add A, B
+```
+
+C equivalent:
+```
+A = A + B
 ```
 
 #### sub
 Subtracts _B_ from _A_, result goes to _A_.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x02.
+
+Example:
 ```
 sub A, B
+```
+
+C equivalent:
+```
+A = A - B
 ```
 
 #### div
 Divides `ar` register by _A_. Result goes to register. Remainder goes to `dr` register.
 _A_ can be dereferenced.
 OpCode: 0x03.
+
+Example:
 ```
 div A
+```
+
+C equivalent:
+```
+ar = ar / A
+dr = ar % A
 ```
 
 #### mul
 Multiplies `ar` register by _A_. Result goes to register.
 _A_ can be dereferenced.
 OpCode: 0x04.
+
+Example:
 ```
 mul A
+```
+
+C equivalent:
+```
+ar = ar * A
 ```
 
 #### inc
 Increments _A_ by 1.
 _A_ can be dereferenced.
 OpCode: 0x05.
+
+Example:
 ```
 inc A
+```
+
+C equivalent:
+```
+A++
 ```
 
 #### dec
 Decrements _A_ by 1.
 _A_ can be dereferenced.
 OpCode: 0x06.
+
+Example:
 ```
 dec A
+```
+
+C equivalent:
+```
+A--
 ```
 
 #### cmp
 Compares _A_ with _B_ by subtracting _B_ from _A_ and setting flags register bits.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x07.
+
+Example:
 ```
 cmp A, B
 ```
@@ -149,54 +194,103 @@ cmp A, B
 Performs bitwise AND operation.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x40.
+
+Example:
 ```
 and A, B
+```
+
+C equivalent:
+```
+A &= B
 ```
 
 #### neg
 Reverses the sign of number _A_.
 _A_ can be dereferenced.
 OpCode: 0x41.
+
+Example:
 ```
 neg A
+```
+
+C equivalent:
+```
+A = -A
 ```
 
 #### not
 Performs bitwise NOT operation.
 _A_ can be dereferenced.
 OpCode: 0x42.
+
+Example:
 ```
 not A
+```
+
+C equivalent:
+```
+A = ~A
 ```
 
 #### or
 Performs bitwise OR operation.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x43.
+
+Example:
 ```
 or A, B
+```
+
+C equivalent:
+```
+A = A | B
 ```
 
 #### xor
 Performs bitwise XOR operation.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x44.
+
+Example:
 ```
 xor A, B
+```
+
+C equivalent:
+```
+A = A ^ B
 ```
 
 #### shl
 Left shift, moves _A_ bits by _B_ positions.
 OpCode: 0x45.
+
+Example:
 ```
 shl A, B
+```
+
+C equivalent:
+```
+A = A << B
 ```
 
 #### shr
 Right shift, moves _A_ bits by _B_ positions.
 OpCode: 0x46.
+
+Example:
 ```
 shr A, B
+```
+
+C equivalent:
+```
+A = A >> B
 ```
 
 ### Transfer
@@ -204,13 +298,22 @@ shr A, B
 Moves data from _B_ to _A_.
 _A_ or/and _B_ can be dereferenced.
 OpCode: 0x60.
+
+Example:
 ```
 mov A, B
+```
+
+C equivalent:
+```
+A = B
 ```
 
 #### push
 Places _A_ on top of stack.
 OpCode: 0x61.
+
+Example:
 ```
 push A
 ```
@@ -218,6 +321,8 @@ push A
 #### pop
 Removes element from top of the stack and into _A_.
 OpCode: 0x62.
+
+Example:
 ```
 pop A
 ```
@@ -227,20 +332,36 @@ pop A
 Places _ip_ register on the stack and jumps to _A_.
 _A_ can be dereferenced.
 OpCode: 0x20.
+
+Example:
 ```
 call A
+```
+
+C equivalent:
+```
+A()
 ```
 
 #### ret
 Pops _ip_ from the stack, and jumps to it.
 OpCode: 0x2c.
+
+Example:
 ```
 ret
+```
+
+C equivalent:
+```
+return
 ```
 
 ### iret
 Comes back from interrupt.
 OpCode: 0x2d.
+
+Example:
 ```
 iret
 ```
@@ -249,14 +370,22 @@ iret
 Performs unconditional jump to _A_.
 _A_ can be dereferenced.
 OpCode: 0x21.
+
+Example:
 ```
 jmp A
+```
+
+```
+goto A
 ```
 
 #### je
 Jumps to _A_ if in _cmp_ _A_ is equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x22.
+
+Example:
 ```
 je A
 ```
@@ -265,6 +394,8 @@ je A
 Jumps to _A_ if in _cmp_ _A_ is greater than _B_.
 _A_ can be dereferenced.
 OpCode: 0x23.
+
+Example:
 ```
 jg A
 ```
@@ -273,6 +404,8 @@ jg A
 Jumps to _A_ if in _cmp_ _A_ is greater or equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x24.
+
+Example:
 ```
 jge A
 ```
@@ -281,6 +414,8 @@ jge A
 Jumps to _A_ if in _cmp_ _A_ is less than _B_.
 _A_ can be dereferenced.
 OpCode: 0x25.
+
+Example:
 ```
 jl A
 ```
@@ -289,6 +424,8 @@ jl A
 Jumps to _A_ if in _cmp_ _A_ is less or equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x26.
+
+Example:
 ```
 jle A
 ```
@@ -297,6 +434,8 @@ jle A
 Jumps to _A_ if in _cmp_ _A_ is not equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x27.
+
+Example:
 ```
 jne A
 ```
@@ -305,6 +444,8 @@ jne A
 Jumps to _A_ if in _cmp_ _A_ is not greater than _B_.
 _A_ can be dereferenced.
 OpCode: 0x28.
+
+Example:
 ```
 jng A
 ```
@@ -313,6 +454,8 @@ jng A
 Jumps to _A_ if in _cmp_ _A_ is not greater or equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x29.
+
+Example:
 ```
 jnge A
 ```
@@ -321,6 +464,8 @@ jnge A
 Jumps to _A_ if in _cmp_ _A_ is not less than _B_.
 _A_ can be dereferenced.
 OpCode: 0x2a.
+
+Example:
 ```
 jnl A
 ```
@@ -329,6 +474,8 @@ jnl A
 Jumps to _A_ if in _cmp_ _A_ is not less or equal to _B_.
 _A_ can be dereferenced.
 OpCode: 0x2b.
+
+Example:
 ```
 jnle A
 ```
@@ -337,8 +484,15 @@ jnle A
 #### lea
 Pushes address of _B_ into _A_.
 OpCode: 0x80.
+
+Example:
 ```
 lea A, B
+```
+
+C equivalent:
+```
+int *A = &B
 ```
 
 #### nop
@@ -352,12 +506,16 @@ nop
 Generate software interrupt with ID specified by _A_.
 _A_ can be dereferenced.
 OpCode: 0x85.
+
+Example:
 ```
 int A
 ```
 
 #### syscall
 Asks Haxor VM to do "system" call. OpCode: 0x86.
+
+Example:
 ```
 syscall
 ```
@@ -370,6 +528,8 @@ System call number is passed via _sc_ register, arguments go via stack in revers
 Terminates VM process with specified exit code.
 Takes 1 argument:
 * exit code
+
+Example:
 ```
 push 100
 mov sc, 01h
@@ -382,6 +542,8 @@ Takes 2 or more arguments:
 * file descriptor (1 for standard output, 2 for standard error)
 * format string
 * data depending on format string...
+
+Example:
 ```
 lea r01, format_text
 push r01
@@ -400,6 +562,8 @@ Takes 2 or more arguments:
 * file descriptor (0 for standard input)
 * format string
 * addresses in memory to put data into them...
+
+Example:
 ```
 section .data
 dw scanfmt, "%100s", 0
@@ -424,6 +588,8 @@ Arguments:
 * maximum (inclusive)
 
 Generated number is pushed onto stack.
+
+Example:
 ```
 mov sc, 04h
 push 100
