@@ -1,7 +1,7 @@
 module Haxor
   class Consts
     MAJOR = 0
-    MINOR = 2
+    MINOR = 3
     PATCH = 0
     GEM_VERSION = "#{MAJOR}.#{MINOR}.#{PATCH}"
     VERSION = (MAJOR << 16) | (MINOR << 8) | PATCH
