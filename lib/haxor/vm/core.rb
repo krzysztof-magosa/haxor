@@ -41,7 +41,9 @@ module Haxor
         @hdr = Header.new
         @hdr.parse! exe
 
-        fail if @hdr.version != Consts::VERSION
+        if @hdr.version != Consts::VERSION
+          fail 'Program is compiled for different version of Haxor VM Machine'
+        end
 
         exe = exe[@hdr.size..-1] # cut off header
         subsystem(:mem).replace_region Consts::RESERVED_MEM, exe

@@ -26,11 +26,16 @@ if ARGV[0].nil?
   exit
 end
 
-vm = Haxor::Vm::Core.new
+begin
+  vm = Haxor::Vm::Core.new
 
-filename = ARGV[0]
-# make life easier ;)
-filename += '.e' if filename.end_with? '.hax'
+  filename = ARGV[0]
+  # make life easier ;)
+  filename += '.e' if filename.end_with? '.hax'
 
-vm.load_program filename
-vm.execute
+  vm.load_program filename
+  vm.execute
+rescue => e
+  puts "An error occurred: #{e}."
+  exit 1
+end
