@@ -11,8 +11,10 @@ module Haxor
     WORD_SIZE = 8 # 64bit
     WORD_UNPACK = 'q<'
 
-    RESERVED_MEM = 2048 # 1024 for CPU, 1024 for IVT
-    IVT_ADDR     = 1024
+    CPU_MEM      = 1024
+    IVT_MEM      = 1024
+    RESERVED_MEM = CPU_MEM + IVT_MEM
+    IVT_ADDR     = CPU_MEM
 
     # OpCode
     OPCODE_CMD_MASK = 0x0000_0000_0000_00ff

@@ -38,7 +38,7 @@ module Haxor
         end
 
         def reserved_mem
-          1024
+          Consts::CPU_MEMORY
         end
 
         def register_unit(unit)
