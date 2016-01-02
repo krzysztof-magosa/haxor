@@ -90,7 +90,6 @@ command A, B
 ### Arithmetic
 #### add
 Sums _A_ and _B_, result goes to _A_.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x01.
 
 Example:
@@ -105,7 +104,6 @@ A = A + B
 
 #### sub
 Subtracts _B_ from _A_, result goes to _A_.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x02.
 
 Example:
@@ -120,7 +118,6 @@ A = A - B
 
 #### div
 Divides `ar` register by _A_. Result goes to register. Remainder goes to `dr` register.
-_A_ can be dereferenced.
 OpCode: 0x03.
 
 Example:
@@ -136,7 +133,6 @@ dr = ar % A
 
 #### mul
 Multiplies `ar` register by _A_. Result goes to register.
-_A_ can be dereferenced.
 OpCode: 0x04.
 
 Example:
@@ -151,7 +147,6 @@ ar = ar * A
 
 #### inc
 Increments _A_ by 1.
-_A_ can be dereferenced.
 OpCode: 0x05.
 
 Example:
@@ -166,7 +161,6 @@ A++
 
 #### dec
 Decrements _A_ by 1.
-_A_ can be dereferenced.
 OpCode: 0x06.
 
 Example:
@@ -181,7 +175,6 @@ A--
 
 #### cmp
 Compares _A_ with _B_ by subtracting _B_ from _A_ and setting flags register bits.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x07.
 
 Example:
@@ -192,7 +185,6 @@ cmp A, B
 ### Logical
 #### and
 Performs bitwise AND operation.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x40.
 
 Example:
@@ -207,7 +199,6 @@ A &= B
 
 #### neg
 Reverses the sign of number _A_.
-_A_ can be dereferenced.
 OpCode: 0x41.
 
 Example:
@@ -222,7 +213,6 @@ A = -A
 
 #### not
 Performs bitwise NOT operation.
-_A_ can be dereferenced.
 OpCode: 0x42.
 
 Example:
@@ -237,7 +227,6 @@ A = ~A
 
 #### or
 Performs bitwise OR operation.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x43.
 
 Example:
@@ -252,7 +241,6 @@ A = A | B
 
 #### xor
 Performs bitwise XOR operation.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x44.
 
 Example:
@@ -296,7 +284,6 @@ A = A >> B
 ### Transfer
 #### mov
 Moves data from _B_ to _A_.
-_A_ or/and _B_ can be dereferenced.
 OpCode: 0x60.
 
 Example:
@@ -330,7 +317,6 @@ pop A
 ### Jumps
 #### call
 Places _ip_ register on the stack and jumps to _A_.
-_A_ can be dereferenced.
 OpCode: 0x20.
 
 Example:
@@ -368,7 +354,6 @@ iret
 
 #### jmp
 Performs unconditional jump to _A_.
-_A_ can be dereferenced.
 OpCode: 0x21.
 
 Example:
@@ -382,7 +367,6 @@ goto A
 
 #### je
 Jumps to _A_ if in _cmp_ _A_ is equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x22.
 
 Example:
@@ -392,7 +376,6 @@ je A
 
 #### jg
 Jumps to _A_ if in _cmp_ _A_ is greater than _B_.
-_A_ can be dereferenced.
 OpCode: 0x23.
 
 Example:
@@ -402,7 +385,6 @@ jg A
 
 #### jge
 Jumps to _A_ if in _cmp_ _A_ is greater or equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x24.
 
 Example:
@@ -412,7 +394,6 @@ jge A
 
 #### jl
 Jumps to _A_ if in _cmp_ _A_ is less than _B_.
-_A_ can be dereferenced.
 OpCode: 0x25.
 
 Example:
@@ -422,7 +403,6 @@ jl A
 
 #### jle
 Jumps to _A_ if in _cmp_ _A_ is less or equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x26.
 
 Example:
@@ -432,7 +412,6 @@ jle A
 
 #### jne
 Jumps to _A_ if in _cmp_ _A_ is not equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x27.
 
 Example:
@@ -442,7 +421,6 @@ jne A
 
 #### jng
 Jumps to _A_ if in _cmp_ _A_ is not greater than _B_.
-_A_ can be dereferenced.
 OpCode: 0x28.
 
 Example:
@@ -452,7 +430,6 @@ jng A
 
 #### jnge
 Jumps to _A_ if in _cmp_ _A_ is not greater or equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x29.
 
 Example:
@@ -462,7 +439,6 @@ jnge A
 
 #### jnl
 Jumps to _A_ if in _cmp_ _A_ is not less than _B_.
-_A_ can be dereferenced.
 OpCode: 0x2a.
 
 Example:
@@ -472,7 +448,6 @@ jnl A
 
 #### jnle
 Jumps to _A_ if in _cmp_ _A_ is not less or equal to _B_.
-_A_ can be dereferenced.
 OpCode: 0x2b.
 
 Example:
@@ -504,7 +479,6 @@ nop
 
 #### int
 Generate software interrupt with ID specified by _A_.
-_A_ can be dereferenced.
 OpCode: 0x85.
 
 Example:
