@@ -33,8 +33,6 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 
 ## Architecture
 
-<img src="media/vm.png" width="50%">
-
 ### General information
 * Little Endian
 * Size of WORD is 64 bit
