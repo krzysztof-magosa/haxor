@@ -11,9 +11,9 @@ dw min,          1
 dw max,          1000
 
 section .bss
-dw number,       0
-dw answer,       0
-dw tries,        0
+dw number
+dw answer
+dw tries
 
 section .text
 label bigger

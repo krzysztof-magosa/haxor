@@ -10,12 +10,16 @@ module Haxor
         def cmd_dw(*args)
           add Token::Label.new(args[0])
 
-          (1...args.size).each do |i|
-            begin
-              add Token::Int64.new(Integer(args[i]))
-            rescue
-              args[i][1...-1].each_char do |c|
-                add Token::Int64.new(c.ord)
+          if args.size == 1
+            add Token::Int64.new(0)
+          else
+            (1...args.size).each do |i|
+              begin
+                add Token::Int64.new(Integer(args[i]))
+              rescue
+                args[i][1...-1].each_char do |c|
+                  add Token::Int64.new(c.ord)
+                end
               end
             end
           end
