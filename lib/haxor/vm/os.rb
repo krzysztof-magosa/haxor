@@ -2,14 +2,13 @@ module Haxor
   module Vm
     class Os < Subsystem
       TABLE = {
-        0x01 => :sys_exit,
-        0x02 => :sys_printf,
-        0x03 => :sys_scanf,
-        0x04 => :sys_rand
+        0x01 => :sys_printf,
+        0x02 => :sys_scanf,
+        0x03 => :sys_rand
       }
 
       def syscall
-        func = subsystem(:mem).read 'sc'
+        func = subsystem(:cpu).reg(Vm::Cpu::Core::REG_SYSCALL)
         send(TABLE[func])
       end
 
@@ -50,14 +49,8 @@ module Haxor
         types
       end
 
-      def sys_exit
-        code = subsystem(:stack).pop_value
-        exit code
-      end
-
       def sys_printf
         fd = subsystem(:stack).pop_value
-
         x = subsystem(:stack).pop_value
         fmt = collect_string x
         args = []
@@ -85,7 +78,7 @@ module Haxor
         result = file.scanf fmt
 
         if result.size != types.size
-          subsystem(:mem).write 'sc', -1
+          subsystem(:cpu).reg Vm::Cpu::Core::REG_SYSCALL, -1
           return
         end
 
@@ -108,7 +101,8 @@ module Haxor
         max = subsystem(:stack).pop_value
 
         prng = Random.new
-        subsystem(:stack).push_value prng.rand(min..max)
+        v = prng.rand(min..max)
+        subsystem(:stack).push_value v
       end
     end
   end

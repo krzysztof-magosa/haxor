@@ -1,6 +1,12 @@
 module Haxor
   module Compiler
     class Core
+      REG_ALIASES = {
+        '$sp'  => Vm::Cpu::Core::REG_STACK,
+        '$ret' => Vm::Cpu::Core::REG_RETURN,
+        '$sc'  => Vm::Cpu::Core::REG_SYSCALL
+      }
+
       def initialize
         @units = []
         @cmds = []
@@ -12,53 +18,68 @@ module Haxor
 
       def init_cmds
         bind_cmd 'section', [:any],       :cmd_section
-        bind_cmd 'label',   [:any],       :cmd_label
         bind_cmd 'dw',      [:wildcard],  :cmd_dw
         bind_cmd 'resw',    [:any],       :cmd_resw
         bind_cmd '#',       [:wildcard],  :cmd_rem
-        bind_cmd 'rem',     [:wildcard],  :cmd_rem
-        bind_cmd 'mov',     [:any, :any], Vm::Cpu::Unit::Transfer::OP_MOV
-        bind_cmd 'push',    [:any],       Vm::Cpu::Unit::Transfer::OP_PUSH
-        bind_cmd 'pop',     [:any],       Vm::Cpu::Unit::Transfer::OP_POP
-        bind_cmd 'and',     [:any, :any], Vm::Cpu::Unit::Logical::OP_AND
-        bind_cmd 'neg',     [:any],       Vm::Cpu::Unit::Logical::OP_NEG
-        bind_cmd 'not',     [:any],       Vm::Cpu::Unit::Logical::OP_NOT
-        bind_cmd 'or',      [:any, :any], Vm::Cpu::Unit::Logical::OP_OR
-        bind_cmd 'xor',     [:any, :any], Vm::Cpu::Unit::Logical::OP_XOR
-        bind_cmd 'shl',     [:any, :any], Vm::Cpu::Unit::Logical::OP_SHL
-        bind_cmd 'shr',     [:any, :any], Vm::Cpu::Unit::Logical::OP_SHR
-        bind_cmd 'nop',     [],           Vm::Cpu::Unit::Various::OP_NOP
-        bind_cmd 'lea',     [:any, :any], Vm::Cpu::Unit::Various::OP_LEA
-        bind_cmd 'int',     [:any],       Vm::Cpu::Unit::Various::OP_INT
-        bind_cmd 'syscall', [],           Vm::Cpu::Unit::Various::OP_SYSCALL
-        bind_cmd 'call',    [:any],       Vm::Cpu::Unit::Jumps::OP_CALL
-        bind_cmd 'ret',     [],           Vm::Cpu::Unit::Jumps::OP_RET
-        bind_cmd 'iret',    [],           Vm::Cpu::Unit::Jumps::OP_IRET
-        bind_cmd 'jmp',     [:any],       Vm::Cpu::Unit::Jumps::OP_JMP
-        bind_cmd 'je',      [:any],       Vm::Cpu::Unit::Jumps::OP_JE
-        bind_cmd 'jg',      [:any],       Vm::Cpu::Unit::Jumps::OP_JG
-        bind_cmd 'jge',     [:any],       Vm::Cpu::Unit::Jumps::OP_JGE
-        bind_cmd 'jl',      [:any],       Vm::Cpu::Unit::Jumps::OP_JL
-        bind_cmd 'jle',     [:any],       Vm::Cpu::Unit::Jumps::OP_JLE
-        bind_cmd 'jne',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNE
-        bind_cmd 'jng',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNG
-        bind_cmd 'jnge',    [:any],       Vm::Cpu::Unit::Jumps::OP_JNGE
-        bind_cmd 'jnl',     [:any],       Vm::Cpu::Unit::Jumps::OP_JNL
-        bind_cmd 'jnle',    [:any],       Vm::Cpu::Unit::Jumps::OP_JNLE
-        bind_cmd 'inc',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_INC
-        bind_cmd 'dec',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_DEC
-        bind_cmd 'add',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_ADD
-        bind_cmd 'sub',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_SUB
-        bind_cmd 'div',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_DIV
-        bind_cmd 'mul',     [:any],       Vm::Cpu::Unit::Arithmetic::OP_MUL
-        bind_cmd 'cmp',     [:any, :any], Vm::Cpu::Unit::Arithmetic::OP_CMP
+        bind_cmd 'push',    [:reg],       :cmd_push
+        bind_cmd 'pushi',   [:imm],       :cmd_pushi
+        bind_cmd 'pushm',   [:imm],       :cmd_pushm
+        bind_cmd 'pop',     [:reg],       :cmd_pop
+        bind_cmd 'popm',    [:imm],       :cmd_popm
+        bind_cmd 'move',    [:reg, :reg], :cmd_move
+        bind_cmd 'clear',   [:reg],       :cmd_clear
+        bind_cmd 'not',     [:reg, :reg], :cmd_not
+        bind_cmd 'ret',     [],           :cmd_ret
+
+        bind_cmd 'b',       [:imm],             :cmd_b
+        bind_cmd 'bal',     [:imm],             :cmd_bal
+        bind_cmd 'bgt',     [:reg, :reg, :imm], :cmd_bgt
+        bind_cmd 'blt',     [:reg, :reg, :imm], :cmd_blt
+        bind_cmd 'bge',     [:reg, :reg, :imm], :cmd_bge
+        bind_cmd 'ble',     [:reg, :reg, :imm], :cmd_ble
+        bind_cmd 'blez',    [:reg, :imm],       :cmd_blez
+        bind_cmd 'bgtz',    [:reg, :imm],       :cmd_bgtz
+        bind_cmd 'beqz',    [:reg, :imm],       :cmd_beqz
+
+        bind_cmd 'nop',     [],                 Vm::Cpu::Core::OP_NOP
+        bind_cmd 'add',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_ADD
+        bind_cmd 'addi',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_ADDI
+        bind_cmd 'sub',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_SUB
+        bind_cmd 'mult',    [:reg, :reg, :reg], Vm::Cpu::Core::OP_MULT
+        bind_cmd 'div',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_DIV
+        bind_cmd 'mod',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_MOD
+        bind_cmd 'lw',      [:reg, :reg, :imm], Vm::Cpu::Core::OP_LW
+        bind_cmd 'sw',      [:reg, :imm, :reg], Vm::Cpu::Core::OP_SW
+        bind_cmd 'lui',     [:reg, :imm],       Vm::Cpu::Core::OP_LUI
+        bind_cmd 'and',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_AND
+        bind_cmd 'andi',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_ANDI
+        bind_cmd 'or',      [:reg, :reg, :reg], Vm::Cpu::Core::OP_OR
+        bind_cmd 'ori',     [:reg, :reg, :imm], Vm::Cpu::Core::OP_ORI
+        bind_cmd 'xor',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_XOR
+        bind_cmd 'nor',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_NOR
+        bind_cmd 'slt',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_SLT
+        bind_cmd 'slti',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_SLTI
+        bind_cmd 'slli',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_SLLI
+        bind_cmd 'srli',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_SRLI
+        bind_cmd 'sll',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_SLL
+        bind_cmd 'srl',     [:reg, :reg, :reg], Vm::Cpu::Core::OP_SRL
+        bind_cmd 'beq',     [:reg, :reg, :imm], Vm::Cpu::Core::OP_BEQ,  [:rel_imm, :x8]
+        bind_cmd 'beql',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_BEQL, [:rel_imm, :x8]
+        bind_cmd 'bne',     [:reg, :reg, :imm], Vm::Cpu::Core::OP_BNE,  [:rel_imm, :x8]
+        bind_cmd 'bnel',    [:reg, :reg, :imm], Vm::Cpu::Core::OP_BNEL, [:rel_imm, :x8]
+        bind_cmd 'j',       [:imm],             Vm::Cpu::Core::OP_J,    [:x8]
+        bind_cmd 'jr',      [:reg],             Vm::Cpu::Core::OP_JR
+        bind_cmd 'jal',     [:imm],             Vm::Cpu::Core::OP_JAL,  [:x8]
+        bind_cmd 'exiti',   [:imm],             Vm::Cpu::Core::OP_EXITI
+        bind_cmd 'syscall', [],                 Vm::Cpu::Core::OP_SYSCALL
       end
 
-      def bind_cmd(cmd, args, opcode)
+      def bind_cmd(cmd, args, opcode, opts = [])
         @cmds << {
           cmd: cmd,
           args: args,
-          opcode: opcode
+          opcode: opcode,
+          opts: opts
         }
       end
 
@@ -84,10 +105,6 @@ module Haxor
         end
       end
 
-      def cmd_label(name)
-        add Token::Label.new(name)
-      end
-
       def cmd_resw(*args)
         (1..args[0].to_i).each do
           add Token::Int64.new(0)
@@ -95,6 +112,95 @@ module Haxor
       end
 
       def cmd_rem(*)
+      end
+
+      def cmd_push(*args)
+        process_cmd 'addi', ['$sp', '$sp', '-' + Consts::WORD_SIZE.to_s]
+        process_cmd 'sw',   ['$sp', '0', args[0]]
+      end
+
+      def cmd_pushi(*args)
+        process_cmd 'addi', ['$1', '$0', args[0]]
+        process_cmd 'addi', ['$sp', '$sp', '-' + Consts::WORD_SIZE.to_s]
+        process_cmd 'sw',   ['$sp', '0', '$1']
+      end
+
+      def cmd_pushm(*args)
+        process_cmd 'lw', ['$1', '$0', args[0]]
+        process_cmd 'addi', ['$sp', '$sp', '-' + Consts::WORD_SIZE.to_s]
+        process_cmd 'sw',   ['$sp', '0', '$1']
+      end
+
+      def cmd_pop(*args)
+        process_cmd 'lw', [args[0], '$sp', '0']
+        process_cmd 'addi', ['$sp', '$sp', Consts::WORD_SIZE.to_s]
+      end
+
+      def cmd_popm(*args)
+        process_cmd 'lw', ['$1', '$sp', '0']
+        process_cmd 'sw', ['$0', args[0], '$1']
+        process_cmd 'addi', ['$sp', '$sp', Consts::WORD_SIZE.to_s]
+      end
+
+      def cmd_move(*args)
+        process_cmd 'add', [args[0], args[1], '$0']
+      end
+
+      def cmd_clear(*args)
+        process_cmd 'add', [args[0], '$0', '$0']
+      end
+
+      def cmd_not(*args)
+        process_cmd 'nor', [args[0], args[1], '$0']
+      end
+
+      def cmd_ret(*_args)
+        process_cmd 'jr', ['$' + Vm::Cpu::Core::REG_RETURN.to_s]
+      end
+
+      def cmd_b(*args)
+        process_cmd 'beq', ['$0', '$0', args[0]]
+      end
+
+      def cmd_bal(*args)
+        process_cmd 'beql', ['$0', '$0', args[0]]
+      end
+
+      # branch is greater than
+      def cmd_bgt(*args)
+        process_cmd 'slt', ['$1', args[1], args[0]]
+        process_cmd 'bne', ['$1', '$0', args[2]]
+      end
+
+      # branch if less than
+      def cmd_blt(*args)
+        process_cmd 'slt', ['$1', args[0], args[1]]
+        process_cmd 'bne', ['$1', '$0', args[2]]
+      end
+
+      # branch is greater or equal
+      def cmd_bge(*args)
+        process_cmd 'slt', ['$1', args[0], args[1]]
+        process_cmd 'beq', ['$1', '$0', args[2]]
+      end
+
+      def cmd_ble(*args)
+        process_cmd 'slt', ['$1', args[1], args[0]]
+        process_cmd 'beq', ['$1', '$0', args[2]]
+      end
+
+      def cmd_blez(*args)
+        process_cmd 'slt', ['$1', '$0', args[0]]
+        process_cmd 'beq', ['$1', '$0', args[1]]
+      end
+
+      def cmd_bgtz(*args)
+        process_cmd 'slt', ['$1', '$0', args[0]]
+        process_cmd 'bne', ['$1', '$0', args[1]]
+      end
+
+      def cmd_beqz(*args)
+        process_cmd 'beq', [args[0], '$0', args[1]]
       end
 
       # this is ugly and must be reworked
@@ -131,7 +237,7 @@ module Haxor
             return
           end
 
-          add_cmd item[:opcode], args
+          add_cmd item, args
           return
         end
 
@@ -151,7 +257,11 @@ module Haxor
           cmd = tmp[0]
           args = split_arguments(tmp[1] || '')
 
-          process_cmd(cmd, args)
+          if cmd[-1] == ':'
+            add Token::Label.new(cmd[0...-1])
+          else
+            process_cmd(cmd, args)
+          end
         end
 
         @unit.save(filename + '.u')
@@ -161,11 +271,47 @@ module Haxor
         @unit.add token
       end
 
-      def add_cmd(opcode, args = [])
-        opcode |= offset_flags(args[0], args[1])
-        add Token::Cmd.new(opcode)
-        parse_value args[0] unless args[0].nil?
-        parse_value args[1] unless args[1].nil?
+#      def resolve_arg(a, type)
+#        case type
+#        when :reg
+#          return a[1..-1].to_i
+#        when :imm
+#          return a.to_i
+#        else
+#          fail
+#        end
+#      end
+
+      def add_cmd(info, args = [])
+        registers = []
+        immediate = 0
+        info[:args].each_with_index do |type, index|
+          if type == :reg
+            if REG_ALIASES.key? args[index]
+              registers << REG_ALIASES[args[index]]
+            else
+              registers << args[index][1..-1].to_i
+            end
+          elsif type == :imm
+            begin
+              immediate = parse_number args[index]
+            rescue
+              immediate = args[index]
+            end
+          end
+        end
+
+        registers.fill 0, registers.size...3
+
+        token      = Token::Cmd.new
+        token.cmd  = info[:opcode]
+        token.reg1 = registers[0]
+        token.reg2 = registers[1]
+        token.reg3 = registers[2]
+        token.imm  = immediate
+        token.opts = info[:opts]
+
+        add token
       end
 
       def parse_number(value)

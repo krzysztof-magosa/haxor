@@ -16,85 +16,74 @@ dw answer
 dw tries
 
 section .text
-label bigger
-mov sc, 02h
-lea r01, bigger_msg
-push r01
-push 1
-syscall
-jmp question
 
-label smaller
-mov sc, 02h
-lea r01, smaller_msg
-push r01
-push 1
-syscall
-jmp question
+bigger:
+  addi $sc, $0, 01h
+  pushi bigger_msg
+  pushi 1
+  syscall
+  j question
 
-label win
-mov sc, 02h
-push tries
-lea r01, win_msg
-push r01
-push 1
-syscall
-jmp exit
+smaller:
+  addi $sc, $0, 01h
+  pushi smaller_msg
+  pushi 1
+  syscall
+  j question
 
-label invalid_number
-mov sc, 02h
-lea r01, invalid_msg
-push r01
-push 1
-syscall
-jmp question
+win:
+  addi $sc, $0, 01h
+  pushm tries
+  pushi win_msg
+  push 1
+  syscall
+  exiti 0
 
-label main
+invalid_number:
+  addi $sc, $0, 01h
+  pushi invalid_msg
+  push 1
+  syscall
+  j question
 
-label welcome
-mov sc, 02h
-lea r01, welcome_msg
-push r01
-push 1
-syscall
+main:
+  addi $sc, $0, 01h
+  pushi welcome_msg
+  push 1
+  syscall
 
-label generate
-mov sc, 02h
-push max
-push min
-lea r01, generate_msg
-push r01
-push 1
-syscall
-mov sc, 04h
-push max
-push min
-syscall
-pop number
+generate:
+  addi $sc, $0, 01h
+  pushm max
+  pushm min
+  pushi generate_msg
+  pushi 1
+  syscall
+  addi $sc, $0, 03h
+  pushm max
+  pushm min
+  syscall
+  popm number
 
-label question
-mov sc, 02h
-lea r01, question_msg
-push r01
-push 1
-syscall
-mov sc, 03h
-lea r01, answer
-push r01
-lea r01, answer_fmt
-push r01
-push 0
-syscall
-cmp sc, -1
-je invalid_number
-inc tries
+question:
+  addi $sc, $0, 01h
+  pushi question_msg
+  pushi 1
+  syscall
+  addi $sc, $0, 02h
+  pushi answer
+  pushi answer_fmt
+  pushi 0
+  syscall
 
-cmp number, answer
-je win
-jg bigger
-jl smaller
+  addi $5, $0, -1
+  beq $sc, $5, invalid_number
+  lw $6, $0, tries
+  addi $6, $6, 1
+  sw $0, tries, $6
 
-label exit
-mov sc, 01h
-push 0
-syscall
+  lw $7, $0, number
+  lw $8, $0, answer
+  beq $7, $8, win
+  bgt $7, $8, bigger
+  blt $7, $8, smaller

@@ -34,40 +34,29 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 ## Architecture
 
 ### General information
-* Little Endian
-* Size of WORD is 64 bit
-* All registers are 64 bit
-* All numbers are signed
-* Memory works in flat model
-* Only integer arithmetic is supported
-* All memory cells are writable
+* Design: RISC
+* Endianness: Little Endian
+* WORD size: 64-bit
+* Registers size: 64-bit
+* Instruction: fixed size, 64-bit
+* Arithmetic: integer only, 64-bit
+* Memory model: flat, no protection
 
 ### OpCodes
-OpCode is 64 bit integer. 0-7 bits are used to designate command, 8-63 are used to specify flags.
-Command can take 0, 1 or 2 operands. All operands are 64 bit addresses in memory. Const values
-are pushed into _.data_ section by compiler and pointed by automatically generated labels.
-
-```
-[opcode (command + flags)] [operand1] [operand2]
-```
+Instruction is 64-bit, and contains:
+* 0:6 bits - instruction code (7 bits, unsigned)
+* 7:8 bits - flags (2 bits, unsigned, not used at the moment)
+* 9:14 bits - register 1 (6 bits, unsigned)
+* 15:20 bits - register 2 (6 bits, unsigned)
+* 21:26 bits - register 3 (6 bits, unsigned)
+* 27:63 bits - immediate value (37 bits, signed)
 
 ### vCPU
-vCPU registers are mapped into lowest memory addresses between 0 and 1024 bytes.
-* _ip_ - instruction pointer
-* _sp_ - stack pointer
-* _bp_ - base pointer
-* _ar_ - arithmetic register I
-* _dr_ - arithmetic register II
-* _fr_ - flags register
-* _sc_ - syscall register
-* _op_ - currently processed opcode
-* _r01-10_ - general usage registres
-
-### Flags register
-Flags register is 64 bit.
-* bit 0 - ZERO (`A-B=0`, so numbers are equal)
-* bit 1 - SIGN (result is negative)
-* rest is reserved for future use
+vCPU has 64 registers, some of them have special role:
+* $0 - always zero register, writes are ignored
+* $61 (alias $sp) - stack pointer
+* $62 (alias $ret) - return address for linked jumps
+* $63 (alias $sc) - syscall function id and return code
 
 ## Memory map
 <img src="media/memory.png" width="50%">
@@ -75,440 +64,74 @@ Flags register is 64 bit.
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
 You can add comments in code, but they also need to be separate lines, beginning
-from _#_ or _rem_.
-For two-argument commands destination goes into first argument while source into second one.
-In some commands you can dereference value by enclosing it in brackets (e.g. `[sp]`).
-Program starts from _main_ label.
+from _#_. Program starts from _main_ label. Labels are created by putting name and color on the end of line (e.g. `main:`).
 
-```
-command A, B
-```
+Most of instructions take 3 registers or 2 registers and immediate value.
+If not stated differently result goes to first specified register.
 
 ## Instructions
-### Arithmetic
-#### add
-Sums _A_ and _B_, result goes to _A_.
-OpCode: 0x01.
-
-Example:
-```
-add A, B
-```
-
-C equivalent:
-```
-A = A + B
-```
-
-#### sub
-Subtracts _B_ from _A_, result goes to _A_.
-OpCode: 0x02.
-
-Example:
-```
-sub A, B
-```
-
-C equivalent:
-```
-A = A - B
-```
-
-#### div
-Divides `ar` register by _A_. Result goes to register. Remainder goes to `dr` register.
-OpCode: 0x03.
-
-Example:
-```
-div A
-```
-
-C equivalent:
-```
-ar = ar / A
-dr = ar % A
-```
-
-#### mul
-Multiplies `ar` register by _A_. Result goes to register.
-OpCode: 0x04.
-
-Example:
-```
-mul A
-```
-
-C equivalent:
-```
-ar = ar * A
-```
-
-#### inc
-Increments _A_ by 1.
-OpCode: 0x05.
-
-Example:
-```
-inc A
-```
-
-C equivalent:
-```
-A++
-```
-
-#### dec
-Decrements _A_ by 1.
-OpCode: 0x06.
-
-Example:
-```
-dec A
-```
-
-C equivalent:
-```
-A--
-```
-
-#### cmp
-Compares _A_ with _B_ by subtracting _B_ from _A_ and setting flags register bits.
-OpCode: 0x07.
-
-Example:
-```
-cmp A, B
-```
-
-### Logical
-#### and
-Performs bitwise AND operation.
-OpCode: 0x40.
-
-Example:
-```
-and A, B
-```
-
-C equivalent:
-```
-A &= B
-```
-
-#### neg
-Reverses the sign of number _A_.
-OpCode: 0x41.
-
-Example:
-```
-neg A
-```
-
-C equivalent:
-```
-A = -A
-```
-
-#### not
-Performs bitwise NOT operation.
-OpCode: 0x42.
-
-Example:
-```
-not A
-```
-
-C equivalent:
-```
-A = ~A
-```
-
-#### or
-Performs bitwise OR operation.
-OpCode: 0x43.
-
-Example:
-```
-or A, B
-```
-
-C equivalent:
-```
-A = A | B
-```
-
-#### xor
-Performs bitwise XOR operation.
-OpCode: 0x44.
-
-Example:
-```
-xor A, B
-```
-
-C equivalent:
-```
-A = A ^ B
-```
-
-#### shl
-Left shift, moves _A_ bits by _B_ positions.
-OpCode: 0x45.
-
-Example:
-```
-shl A, B
-```
-
-C equivalent:
-```
-A = A << B
-```
-
-#### shr
-Right shift, moves _A_ bits by _B_ positions.
-OpCode: 0x46.
-
-Example:
-```
-shr A, B
-```
-
-C equivalent:
-```
-A = A >> B
-```
-
-### Transfer
-#### mov
-Moves data from _B_ to _A_.
-OpCode: 0x60.
-
-Example:
-```
-mov A, B
-```
-
-C equivalent:
-```
-A = B
-```
-
-#### push
-Places _A_ on top of stack.
-OpCode: 0x61.
-
-Example:
-```
-push A
-```
-
-#### pop
-Removes element from top of the stack and into _A_.
-OpCode: 0x62.
-
-Example:
-```
-pop A
-```
-
-### Jumps
-#### call
-Places _ip_ register on the stack and jumps to _A_.
-OpCode: 0x20.
-
-Example:
-```
-call A
-```
-
-C equivalent:
-```
-A()
-```
-
-#### ret
-Pops _ip_ from the stack, and jumps to it.
-OpCode: 0x2c.
-
-Example:
-```
-ret
-```
-
-C equivalent:
-```
-return
-```
-
-### iret
-Comes back from interrupt.
-OpCode: 0x2d.
-
-Example:
-```
-iret
-```
-
-#### jmp
-Performs unconditional jump to _A_.
-OpCode: 0x21.
-
-Example:
-```
-jmp A
-```
-
-```
-goto A
-```
-
-#### je
-Jumps to _A_ if in _cmp_ _A_ is equal to _B_.
-OpCode: 0x22.
-
-Example:
-```
-je A
-```
-
-#### jg
-Jumps to _A_ if in _cmp_ _A_ is greater than _B_.
-OpCode: 0x23.
-
-Example:
-```
-jg A
-```
-
-#### jge
-Jumps to _A_ if in _cmp_ _A_ is greater or equal to _B_.
-OpCode: 0x24.
-
-Example:
-```
-jge A
-```
-
-#### jl
-Jumps to _A_ if in _cmp_ _A_ is less than _B_.
-OpCode: 0x25.
-
-Example:
-```
-jl A
-```
-
-#### jle
-Jumps to _A_ if in _cmp_ _A_ is less or equal to _B_.
-OpCode: 0x26.
-
-Example:
-```
-jle A
-```
-
-#### jne
-Jumps to _A_ if in _cmp_ _A_ is not equal to _B_.
-OpCode: 0x27.
-
-Example:
-```
-jne A
-```
-
-#### jng
-Jumps to _A_ if in _cmp_ _A_ is not greater than _B_.
-OpCode: 0x28.
-
-Example:
-```
-jng A
-```
-
-#### jnge
-Jumps to _A_ if in _cmp_ _A_ is not greater or equal to _B_.
-OpCode: 0x29.
-
-Example:
-```
-jnge A
-```
-
-#### jnl
-Jumps to _A_ if in _cmp_ _A_ is not less than _B_.
-OpCode: 0x2a.
-
-Example:
-```
-jnl A
-```
-
-#### jnle
-Jumps to _A_ if in _cmp_ _A_ is not less or equal to _B_.
-OpCode: 0x2b.
-
-Example:
-```
-jnle A
-```
-
-### Various
-#### lea
-Pushes address of _B_ into _A_.
-OpCode: 0x80.
-
-Example:
-```
-lea A, B
-```
-
-C equivalent:
-```
-int *A = &B
-```
-
-#### nop
-Does nothing.
-OpCode: 0x81.
-```
-nop
-```
-
-#### int
-Generate software interrupt with ID specified by _A_.
-OpCode: 0x85.
-
-Example:
-```
-int A
-```
-
-#### syscall
-Asks Haxor VM to do "system" call. OpCode: 0x86.
-
-Example:
-```
-syscall
-```
+### Native instructions
+|Syntax|OpCode|Description|
+|------|------|-----------|
+|nop                  |0x00|Does nothing.|
+|exiti imm            |0x01|Closes VM with specified exit code.|
+|syscall              |0x02|Performs Syscall with ID stored in $sc register.|
+|add reg1, reg2, reg3 |0x10|reg1 = reg2 + reg3|
+|addi reg1, reg2, imm |0x11|reg1 = reg2 + imm|
+|sub reg1, reg2, reg3 |0x12|reg1 = reg2 - reg3|
+|mult reg1, reg2, reg3|0x13|reg1 = reg2 * reg3|
+|div reg1, reg2, reg3 |0x14|reg1 = reg2 / reg3|
+|mod reg1, reg2, reg3 |0x15|reg1 = reg2 % reg3|
+|lw reg1, reg2, imm   |0x20|reg1 = memory[reg2 + imm]|
+|sw reg1, imm, reg2   |0x21|memory[reg1+imm] = reg2|
+|lui reg1, imm        |0x22|reg1 = (imm << 32)|
+|and reg1, reg2, reg3 |0x30|reg1 = reg2 & reg3|
+|andi reg1, reg2, imm |0x31|reg1 = reg2 & imm|
+|or reg1, reg2, reg3  |0x32|reg1 = reg2 \| reg3|
+|ori reg1, reg2, imm  |0x33|reg1 = reg2 \| imm|
+|xor reg1, reg2, reg3 |0x34|reg1 = reg2 ^ reg3|
+|nor reg1, reg2, reg3 |0x35|reg1 = ~(reg2 \| reg3)|
+|slt reg1, reg2, reg3 |0x36|reg1 = reg2 < reg3|
+|slti reg1, reg2, imm |0x37|reg1 = reg2 < imm|
+|slli reg1, reg2, imm |0x40|reg1 = reg2 << imm|
+|srli reg1, reg2, imm |0x41|reg1 = reg2 >> imm|
+|sll reg1, reg2, reg3 |0x42|reg1 = reg2 << reg3|
+|srl reg1, reg2, reg3 |0x43|reg1 = reg2 >> reg3|
+|beq reg1, reg2, imm  |0x50|goto imm if reg1 == reg2|
+|beql reg1, reg2, imm |0x51|$ret = pc, goto imm if reg1 == reg2|
+|bne reg1, reg2, imm  |0x52|goto imm if reg1 != reg2|
+|bnel reg1, reg2, imm |0x53|$ret = pc, goto imm if reg1 != reg2|
+|j imm                |0x54|goto imm|
+|jr reg1              |0x55|goto reg1|
+|jal imm              |0x56|$ret = pc, goto imm|
+
+### Pseudo instructions
+|Syntax|Description|
+|------|-----------|
+|push reg1          |Pushes register onto stack|
+|pushi imm          |Pushes const onto stack|
+|pushm imm          |Pushes word stored at specified address|
+|pop reg1           |Pops value into register|
+|popm imm           |Pops value into specified address|
+|move reg1, reg2    |reg1 = reg2|
+|clear reg1         |reg1 = 0|
+|not reg1, reg2     |reg1 = ~reg2|
+|ret                |Jumps to address stored in $ret|
+|b imm              |Unconditional branch|
+|bal imm            |Unconditional linked branch|
+|bgt reg1, reg2, imm|goto imm if reg1 > reg2|
+|blt reg1, reg2, imm|goto imm if reg1 < reg2|
+|bge reg1, reg2, imm|goto imm if reg1 >= reg2|
+|ble reg1, reg2, imm|goto imm if reg1 <= reg2|
+|blez reg1, imm     |goto imm if reg1 <= 0|
+|bgtz reg1, imm     |goto imm if reg1 > 0|
+|beqz reg1, imm     |goto imm if reg1 == 0|
 
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.
-System call number is passed via _sc_ register, arguments go via stack in reversed order.
+System call number is passed via _$sc_ register, arguments go via stack in reversed order.
 
-### exit (01h)
-Terminates VM process with specified exit code.
-Takes 1 argument:
-* exit code
-
-Example:
-```
-push 100
-mov sc, 01h
-syscall
-```
-
-### printf (02h)
+### printf (01h)
 Prints formatted text into file specified by descriptor.
 Takes 2 or more arguments:
 * file descriptor (1 for standard output, 2 for standard error)
@@ -517,13 +140,13 @@ Takes 2 or more arguments:
 
 Example:
 ```
-lea r01, format_text
-push r01
-push 1
-mov sc, 02h
+addi $sc, $0, 01h
+pushi msg_fmt
+pushi 1
+syscall
 ```
 
-### scanf (03h)
+### scanf (02h)
 Converts data from file specified by descriptor.
 Remember that memory is not automatically
 allocated by this function. You need to prepare
@@ -537,23 +160,14 @@ Takes 2 or more arguments:
 
 Example:
 ```
-section .data
-dw scanfmt, "%100s", 0
-
-section .bss
-label name
-resw 101
-
-lea r01, name
-push r01
-lea r01, scanfmt
-push r01
-push 0
-mov sc, 03h
+addi $sc, $0, 02h
+pushi answer
+pushi format
+pushi 0
 syscall
 ```
 
-### random (04h)
+### random (03h)
 Generates random integer from specified range.
 Arguments:
 * minimum (inclusive)
@@ -563,8 +177,8 @@ Generated number is pushed onto stack.
 
 Example:
 ```
-mov sc, 04h
-push 100
-push 1
+addi $sc, $0, 03h
+pushi 100
+pushi 1
 syscall
 ```

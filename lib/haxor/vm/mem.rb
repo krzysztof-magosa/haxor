@@ -1,7 +1,7 @@
 module Haxor
   module Vm
     class Mem < Subsystem
-      attr_accessor :memory
+      #attr_accessor :memory
 
       def initialize(bytes)
         @memory = Array.new(bytes, 0).pack('C*')
@@ -56,44 +56,9 @@ module Haxor
         @memory[addr...x] = data
       end
 
-      # (see #read)
-      def dereference(addr)
-        read addr
-      end
-
-      # Reads data pointed by IP register and moves IP forward
-      #
-      # @return [Integer] Data stored under address pointed by IP
-      def next_word
-        data = read ip
-        move_ip Consts::WORD_SIZE
-        data
-      end
-
-      # TODO: BC
-      def next_cell
-        next_word
-      end
-
-      def ip
-        read 'ip'
-      end
-
-      def move_ip(step)
-        write 'ip', ip + step
-      end
-
-      def label(name)
-        @labels[addr]
-      end
-
       private
 
       def resolve(addr)
-        if addr.is_a? String
-          fail "Unknown label #{addr}." unless @labels.key? addr
-          addr = @labels[addr]
-        end
         Range.new(addr, addr + Consts::WORD_SIZE, true)
       end
     end

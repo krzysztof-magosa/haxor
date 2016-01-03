@@ -1,24 +1,24 @@
 module Haxor
   module Utils
-    def self.encode_opcode(cmd = 0, flags = 0, reg1 = 0, reg2 = 0, reg3 = 0, immediate = 0)
+    def self.encode_opcode(cmd = 0, flags = 0, reg1 = 0, reg2 = 0, reg3 = 0, imm = 0)
       result = cmd
-      result |= flags << 8
-      result |= reg1 << 14
-      result |= reg2 << 20
-      result |= reg3 << 26
-      result |= immediate << 32
+      result |= flags << 7
+      result |= reg1 << 9
+      result |= reg2 << 15
+      result |= reg3 << 21
+      result |= imm << 27
       result
     end
 
     def self.decode_opcode(opcode)
-      [
-        opcode & 0xff,         # cmd
-        (opcode >> 8) & 0x3f,  # flags
-        (opcode >> 14) & 0x3f, # reg1
-        (opcode >> 20) & 0x3f, # reg2
-        (opcode >> 26) & 0x3f, # reg3
-        (opcode >> 32)         # immediate
-      ]
+      r = OpenStruct.new
+      r.cmd   = opcode & 0x7f
+      r.flags = (opcode >> 7) & 0x03
+      r.reg1  = (opcode >> 9) & 0x3f
+      r.reg2  = (opcode >> 15) & 0x3f
+      r.reg3  = (opcode >> 21) & 0x3f
+      r.imm   = (opcode >> 27)
+      r
     end
   end
 end

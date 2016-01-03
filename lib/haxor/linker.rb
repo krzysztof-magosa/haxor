@@ -8,7 +8,7 @@ module Haxor
       @cpu = Vm::Cpu::Core.new
       @units = []
       @tokens = []
-      @labels = @cpu.labels.clone
+      @labels = {}
       @stack = 4096
     end
 
@@ -56,9 +56,17 @@ module Haxor
     end
 
     def unwind_pointers
-      walk_tokens(Token::Pointer) do |token|
-        fail "Label not found: #{token.label}." unless @labels.key? token.label
-        token.data = @labels[token.label].absolute_addr
+      walk_tokens(Token::Cmd) do |token|
+        next unless token.imm.is_a? String
+        fail "Label not found: #{token.imm}." unless @labels.key? token.imm
+
+        token.imm = @labels[token.imm].absolute_addr
+
+        if token.opts.include? :rel_imm
+          token.imm -= token.absolute_addr + Consts::WORD_SIZE
+        end
+
+        token.imm /= Consts::WORD_SIZE if token.opts.include? :x8
       end
     end
 

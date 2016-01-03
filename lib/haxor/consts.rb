@@ -11,23 +11,8 @@ module Haxor
     WORD_SIZE = 8 # 64bit
     WORD_UNPACK = 'q<'
 
-    CPU_MEM      = 1024
     IVT_MEM      = 1024
-    RESERVED_MEM = CPU_MEM + IVT_MEM
-    IVT_ADDR     = CPU_MEM
-
-    # OpCode
-    OPCODE_CMD_MASK = 0x0000_0000_0000_00ff
-    OPCODE_FLG_MASK = 0xffff_ffff_ffff_ff00 # << 8
-    OPCODE_FLG_OFFSET = 8
-    # 8 bits of flag - 1st operand
-    # 8 bits of flag - 2nd operand
-
-    OPERAND_FLAGS = 8 # how many bits per operand
-    OPERAND_DEREFERENCE = (1 << 0) # Dereference operand (aka *operand)
-
-    # Flags Registry Flags
-    FR_ZERO    = 1 << 0 # a-b == 0
-    FR_SIGN    = 1 << 1 # a-b < 0
+    IVT_ADDR     = 0
+    RESERVED_MEM = IVT_MEM
   end
 end
