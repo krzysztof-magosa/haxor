@@ -2,8 +2,8 @@
 [![Gem Version](https://badge.fury.io/rb/haxor.svg)](https://badge.fury.io/rb/haxor)
 [![Code Climate](https://codeclimate.com/github/krzysztof-magosa/haxor/badges/gpa.svg)](https://codeclimate.com/github/krzysztof-magosa/haxor)
 
-Haxor consists of compiler _hcc_, linker _hld_ and virtual machine _hvm_.
-_hcc_ translates asm-like code into tokens, _hld_ links them into bytecode, while _hvm_ runs it.
+Haxor consists of compiler _hc_, linker _hld_ and virtual machine _hvm_.
+_hc_ translates asm-like code into tokens, _hld_ links them into bytecode, while _hvm_ runs it.
 
 ## Man, why have you written that?
 Writing own implementation of VM gives a lot of knowledge about

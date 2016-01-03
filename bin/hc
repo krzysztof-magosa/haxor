@@ -4,7 +4,7 @@ require_relative '../lib/haxor'
 require 'optparse'
 
 parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: hcc [options] [file.hax]'
+  opts.banner = 'Usage: hc [options] [file.hax]'
 
   opts.on_tail('-h', '--help', 'Show this message') do
     puts opts
