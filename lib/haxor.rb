@@ -16,7 +16,7 @@ require_relative 'haxor/vm/mem'
 require_relative 'haxor/vm/stack'
 require_relative 'haxor/vm/os'
 require_relative 'haxor/vm/registers'
-require_relative 'haxor/vm/cpu/core'
+require_relative 'haxor/vm/cpu'
 
 # compiler
 require_relative 'haxor/compiler/unit'

@@ -7,9 +7,9 @@ module Haxor
       end
 
       def push_value(value)
-        sp = @vm.subsystem(:cpu).reg Vm::Cpu::Core::REG_STACK
+        sp = @vm.subsystem(:cpu).reg Vm::Cpu::REG_STACK
         sp -= Consts::WORD_SIZE
-        @vm.subsystem(:cpu).reg Vm::Cpu::Core::REG_STACK, sp
+        @vm.subsystem(:cpu).reg Vm::Cpu::REG_STACK, sp
         @vm.subsystem(:mem).write sp, value
       end
 
@@ -19,10 +19,10 @@ module Haxor
       end
 
       def pop_value
-        sp = @vm.subsystem(:cpu).reg Vm::Cpu::Core::REG_STACK
+        sp = @vm.subsystem(:cpu).reg Vm::Cpu::REG_STACK
         value = @vm.subsystem(:mem).read sp
         sp += Consts::WORD_SIZE
-        @vm.subsystem(:cpu).reg Vm::Cpu::Core::REG_STACK, sp
+        @vm.subsystem(:cpu).reg Vm::Cpu::REG_STACK, sp
 
         value
       end

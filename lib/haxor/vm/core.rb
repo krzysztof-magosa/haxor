@@ -5,7 +5,7 @@ module Haxor
 
       def initialize
         @subsystems = {}
-        register_subsystem :cpu, Cpu::Core.new
+        register_subsystem :cpu, Cpu.new
         register_subsystem :mem, Mem.new(Consts::RESERVED_MEM)
         register_subsystem :stack, Stack.new
         register_subsystem :os, Os.new
@@ -45,7 +45,7 @@ module Haxor
         subsystem(:cpu).ip = @hdr.entry_point # instruction pointer
         subsystem(:mem).enlarge @hdr.bss_size
         subsystem(:mem).enlarge @hdr.stack_size
-        subsystem(:cpu).reg Vm::Cpu::Core::REG_STACK, subsystem(:mem).size
+        subsystem(:cpu).reg Vm::Cpu::REG_STACK, subsystem(:mem).size
       end
     end
   end

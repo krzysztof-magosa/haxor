@@ -8,7 +8,7 @@ module Haxor
       }
 
       def syscall
-        func = subsystem(:cpu).reg(Vm::Cpu::Core::REG_SYSCALL)
+        func = subsystem(:cpu).reg(Vm::Cpu::REG_SYSCALL)
         send(TABLE[func])
       end
 
@@ -78,7 +78,7 @@ module Haxor
         result = file.scanf fmt
 
         if result.size != types.size
-          subsystem(:cpu).reg Vm::Cpu::Core::REG_SYSCALL, -1
+          subsystem(:cpu).reg Vm::Cpu::REG_SYSCALL, -1
           return
         end
 
