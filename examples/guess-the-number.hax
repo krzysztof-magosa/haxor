@@ -22,6 +22,8 @@ bigger:
   pushi bigger_msg
   pushi 1
   syscall
+  addi $sp, $sp, 16
+
   j question
 
 smaller:
@@ -29,6 +31,8 @@ smaller:
   pushi smaller_msg
   pushi 1
   syscall
+  addi $sp, $sp, 16
+
   j question
 
 win:
@@ -37,6 +41,8 @@ win:
   pushi win_msg
   push 1
   syscall
+  addi $sp, $sp, 24
+
   exiti 0
 
 invalid_number:
@@ -44,6 +50,8 @@ invalid_number:
   pushi invalid_msg
   push 1
   syscall
+  addi $sp, $sp, 16
+
   j question
 
 main:
@@ -51,6 +59,7 @@ main:
   pushi welcome_msg
   push 1
   syscall
+  addi $sp, $sp, 16
 
 generate:
   addi $sc, $0, 01h
@@ -59,25 +68,30 @@ generate:
   pushi generate_msg
   pushi 1
   syscall
+  addi $sp, $sp, 32
+
   addi $sc, $0, 03h
   pushm max
   pushm min
   syscall
-  popm number
+  addi $sp, $sp, 16
+  sw $r0, number, $sc
 
 question:
   addi $sc, $0, 01h
   pushi question_msg
   pushi 1
   syscall
+  addi $sp, $sp, 16
+
   addi $sc, $0, 02h
   pushi answer
   pushi answer_fmt
   pushi 0
   syscall
+  addi $sp, $sp, 24
 
-  addi $5, $0, -1
-  beq $sc, $5, invalid_number
+  beq $sc, $0, invalid_number
   lw $6, $0, tries
   addi $6, $6, 1
   sw $0, tries, $6

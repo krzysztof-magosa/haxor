@@ -46,6 +46,8 @@ module Haxor
         subsystem(:mem).enlarge @hdr.bss_size
         subsystem(:mem).enlarge @hdr.stack_size
         subsystem(:cpu).reg Vm::Cpu::REG_STACK, subsystem(:mem).size
+
+        puts subsystem(:mem).size
       end
     end
   end
