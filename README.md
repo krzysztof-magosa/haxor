@@ -150,6 +150,8 @@ If not stated differently result goes to first specified register.
 |blez reg1, imm     |goto imm if reg1 <= 0|
 |bgtz reg1, imm     |goto imm if reg1 > 0|
 |beqz reg1, imm     |goto imm if reg1 == 0|
+|prol imm           |function prologue, imm - numbers of bytes to reserve on stack|
+|epil               |function epilogue|
 
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.
