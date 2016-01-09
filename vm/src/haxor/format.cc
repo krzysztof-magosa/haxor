@@ -56,6 +56,11 @@ namespace haxor {
         fmt_token t;
         t.flags     = m[1];
         t.width     = m[2];
+        if (t.width.empty()) {
+          t.width_n = -1;
+        } else {
+          t.width_n   = std::stoi(m[2]);
+        }
         t.precision = m[3];
         t.length    = m[4];
         t.specifier = m[5];

@@ -18,6 +18,7 @@ namespace haxor {
   struct fmt_token {
     std::string flags;
     std::string width;
+    int64_t width_n;
     std::string precision;
     std::string length;
     std::string specifier;
