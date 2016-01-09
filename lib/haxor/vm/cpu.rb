@@ -46,7 +46,32 @@ module Haxor
       OP_JR      = 0x55
       OP_JAL     = 0x56
 
+      #
       REG_ZERO    = 0
+      REG_ASM     = 1
+
+      REG_ARG_0   = 2
+      REG_ARG_1   = 3
+      REG_ARG_2   = 4
+      REG_ARG_3   = 5
+      REG_ARG_4   = 6
+      REG_ARG_5   = 7
+      REG_ARG_6   = 8
+      REG_ARG_7   = 9
+      REG_ARG_8   = 10
+      REG_ARG_9   = 11
+
+      REG_TEMP_0  = 12
+      REG_TEMP_1  = 13
+      REG_TEMP_2  = 14
+      REG_TEMP_3  = 15
+      REG_TEMP_4  = 16
+      REG_TEMP_5  = 17
+      REG_TEMP_6  = 18
+      REG_TEMP_7  = 19
+      REG_TEMP_8  = 20
+      REG_TEMP_9  = 21
+
       REG_FRAME   = 60
       REG_STACK   = 61
       REG_RETURN  = 62

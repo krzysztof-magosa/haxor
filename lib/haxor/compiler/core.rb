@@ -2,6 +2,31 @@ module Haxor
   module Compiler
     class Core
       REG_ALIASES = {
+        '$zero' => Vm::Cpu::REG_ZERO,
+        '$at'   => Vm::Cpu::REG_ASM,
+
+        '$a0'   => Vm::Cpu::REG_ARG_0,
+        '$a1'   => Vm::Cpu::REG_ARG_1,
+        '$a2'   => Vm::Cpu::REG_ARG_2,
+        '$a3'   => Vm::Cpu::REG_ARG_3,
+        '$a4'   => Vm::Cpu::REG_ARG_4,
+        '$a5'   => Vm::Cpu::REG_ARG_5,
+        '$a6'   => Vm::Cpu::REG_ARG_6,
+        '$a7'   => Vm::Cpu::REG_ARG_7,
+        '$a8'   => Vm::Cpu::REG_ARG_8,
+        '$a9'   => Vm::Cpu::REG_ARG_9,
+
+        '$t0'   => Vm::Cpu::REG_TEMP_0,
+        '$t1'   => Vm::Cpu::REG_TEMP_1,
+        '$t2'   => Vm::Cpu::REG_TEMP_2,
+        '$t3'   => Vm::Cpu::REG_TEMP_3,
+        '$t4'   => Vm::Cpu::REG_TEMP_4,
+        '$t5'   => Vm::Cpu::REG_TEMP_5,
+        '$t6'   => Vm::Cpu::REG_TEMP_6,
+        '$t7'   => Vm::Cpu::REG_TEMP_7,
+        '$t8'   => Vm::Cpu::REG_TEMP_8,
+        '$t9'   => Vm::Cpu::REG_TEMP_9,
+
         '$fp'  => Vm::Cpu::REG_FRAME,
         '$sp'  => Vm::Cpu::REG_STACK,
         '$ra'  => Vm::Cpu::REG_RETURN,

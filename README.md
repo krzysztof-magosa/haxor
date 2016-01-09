@@ -53,10 +53,34 @@ Instruction is 64-bit, and contains:
 
 ### vCPU
 vCPU has 64 registers, some of them have special role:
-* $0 - always zero register, writes are ignored
-* $61 (alias $sp) - stack pointer
-* $62 (alias $ra) - return address for linked jumps
-* $63 (alias $sc) - syscall function id and return code
+|Number|Alias|Description|
+|------|-----|-----------|
+|0     |$zero|always zero register, writes are ignored|
+|1     |$at  |reserved for assembler (pseudo-instructions etc.)|
+|2     |$a0  |argument for routine|
+|3     |$a1  |argument for routine|
+|4     |$a2  |argument for routine|
+|5     |$a3  |argument for routine|
+|6     |$a4  |argument for routine|
+|7     |$a5  |argument for routine|
+|8     |$a6  |argument for routine|
+|9     |$a7  |argument for routine|
+|10    |$a8  |argument for routine|
+|11    |$a9  |argument for routine|
+|12    |$t0  |temporary (local variable)|
+|13    |$t1  |temporary (local variable)|
+|14    |$t2  |temporary (local variable)|
+|15    |$t3  |temporary (local variable)|
+|16    |$t4  |temporary (local variable)|
+|17    |$t5  |temporary (local variable)|
+|18    |$t6  |temporary (local variable)|
+|19    |$t7  |temporary (local variable)|
+|20    |$t8  |temporary (local variable)|
+|21    |$t9  |temporary (local variable)|
+|...   |...  |...|
+|61    |$sp  |stack pointer|
+|62    |$ra  |return address for linked jumps/branches|
+|63    |$sc  |syscall function id and return code|
 
 ## Memory map
 <img src="media/memory.png" width="50%">
