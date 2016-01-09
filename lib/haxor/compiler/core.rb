@@ -1,36 +1,110 @@
 module Haxor
   module Compiler
     class Core
+      # Misc
+      OP_NOP     = 0x00
+      OP_EXITI   = 0x01
+      OP_SYSCALL = 0x02
+
+      # Arithmetic
+      OP_ADD     = 0x10
+      OP_ADDI    = 0x11
+      OP_SUB     = 0x12
+      OP_MULT    = 0x13
+      OP_DIV     = 0x14
+      OP_MOD     = 0x15
+
+      # Data transfer
+      OP_LW      = 0x20
+      OP_SW      = 0x21
+      OP_LUI     = 0x22
+
+      # Logical
+      OP_AND     = 0x30
+      OP_ANDI    = 0x31
+      OP_OR      = 0x32
+      OP_ORI     = 0x33
+      OP_XOR     = 0x34
+      OP_NOR     = 0x35
+      OP_SLT     = 0x36
+      OP_SLTI    = 0x37
+
+      # Bitwise shift
+      OP_SLLI    = 0x40
+      OP_SRLI    = 0x41
+      OP_SLL     = 0x42
+      OP_SRL     = 0x43
+
+      # Branch/Jumps
+      OP_BEQ     = 0x50
+      OP_BEQL    = 0x51
+      OP_BNE     = 0x52
+      OP_BNEL    = 0x53
+      OP_J       = 0x54
+      OP_JR      = 0x55
+      OP_JAL     = 0x56
+
+      #
+      REG_ZERO    = 0
+      REG_ASM     = 1
+
+      REG_ARG_0   = 2
+      REG_ARG_1   = 3
+      REG_ARG_2   = 4
+      REG_ARG_3   = 5
+      REG_ARG_4   = 6
+      REG_ARG_5   = 7
+      REG_ARG_6   = 8
+      REG_ARG_7   = 9
+      REG_ARG_8   = 10
+      REG_ARG_9   = 11
+
+      REG_TEMP_0  = 12
+      REG_TEMP_1  = 13
+      REG_TEMP_2  = 14
+      REG_TEMP_3  = 15
+      REG_TEMP_4  = 16
+      REG_TEMP_5  = 17
+      REG_TEMP_6  = 18
+      REG_TEMP_7  = 19
+      REG_TEMP_8  = 20
+      REG_TEMP_9  = 21
+
+      REG_FRAME   = 60
+      REG_STACK   = 61
+      REG_RETURN  = 62
+      REG_SYSCALL = 63
+
       REG_ALIASES = {
-        '$zero' => Vm::Cpu::REG_ZERO,
-        '$at'   => Vm::Cpu::REG_ASM,
+        '$zero' => REG_ZERO,
+        '$at'   => REG_ASM,
 
-        '$a0'   => Vm::Cpu::REG_ARG_0,
-        '$a1'   => Vm::Cpu::REG_ARG_1,
-        '$a2'   => Vm::Cpu::REG_ARG_2,
-        '$a3'   => Vm::Cpu::REG_ARG_3,
-        '$a4'   => Vm::Cpu::REG_ARG_4,
-        '$a5'   => Vm::Cpu::REG_ARG_5,
-        '$a6'   => Vm::Cpu::REG_ARG_6,
-        '$a7'   => Vm::Cpu::REG_ARG_7,
-        '$a8'   => Vm::Cpu::REG_ARG_8,
-        '$a9'   => Vm::Cpu::REG_ARG_9,
+        '$a0'   => REG_ARG_0,
+        '$a1'   => REG_ARG_1,
+        '$a2'   => REG_ARG_2,
+        '$a3'   => REG_ARG_3,
+        '$a4'   => REG_ARG_4,
+        '$a5'   => REG_ARG_5,
+        '$a6'   => REG_ARG_6,
+        '$a7'   => REG_ARG_7,
+        '$a8'   => REG_ARG_8,
+        '$a9'   => REG_ARG_9,
 
-        '$t0'   => Vm::Cpu::REG_TEMP_0,
-        '$t1'   => Vm::Cpu::REG_TEMP_1,
-        '$t2'   => Vm::Cpu::REG_TEMP_2,
-        '$t3'   => Vm::Cpu::REG_TEMP_3,
-        '$t4'   => Vm::Cpu::REG_TEMP_4,
-        '$t5'   => Vm::Cpu::REG_TEMP_5,
-        '$t6'   => Vm::Cpu::REG_TEMP_6,
-        '$t7'   => Vm::Cpu::REG_TEMP_7,
-        '$t8'   => Vm::Cpu::REG_TEMP_8,
-        '$t9'   => Vm::Cpu::REG_TEMP_9,
+        '$t0'   => REG_TEMP_0,
+        '$t1'   => REG_TEMP_1,
+        '$t2'   => REG_TEMP_2,
+        '$t3'   => REG_TEMP_3,
+        '$t4'   => REG_TEMP_4,
+        '$t5'   => REG_TEMP_5,
+        '$t6'   => REG_TEMP_6,
+        '$t7'   => REG_TEMP_7,
+        '$t8'   => REG_TEMP_8,
+        '$t9'   => REG_TEMP_9,
 
-        '$fp'  => Vm::Cpu::REG_FRAME,
-        '$sp'  => Vm::Cpu::REG_STACK,
-        '$ra'  => Vm::Cpu::REG_RETURN,
-        '$sc'  => Vm::Cpu::REG_SYSCALL
+        '$fp'  => REG_FRAME,
+        '$sp'  => REG_STACK,
+        '$ra'  => REG_RETURN,
+        '$sc'  => REG_SYSCALL
       }
 
       def initialize
@@ -69,37 +143,37 @@ module Haxor
         bind_cmd 'bgtz',    [:reg, :imm],       :cmd_bgtz
         bind_cmd 'beqz',    [:reg, :imm],       :cmd_beqz
 
-        bind_cmd 'nop',     [],                 Vm::Cpu::OP_NOP
-        bind_cmd 'add',     [:reg, :reg, :reg], Vm::Cpu::OP_ADD
-        bind_cmd 'addi',    [:reg, :reg, :imm], Vm::Cpu::OP_ADDI
-        bind_cmd 'sub',     [:reg, :reg, :reg], Vm::Cpu::OP_SUB
-        bind_cmd 'mult',    [:reg, :reg, :reg], Vm::Cpu::OP_MULT
-        bind_cmd 'div',     [:reg, :reg, :reg], Vm::Cpu::OP_DIV
-        bind_cmd 'mod',     [:reg, :reg, :reg], Vm::Cpu::OP_MOD
-        bind_cmd 'lw',      [:reg, :reg, :imm], Vm::Cpu::OP_LW
-        bind_cmd 'sw',      [:reg, :imm, :reg], Vm::Cpu::OP_SW
-        bind_cmd 'lui',     [:reg, :imm],       Vm::Cpu::OP_LUI
-        bind_cmd 'and',     [:reg, :reg, :reg], Vm::Cpu::OP_AND
-        bind_cmd 'andi',    [:reg, :reg, :imm], Vm::Cpu::OP_ANDI
-        bind_cmd 'or',      [:reg, :reg, :reg], Vm::Cpu::OP_OR
-        bind_cmd 'ori',     [:reg, :reg, :imm], Vm::Cpu::OP_ORI
-        bind_cmd 'xor',     [:reg, :reg, :reg], Vm::Cpu::OP_XOR
-        bind_cmd 'nor',     [:reg, :reg, :reg], Vm::Cpu::OP_NOR
-        bind_cmd 'slt',     [:reg, :reg, :reg], Vm::Cpu::OP_SLT
-        bind_cmd 'slti',    [:reg, :reg, :imm], Vm::Cpu::OP_SLTI
-        bind_cmd 'slli',    [:reg, :reg, :imm], Vm::Cpu::OP_SLLI
-        bind_cmd 'srli',    [:reg, :reg, :imm], Vm::Cpu::OP_SRLI
-        bind_cmd 'sll',     [:reg, :reg, :reg], Vm::Cpu::OP_SLL
-        bind_cmd 'srl',     [:reg, :reg, :reg], Vm::Cpu::OP_SRL
-        bind_cmd 'beq',     [:reg, :reg, :imm], Vm::Cpu::OP_BEQ,  [:rel_imm, :x8]
-        bind_cmd 'beql',    [:reg, :reg, :imm], Vm::Cpu::OP_BEQL, [:rel_imm, :x8]
-        bind_cmd 'bne',     [:reg, :reg, :imm], Vm::Cpu::OP_BNE,  [:rel_imm, :x8]
-        bind_cmd 'bnel',    [:reg, :reg, :imm], Vm::Cpu::OP_BNEL, [:rel_imm, :x8]
-        bind_cmd 'j',       [:imm],             Vm::Cpu::OP_J,    [:x8]
-        bind_cmd 'jr',      [:reg],             Vm::Cpu::OP_JR
-        bind_cmd 'jal',     [:imm],             Vm::Cpu::OP_JAL,  [:x8]
-        bind_cmd 'exiti',   [:imm],             Vm::Cpu::OP_EXITI
-        bind_cmd 'syscall', [],                 Vm::Cpu::OP_SYSCALL
+        bind_cmd 'nop',     [],                 OP_NOP
+        bind_cmd 'add',     [:reg, :reg, :reg], OP_ADD
+        bind_cmd 'addi',    [:reg, :reg, :imm], OP_ADDI
+        bind_cmd 'sub',     [:reg, :reg, :reg], OP_SUB
+        bind_cmd 'mult',    [:reg, :reg, :reg], OP_MULT
+        bind_cmd 'div',     [:reg, :reg, :reg], OP_DIV
+        bind_cmd 'mod',     [:reg, :reg, :reg], OP_MOD
+        bind_cmd 'lw',      [:reg, :reg, :imm], OP_LW
+        bind_cmd 'sw',      [:reg, :imm, :reg], OP_SW
+        bind_cmd 'lui',     [:reg, :imm],       OP_LUI
+        bind_cmd 'and',     [:reg, :reg, :reg], OP_AND
+        bind_cmd 'andi',    [:reg, :reg, :imm], OP_ANDI
+        bind_cmd 'or',      [:reg, :reg, :reg], OP_OR
+        bind_cmd 'ori',     [:reg, :reg, :imm], OP_ORI
+        bind_cmd 'xor',     [:reg, :reg, :reg], OP_XOR
+        bind_cmd 'nor',     [:reg, :reg, :reg], OP_NOR
+        bind_cmd 'slt',     [:reg, :reg, :reg], OP_SLT
+        bind_cmd 'slti',    [:reg, :reg, :imm], OP_SLTI
+        bind_cmd 'slli',    [:reg, :reg, :imm], OP_SLLI
+        bind_cmd 'srli',    [:reg, :reg, :imm], OP_SRLI
+        bind_cmd 'sll',     [:reg, :reg, :reg], OP_SLL
+        bind_cmd 'srl',     [:reg, :reg, :reg], OP_SRL
+        bind_cmd 'beq',     [:reg, :reg, :imm], OP_BEQ,  [:rel_imm, :x8]
+        bind_cmd 'beql',    [:reg, :reg, :imm], OP_BEQL, [:rel_imm, :x8]
+        bind_cmd 'bne',     [:reg, :reg, :imm], OP_BNE,  [:rel_imm, :x8]
+        bind_cmd 'bnel',    [:reg, :reg, :imm], OP_BNEL, [:rel_imm, :x8]
+        bind_cmd 'j',       [:imm],             OP_J,    [:x8]
+        bind_cmd 'jr',      [:reg],             OP_JR
+        bind_cmd 'jal',     [:imm],             OP_JAL,  [:x8]
+        bind_cmd 'exiti',   [:imm],             OP_EXITI
+        bind_cmd 'syscall', [],                 OP_SYSCALL
       end
 
       def bind_cmd(cmd, args, opcode, opts = [])
@@ -183,7 +257,7 @@ module Haxor
       end
 
       def cmd_ret(*_args)
-        process_cmd 'jr', ['$' + Vm::Cpu::REG_RETURN.to_s]
+        process_cmd 'jr', ['$' + REG_RETURN.to_s]
       end
 
       def cmd_prol(imm = '0')

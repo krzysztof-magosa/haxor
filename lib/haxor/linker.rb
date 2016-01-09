@@ -5,7 +5,6 @@ module Haxor
     SECTIONS = [:text, :data, :bss]
 
     def initialize
-      @cpu = Vm::Cpu.new
       @units = []
       @tokens = []
       @labels = {}

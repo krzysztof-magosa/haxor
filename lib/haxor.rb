@@ -9,14 +9,6 @@ require_relative 'haxor/consts'
 require_relative 'haxor/header'
 require_relative 'haxor/utils'
 
-# vm
-require_relative 'haxor/vm/core'
-require_relative 'haxor/vm/subsystem'
-require_relative 'haxor/vm/mem'
-require_relative 'haxor/vm/stack'
-require_relative 'haxor/vm/os'
-require_relative 'haxor/vm/cpu'
-
 # compiler
 require_relative 'haxor/compiler/unit'
 require_relative 'haxor/compiler/core'
