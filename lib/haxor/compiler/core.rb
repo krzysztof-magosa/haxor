@@ -3,7 +3,7 @@ module Haxor
     class Core
       REG_ALIASES = {
         '$sp'  => Vm::Cpu::REG_STACK,
-        '$ret' => Vm::Cpu::REG_RETURN,
+        '$ra'  => Vm::Cpu::REG_RETURN,
         '$sc'  => Vm::Cpu::REG_SYSCALL
       }
 

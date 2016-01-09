@@ -55,7 +55,7 @@ Instruction is 64-bit, and contains:
 vCPU has 64 registers, some of them have special role:
 * $0 - always zero register, writes are ignored
 * $61 (alias $sp) - stack pointer
-* $62 (alias $ret) - return address for linked jumps
+* $62 (alias $ra) - return address for linked jumps
 * $63 (alias $sc) - syscall function id and return code
 
 ## Memory map
@@ -98,12 +98,12 @@ If not stated differently result goes to first specified register.
 |sll reg1, reg2, reg3 |0x42|reg1 = reg2 << reg3|
 |srl reg1, reg2, reg3 |0x43|reg1 = reg2 >> reg3|
 |beq reg1, reg2, imm  |0x50|goto imm if reg1 == reg2|
-|beql reg1, reg2, imm |0x51|$ret = pc, goto imm if reg1 == reg2|
+|beql reg1, reg2, imm |0x51|$ra = pc, goto imm if reg1 == reg2|
 |bne reg1, reg2, imm  |0x52|goto imm if reg1 != reg2|
-|bnel reg1, reg2, imm |0x53|$ret = pc, goto imm if reg1 != reg2|
+|bnel reg1, reg2, imm |0x53|$ra = pc, goto imm if reg1 != reg2|
 |j imm                |0x54|goto imm|
 |jr reg1              |0x55|goto reg1|
-|jal imm              |0x56|$ret = pc, goto imm|
+|jal imm              |0x56|$ra = pc, goto imm|
 
 ### Pseudo instructions
 |Syntax|Description|
@@ -116,7 +116,7 @@ If not stated differently result goes to first specified register.
 |move reg1, reg2    |reg1 = reg2|
 |clear reg1         |reg1 = 0|
 |not reg1, reg2     |reg1 = ~reg2|
-|ret                |Jumps to address stored in $ret|
+|ret                |Jumps to address stored in $ra|
 |b imm              |Unconditional branch|
 |bal imm            |Unconditional linked branch|
 |bgt reg1, reg2, imm|goto imm if reg1 > reg2|
