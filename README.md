@@ -11,6 +11,27 @@ computer's architecture. You hit into issues not known during day
 by day activity in high level languages you use. So... just to
 broaden horizons and for fun ;)
 
+## How to install?
+_hc_ and _hld_ are written in ruby, you can install them by gem:
+```
+gem install haxor
+```
+
+_hvm_ is written in c++, you must compile it before use:
+```
+cd vm
+mkdir build
+cd build
+cmake ..
+make
+make install
+```
+
+Optionally you can change installation prefix by invoking this command instead of `cmake ..`:
+```
+cmake -DCMAKE_INSTALL_PREFIX=/opt/haxor ..
+```
+
 ## Usage
 Compilation:
 ```
@@ -41,6 +62,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 * Instruction: fixed size, 64-bit
 * Arithmetic: integer only, 64-bit
 * Memory model: flat, no protection
+* Syscall call convention: similar to [cdecl](https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl)
 
 ### OpCodes
 Instruction is 64-bit, and contains:
@@ -53,6 +75,7 @@ Instruction is 64-bit, and contains:
 
 ### vCPU
 vCPU has 64 registers, some of them have special role:
+
 |Number|Alias|Description|
 |------|-----|-----------|
 |0     |$zero|always zero register, writes are ignored|
@@ -156,6 +179,7 @@ If not stated differently result goes to first specified register.
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.
 System call number is passed via _$sc_ register, arguments go via stack in reversed order.
+Return value is written into _$sc_ register.
 
 ### printf (01h)
 Prints formatted text into file specified by descriptor.
@@ -170,6 +194,7 @@ addi $sc, $0, 01h
 pushi msg_fmt
 pushi 1
 syscall
+addi $sc, $sc, 16
 ```
 
 ### scanf (02h)
@@ -191,6 +216,7 @@ pushi answer
 pushi format
 pushi 0
 syscall
+addi $sc, $sc, 24
 ```
 
 ### random (03h)
@@ -199,7 +225,7 @@ Arguments:
 * minimum (inclusive)
 * maximum (inclusive)
 
-Generated number is pushed onto stack.
+Generated number is written to _$sc_ register.
 
 Example:
 ```
@@ -207,4 +233,5 @@ addi $sc, $0, 03h
 pushi 100
 pushi 1
 syscall
+addi $sc, $sc, 16
 ```
