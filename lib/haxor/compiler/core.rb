@@ -2,6 +2,7 @@ module Haxor
   module Compiler
     class Core
       REG_ALIASES = {
+        '$fp'  => Vm::Cpu::REG_FRAME,
         '$sp'  => Vm::Cpu::REG_STACK,
         '$ra'  => Vm::Cpu::REG_RETURN,
         '$sc'  => Vm::Cpu::REG_SYSCALL

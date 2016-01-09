@@ -47,6 +47,7 @@ module Haxor
       OP_JAL     = 0x56
 
       REG_ZERO    = 0
+      REG_FRAME   = 60
       REG_STACK   = 61
       REG_RETURN  = 62
       REG_SYSCALL = 63
