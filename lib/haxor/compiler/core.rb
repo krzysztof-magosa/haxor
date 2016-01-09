@@ -31,6 +31,8 @@ module Haxor
         bind_cmd 'clear',   [:reg],       :cmd_clear
         bind_cmd 'not',     [:reg, :reg], :cmd_not
         bind_cmd 'ret',     [],           :cmd_ret
+        bind_cmd 'prol',    [:imm],       :cmd_prol
+        bind_cmd 'epil',    [],           :cmd_epil
 
         bind_cmd 'b',       [:imm],             :cmd_b
         bind_cmd 'bal',     [:imm],             :cmd_bal
@@ -157,6 +159,37 @@ module Haxor
 
       def cmd_ret(*_args)
         process_cmd 'jr', ['$' + Vm::Cpu::REG_RETURN.to_s]
+      end
+
+      def cmd_prol(imm = '0')
+        # push $ra
+        process_cmd 'addi', ['$sp', '$sp', '-' + Consts::WORD_SIZE.to_s]
+        process_cmd 'sw',   ['$sp', '0', '$ra']
+
+        # push $fp
+        process_cmd 'addi', ['$sp', '$sp', '-' + Consts::WORD_SIZE.to_s]
+        process_cmd 'sw',   ['$sp', '0', '$fp']
+
+        # $fp = $sp
+        process_cmd 'addi', ['$fp', '$sp', '0']
+
+        # $sp -= imm
+        process_cmd 'addi', ['$sp', '$sp', '-' + imm]
+      end
+
+      def cmd_epil(*_args)
+        # $sp = $fp
+        process_cmd 'addi', ['$sp', '$fp', '0']
+
+        # pop $fp
+        process_cmd 'lw', ['$fp', '$sp', '0']
+        process_cmd 'addi', ['$sp', '$sp', Consts::WORD_SIZE.to_s]
+
+        # pop $ra
+        process_cmd 'lw', ['$ra', '$sp', '0']
+        process_cmd 'addi', ['$sp', '$sp', Consts::WORD_SIZE.to_s]
+
+        process_cmd 'ret', []
       end
 
       def cmd_b(*args)
