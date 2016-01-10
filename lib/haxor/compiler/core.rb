@@ -190,16 +190,14 @@ module Haxor
       end
 
       def cmd_dw(*args)
-        add Token::Label.new(args[0])
-
-        if args.size == 1
+        if args.size == 0
           add Token::Int64.new(0)
         else
-          (1...args.size).each do |i|
+          args.each do |arg|
             begin
-              add Token::Int64.new(Integer(args[i]))
+              add Token::Int64.new(Integer(arg))
             rescue
-              args[i][1...-1].each_char do |c|
+              arg[1...-1].each_char do |c|
                 add Token::Int64.new(c.ord)
               end
             end
@@ -384,17 +382,18 @@ module Haxor
         @unit = Unit.new filename
 
         input.lines.map(&:chomp).each_with_index do |line, index|
+          m = line.match(/^([a-zA-Z_][\w\d]*):(.*)/)
+          unless m.nil?
+            add Token::Label.new(m[1])
+            line = m[2]
+          end
+
           next if line.empty?
 
           tmp = line.split ' ', 2
           cmd = tmp[0]
           args = split_arguments(tmp[1] || '')
-
-          if cmd[-1] == ':'
-            add Token::Label.new(cmd[0...-1])
-          else
-            process_cmd(cmd, args)
-          end
+          process_cmd(cmd, args)
         end
 
         @unit.save(filename + '.u')

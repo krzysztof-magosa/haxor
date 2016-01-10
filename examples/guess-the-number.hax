@@ -1,19 +1,19 @@
 section .data
-dw welcome_msg,  "Simple 'Guess the number' game. Powered by Haxor VM.", 10, 0
-dw generate_msg, "I will pick a number between %d and %d, your job is to guess it in smallest number of tries.", 10, 0
-dw question_msg, 10, "What is the number? ", 0
-dw bigger_msg,   "Sorry, but my number is bigger.", 10, 0
-dw smaller_msg,  "Sorry, but my number is smaller.", 10, 0
-dw win_msg,      "Yeah! You guessed my number after %d tries!", 10, 0
-dw invalid_msg,  "Man, do you need definition of a number?! Try wikipedia then ;)", 10, 0
-dw answer_fmt,   "%d", 0
-dw min,          1
-dw max,          1000
+welcome_msg:  dw "Simple 'Guess the number' game. Powered by Haxor VM.", 10, 0
+generate_msg: dw "I will pick a number between %d and %d, your job is to guess it in smallest number of tries.", 10, 0
+question_msg: dw 10, "What is the number? ", 0
+bigger_msg:   dw "Sorry, but my number is bigger.", 10, 0
+smaller_msg:  dw "Sorry, but my number is smaller.", 10, 0
+win_msg:      dw "Yeah! You guessed my number after %d tries!", 10, 0
+invalid_msg:  dw "Man, do you need definition of a number?! Try wikipedia then ;)", 10, 0
+answer_fmt:   dw "%d", 0
+min:          dw 1
+max:          dw 1000
 
 section .bss
-dw number
-dw answer
-dw tries
+number:       dw
+answer:       dw
+tries:        dw
 
 section .text
 
