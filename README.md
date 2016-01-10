@@ -238,7 +238,7 @@ addi $sc, $sc, 16
 
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
-* [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming)
+* [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))
 * [Endianness](https://en.wikipedia.org/wiki/Endianness)
 * [Berkeley RISC](https://en.wikipedia.org/wiki/Berkeley_RISC)
 * [Comparison of instruction set architectures](https://en.wikipedia.org/wiki/Comparison_of_instruction_set_architectures)
