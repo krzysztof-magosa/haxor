@@ -15,6 +15,11 @@ namespace haxor {
     std::uint64_t esize;
 
     exe.open(filename, std::ios::binary | std::ifstream::ate);
+
+    if (exe.fail()) {
+      throw haxe_open_error();
+    }
+
     esize = static_cast<uint64_t>(exe.tellg()) - sizeof(hdr_t);
     exe.seekg(0, std::ios::beg);
 
