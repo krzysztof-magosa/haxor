@@ -12,6 +12,11 @@ by day activity in high level languages you use. So... just to
 broaden horizons and for fun ;)
 
 ## How to install?
+You need to install these software before installing Haxor:
+* Ruby 2.x
+* cmake 2.8.7 or newer
+* c++11 compiler (I use clang++ bundled with OS X)
+
 _hc_ and _hld_ are written in ruby, you can install them by gem:
 ```
 gem install haxor
