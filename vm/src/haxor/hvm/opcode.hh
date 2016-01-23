@@ -1,7 +1,7 @@
 #ifndef HAXOR_OPCODE_HH
 #define HAXOR_OPCODE_HH
 
-#include "haxor/haxor.hh"
+#include "haxor/hvm/haxor.hh"
 
 namespace haxor {
   struct opcode_t {

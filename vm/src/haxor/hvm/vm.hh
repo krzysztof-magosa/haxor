@@ -3,12 +3,12 @@
 
 #include <string>
 
-#include "haxor/haxor.hh"
-#include "haxor/mem.hh"
-#include "haxor/cpu.hh"
-#include "haxor/os.hh"
-#include "haxor/hdr.hh"
-#include "haxor/opcode.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/mem.hh"
+#include "haxor/hvm/cpu.hh"
+#include "haxor/hvm/os.hh"
+#include "haxor/hvm/hdr.hh"
+#include "haxor/hvm/opcode.hh"
 
 namespace haxor {
   class vm {

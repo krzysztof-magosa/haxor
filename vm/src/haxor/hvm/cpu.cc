@@ -1,6 +1,6 @@
-#include "haxor/haxor.hh"
-#include "haxor/vm.hh"
-#include "haxor/cpu.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/vm.hh"
+#include "haxor/hvm/cpu.hh"
 
 #include <iostream>
 

@@ -2,7 +2,7 @@
 #define HAXOR_REGS_HH
 
 #include <vector>
-#include "haxor.hh"
+#include "haxor/hvm/haxor.hh"
 
 namespace haxor {
   enum special_reg {

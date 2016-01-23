@@ -1,5 +1,5 @@
-#include "haxor/haxor.hh"
-#include "haxor/regs.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/regs.hh"
 
 namespace haxor {
   regs::regs() {

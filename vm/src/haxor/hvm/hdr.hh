@@ -1,7 +1,7 @@
 #ifndef HAXOR_HDR_HH
 #define HAXOR_HDR_HH
 
-#include "haxor/haxor.hh"
+#include "haxor/hvm/haxor.hh"
 
 namespace haxor {
   struct hdr_t {

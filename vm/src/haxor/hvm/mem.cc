@@ -1,5 +1,5 @@
-#include "haxor/haxor.hh"
-#include "haxor/mem.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/mem.hh"
 #include <cstdlib>
 #include <cstring>
 #include <string>

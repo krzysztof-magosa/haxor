@@ -1,5 +1,5 @@
-#include "haxor/haxor.hh"
-#include "haxor/format.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/format.hh"
 #include <string>
 #include <vector>
 #include <regex>

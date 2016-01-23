@@ -1,5 +1,5 @@
-#include "haxor/haxor.hh"
-#include "haxor/opcode.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/opcode.hh"
 
 #include <iostream>
 

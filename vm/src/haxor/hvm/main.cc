@@ -1,8 +1,8 @@
 #include <iostream>
 #include <stdexcept>
-#include "haxor/haxor.hh"
-#include "haxor/vm.hh"
-#include "haxor/hdr.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/vm.hh"
+#include "haxor/hvm/hdr.hh"
 
 int main(int argc, char **argv) {
   if (argc != 2) {

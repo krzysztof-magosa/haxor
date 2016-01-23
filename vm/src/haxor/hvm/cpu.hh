@@ -1,9 +1,9 @@
 #ifndef HAXOR_CPU_HH
 #define HAXOR_CPU_HH
 
-#include "haxor/haxor.hh"
-#include "haxor/regs.hh"
-#include "haxor/opcode.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/regs.hh"
+#include "haxor/hvm/opcode.hh"
 
 namespace haxor {
   class vm;

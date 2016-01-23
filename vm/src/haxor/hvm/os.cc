@@ -1,8 +1,8 @@
-#include "haxor/haxor.hh"
-#include "haxor/os.hh"
-#include "haxor/regs.hh"
-#include "haxor/vm.hh"
-#include "haxor/format.hh"
+#include "haxor/hvm/haxor.hh"
+#include "haxor/hvm/os.hh"
+#include "haxor/hvm/regs.hh"
+#include "haxor/hvm/vm.hh"
+#include "haxor/hvm/format.hh"
 
 #include <iostream>
 #include <vector>
