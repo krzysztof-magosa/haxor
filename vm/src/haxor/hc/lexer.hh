@@ -15,7 +15,8 @@
 namespace haxor {
   class lexer : public yyFlexLexer {
     public:
-    lexer(compiler &compiler) : compiler(compiler) {}
+    lexer(compiler &compiler);
+    void set_stream(std::istream &stream);
     virtual ~lexer() {}
     virtual haxor::parser::symbol_type get_next_token();
 

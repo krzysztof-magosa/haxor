@@ -126,8 +126,13 @@ namespace haxor {
     return hdr;
   }
 
-  void compiler::compile() {
+  void compiler::compile(const std::string &filename) {
     location = 0;
+
+    std::ifstream source;
+    source.open(filename);
+    lexer.set_stream(source);
+
     parser.parse();
 
     verify_code();

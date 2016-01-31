@@ -38,7 +38,7 @@ namespace haxor {
 
     public:
     compiler();
-    void compile();
+    void compile(const std::string &filename);
 
     private:
     void set_ast(std::vector<node::base*> *ast);

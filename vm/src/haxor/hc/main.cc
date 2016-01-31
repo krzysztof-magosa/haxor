@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
   haxor::compiler compiler;
-  compiler.compile();
+  compiler.compile(argv[1]);
 
   return 0;
 }
