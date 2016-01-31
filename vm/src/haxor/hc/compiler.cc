@@ -146,7 +146,7 @@ namespace haxor {
 
     // compile
     std::fstream haxe;
-    haxe.open("output.hax.e", std::ios::binary | std::fstream::out);
+    haxe.open(filename + ".e", std::ios::binary | std::fstream::out);
     haxe.write(reinterpret_cast<char*>(&hdr), sizeof(hdr));
 
     for (auto item : *ast) {
