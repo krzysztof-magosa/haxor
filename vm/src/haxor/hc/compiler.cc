@@ -86,7 +86,7 @@ namespace haxor {
   }
 
   void compiler::calc_addresses() {
-    int64_t current_address = 1024; // @TODO use const
+    int64_t current_address = ivt_size;
 
     for (auto *item : *ast) {
       item->set_addr(current_address);
