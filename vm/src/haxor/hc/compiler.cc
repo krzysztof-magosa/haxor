@@ -118,7 +118,7 @@ namespace haxor {
   hdr_t compiler::build_hdr() {
     hdr_t hdr;
     hdr.magic = magic;
-    hdr.version = 123; // @TODO
+    hdr.version = version;
     hdr.entry_point = labels.at("main");
     hdr.stack_size = 4096; // @TODO
     hdr.bss_size = calc_bss_size();

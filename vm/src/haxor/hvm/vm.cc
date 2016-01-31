@@ -28,6 +28,10 @@ namespace haxor {
       throw hdr_magic_error();
     }
 
+    if (hdr.version != version) {
+      throw hdr_version_error();
+    }
+
     mem.alloc(ivt_size + esize + hdr.bss_size + hdr.stack_size);
 
     uint64_t index = ivt_size;
