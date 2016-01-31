@@ -42,6 +42,7 @@ namespace haxor {
 
     private:
     void set_ast(std::vector<node::base*> *ast);
+    std::string& get_filename();
 
     void verify_code();
     void unwind_pseudo();
@@ -61,6 +62,7 @@ namespace haxor {
 
     unsigned int location; //
 
+    std::string filename;
     std::vector<node::base*> *ast;
     std::map<std::string, word_t> labels;
 

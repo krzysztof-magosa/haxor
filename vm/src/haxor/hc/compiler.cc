@@ -126,7 +126,13 @@ namespace haxor {
     return hdr;
   }
 
+  std::string& compiler::get_filename() {
+    return filename;
+  }
+
   void compiler::compile(const std::string &filename) {
+    this->filename = filename;
+
     location = 0;
 
     std::ifstream source;
