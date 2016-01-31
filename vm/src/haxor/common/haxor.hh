@@ -7,12 +7,11 @@
 
 namespace haxor {
   typedef int64_t word_t;
-  constexpr size_t word_size_t = sizeof(word_t);
 
   const int64_t magic = 0x7265887982;
 
   const uint64_t ivt_num = 128;
-  constexpr uint64_t ivt_size = word_size_t * ivt_num;
+  constexpr uint64_t ivt_size = sizeof(word_t) * ivt_num;
 
   class haxe_open_error : public std::exception {
     virtual const char* what() const throw() {

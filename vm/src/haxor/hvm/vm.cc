@@ -33,7 +33,7 @@ namespace haxor {
     uint64_t index = ivt_size;
     while (true) {
       word_t x;
-      exe.read(reinterpret_cast<char*>(&x), word_size_t);
+      exe.read(reinterpret_cast<char*>(&x), sizeof(word_t));
 
       if (exe.eof()) {
         break;

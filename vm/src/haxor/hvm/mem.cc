@@ -17,13 +17,13 @@ namespace haxor {
   word_t mem::read_word(const uint64_t addr) const {
     validate_addr(addr);
     word_t temp;
-    memcpy(&temp, data + addr, word_size_t);
+    memcpy(&temp, data + addr, sizeof(word_t));
     return temp;
   }
 
   void mem::write_word(const uint64_t addr, const word_t value) {
     validate_addr(addr);
-    memcpy(data + addr, &value, word_size_t);
+    memcpy(data + addr, &value, sizeof(word_t));
   }
 
   std::string mem::read_string(const uint64_t addr) const {
@@ -51,7 +51,7 @@ namespace haxor {
   }
 
   void mem::alloc(const uint64_t space) {
-    if (space % word_size_t != 0) {
+    if (space % sizeof(word_t) != 0) {
       throw mem_misalign_error();
     }
 
@@ -65,7 +65,7 @@ namespace haxor {
   }
 
   void mem::validate_addr(const uint64_t addr) const {
-    if (addr > size - word_size_t) {
+    if (addr > size - sizeof(word_t)) {
       throw mem_range_error();
     }
   }
