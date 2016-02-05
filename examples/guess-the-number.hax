@@ -39,7 +39,7 @@ win:
   addi $sc, $0, 01h
   pushm tries
   pushi win_msg
-  push 1
+  pushi 1
   syscall
   addi $sp, $sp, 24
 
@@ -48,7 +48,7 @@ win:
 invalid_number:
   addi $sc, $0, 01h
   pushi invalid_msg
-  push 1
+  pushi 1
   syscall
   addi $sp, $sp, 16
 
@@ -57,7 +57,7 @@ invalid_number:
 main:
   addi $sc, $0, 01h
   pushi welcome_msg
-  push 1
+  pushi 1
   syscall
   addi $sp, $sp, 16
 
