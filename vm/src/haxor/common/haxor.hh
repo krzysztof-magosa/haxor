@@ -1,5 +1,5 @@
-#ifndef HAXOR_HH
-#define HAXOR_HH
+#ifndef HAXOR_COMMON_HAXOR_HH
+#define HAXOR_COMMON_HAXOR_HH
 
 #include <cstdint>
 #include <stdexcept>

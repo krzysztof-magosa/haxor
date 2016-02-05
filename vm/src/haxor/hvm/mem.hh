@@ -1,7 +1,7 @@
 #ifndef HAXOR_MEM_HH
 #define HAXOR_MEM_HH
 
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
 #include <cstdint>
 
 namespace haxor {

@@ -1,4 +1,5 @@
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
+#include "haxor/common/cmd.hh"
 #include "haxor/hvm/vm.hh"
 #include "haxor/hvm/cpu.hh"
 
@@ -15,6 +16,7 @@ namespace haxor {
 
   void cpu::execute(const opcode_t &op) {
     uint64_t tmp;
+
     switch(op.cmd) {
     case cmd_nop:
       break;

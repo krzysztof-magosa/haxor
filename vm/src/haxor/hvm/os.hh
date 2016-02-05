@@ -1,7 +1,7 @@
 #ifndef HAXOR_OS_HH
 #define HAXOR_OS_HH
 
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
 #include <vector>
 #include <string>
 

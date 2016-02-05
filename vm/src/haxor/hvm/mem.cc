@@ -1,4 +1,4 @@
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
 #include "haxor/hvm/mem.hh"
 #include <cstdlib>
 #include <cstring>

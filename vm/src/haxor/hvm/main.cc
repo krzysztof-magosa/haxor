@@ -1,8 +1,8 @@
 #include <iostream>
 #include <stdexcept>
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
 #include "haxor/hvm/vm.hh"
-#include "haxor/hvm/hdr.hh"
+#include "haxor/common/hdr.hh"
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -10,13 +10,13 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  try {
+  //  try {
     haxor::vm vm;
     vm.load_exec(argv[1]);
     return vm.run();
-  }
-  catch (const std::exception &e) {
-    std::cerr << "An error occurred: " << e.what() << std::endl;
-    return 2;
-  }
+    //  }
+  //  catch (const std::exception &e) {
+    //    std::cerr << "An error occurred: " << e.what() << std::endl;
+    //return 2;
+    //}
 }

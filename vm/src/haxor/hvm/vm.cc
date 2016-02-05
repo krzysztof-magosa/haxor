@@ -1,10 +1,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "haxor/hvm/haxor.hh"
-#include "haxor/hvm/hdr.hh"
+#include "haxor/common/haxor.hh"
+#include "haxor/common/hdr.hh"
 #include "haxor/hvm/vm.hh"
-#include "haxor/hvm/opcode.hh"
+#include "haxor/common/opcode.hh"
 
 namespace haxor {
   vm::vm() : cpu(*this), os(*this) {

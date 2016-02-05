@@ -3,12 +3,12 @@
 
 #include <string>
 
-#include "haxor/hvm/haxor.hh"
+#include "haxor/common/haxor.hh"
 #include "haxor/hvm/mem.hh"
 #include "haxor/hvm/cpu.hh"
 #include "haxor/hvm/os.hh"
-#include "haxor/hvm/hdr.hh"
-#include "haxor/hvm/opcode.hh"
+#include "haxor/common/hdr.hh"
+#include "haxor/common/opcode.hh"
 
 namespace haxor {
   class vm {
@@ -31,5 +31,4 @@ namespace haxor {
     opcode_t opcode;
   };
 }
-
 #endif
