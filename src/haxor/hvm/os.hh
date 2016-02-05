@@ -14,8 +14,10 @@ namespace haxor {
     void syscall();
 
     private:
-    word_t sc_printf();
-    word_t sc_scanf();
+    word_t sc_print();
+    word_t sc_printi();
+    word_t sc_scan();
+    word_t sc_scani();
     word_t sc_rand();
 
     word_t pop();

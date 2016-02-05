@@ -175,59 +175,61 @@ Using _syscall_ command you can run some system calls provided by Haxor VM.
 System call number is passed via _$sc_ register, arguments go via stack in reversed order.
 Return value is written into _$sc_ register.
 
-### printf (01h)
-Prints formatted text into file specified by descriptor.
-Takes 2 or more arguments:
-* file descriptor (1 for standard output, 2 for standard error)
-* format string
-* data depending on format string...
+### print (01h)
+Print 0 terminated string located under specific address.
 
 Example:
 ```
-addi $sc, $0, 01h
-pushi msg_fmt
-pushi 1
+pushi label_msg
+addi $sc, $zero, 01h
 syscall
-addi $sc, $sc, 16
+addi $sp, $sp, 8
 ```
 
-### scanf (02h)
-Converts data from file specified by descriptor.
-Remember that memory is not automatically
-allocated by this function. You need to prepare
-space before calling this function.
-Use length limits to avoid buffer overflow (e.g. %100s to take up to 100 characters from string).
-In case of string your buffer must have 1 element more for closing '0'.
-Takes 2 or more arguments:
-* file descriptor (0 for standard input)
-* format string
-* addresses in memory to put data into them...
+### printi (02h)
+Print number.
 
 Example:
 ```
-addi $sc, $0, 02h
-pushi answer
-pushi format
-pushi 0
+pushi 123
+addi $sc, $zero, 02h
 syscall
-addi $sc, $sc, 24
+addi $sp, $sp, 8
 ```
 
-### random (03h)
-Generates random integer from specified range.
-Arguments:
-* minimum (inclusive)
-* maximum (inclusive)
-
-Generated number is written to _$sc_ register.
+### scan (03h)
+Reads line from standard input and writes under specified address.
+Second parameter designated buffer size (including terminating 0).
 
 Example:
 ```
-addi $sc, $0, 03h
 pushi 100
-pushi 1
+pushi destination_label
+addi $sc, $zero, 03h
 syscall
-addi $sc, $sc, 16
+addi $sp, $sp, 16
+```
+
+### scani (04h)
+Reads integer from standard input and writes under specified address.
+
+Example:
+```
+pushi answer
+addi $sc, $zero, 04h
+syscall
+addi $sp, $sp, 8
+```
+
+### rand (05h)
+Generate random number between min and max.
+
+```
+pushi 200
+pushi 100
+addi $sc, $zero, 05h
+syscall
+addi $sp, $sp, 16
 ```
 
 ## Useful knowledge related to (virtual) machines

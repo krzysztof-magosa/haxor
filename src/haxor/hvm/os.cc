@@ -2,7 +2,6 @@
 #include "haxor/hvm/os.hh"
 #include "haxor/hvm/regs.hh"
 #include "haxor/hvm/vm.hh"
-#include "haxor/hvm/format.hh"
 
 #include <iostream>
 #include <vector>
@@ -22,14 +21,22 @@ namespace haxor {
 
     switch(id) {
     case 0x01:
-      ret = sc_printf();
+      ret = sc_print();
       break;
 
     case 0x02:
-      ret = sc_scanf();
+      ret = sc_printi();
       break;
 
     case 0x03:
+      ret = sc_scan();
+      break;
+
+    case 0x04:
+      ret = sc_scani();
+      break;
+
+    case 0x05:
       ret = sc_rand();
       break;
 
@@ -40,102 +47,40 @@ namespace haxor {
     vm.get_cpu().get_regs().write(reg_syscall, ret);
   }
 
-  word_t os::sc_printf() {
-    word_t fd = pop(); // ignored at the moment
-    uint64_t fmt_addr = pop();
-    std::string fmt = vm.get_mem().read_string(fmt_addr);
-    std::vector<fmt_token> tokens = get_fmt_tokens(fmt);
-
-    std::string temp;
-    for (fmt_token item : tokens) {
-      switch (item.type) {
-      case fmt_token_type::integer:
-        temp = "%" + item.flags + item.width + item.precision + "j" + item.specifier;
-        std::printf(temp.c_str(), static_cast<intmax_t>(pop()));
-        break;
-
-      case fmt_token_type::real:
-        // not used at the moment
-        pop();
-        break;
-
-      case fmt_token_type::text:
-        std::printf(concat_fmt_token(item).c_str(), vm.get_mem().read_string(pop()).c_str());
-        break;
-
-      case fmt_token_type::letter:
-        // not used at the moment
-        pop();
-        break;
-
-      case fmt_token_type::pointer:
-        // not used at the moment
-        pop();
-        break;
-
-      case fmt_token_type::free_text:
-        std::printf("%s", item.free_text.c_str());
-        break;
-      }
-    }
+  word_t os::sc_print() {
+    word_t addr = pop();
+    std::string string = vm.get_mem().read_string(addr);
+    std::cout << string;
 
     return 0;
   }
 
-  word_t os::sc_scanf() {
-    word_t ret = 0;
+  word_t os::sc_printi() {
+    word_t num = pop();
+    std::cout << num;
 
-    try {
-      word_t fd = pop(); // ignored at the moment
-      uint64_t fmt_addr = pop();
-      std::string fmt = vm.get_mem().read_string(fmt_addr);
-      std::vector<fmt_token> tokens = get_fmt_tokens(fmt);
+    return 0;
+  }
 
-      std::string temp;
-      std::string width;
-      char *chars;
-      intmax_t integer;
+  word_t os::sc_scan() {
+    word_t addr = pop();
+    word_t size = pop();
 
-      for (fmt_token item : tokens) {
-        switch (item.type) {
-        case fmt_token_type::integer:
-          // 'j' stands for intmax_t
-          temp = "%" + item.flags + item.width + item.precision + "j" + item.specifier;
-          ret += std::scanf(temp.c_str(), &integer);
-          vm.get_mem().write_word(pop(), integer);
-          break;
+    char *buffer = new char[size];
+    std::cin.getline(buffer, size);
+    vm.get_mem().write_string(addr, buffer);
+    delete buffer;
 
-        case fmt_token_type::real:
-          // todo
-          break;
+    return 0;
+  }
 
-        case fmt_token_type::text:
-          temp = "%" + item.flags + item.width + item.precision + item.length + item.specifier;
-          chars = new char[item.width_n+1];
-          ret += std::scanf(temp.c_str(), chars);
-          vm.get_mem().write_string(pop(), std::string(chars));
-          delete[] chars;
-          break;
+  word_t os::sc_scani() {
+    word_t addr = pop();
+    word_t value;
+    word_t ret;
 
-        case fmt_token_type::letter:
-          // not used at the moment
-          pop();
-          break;
-
-        case fmt_token_type::pointer:
-          // not used at the moment
-          pop();
-          break;
-
-        case fmt_token_type::free_text:
-          break;
-        }
-      }
-    }
-    catch (std::invalid_argument) {
-      // caused by invalid format - e.g. bad width.
-      ret = -1;
-    }
+    ret = scanf("%" SCNd64, &value);
+    vm.get_mem().write_word(addr, value);
 
     if (ret <= 0) {
       discard_input();
@@ -144,17 +89,17 @@ namespace haxor {
     return ret;
   }
 
-  void os::discard_input() {
-    std::cin.sync();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
-
   word_t os::sc_rand() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(pop(), pop());
 
     return dist(gen);
+  }
+
+  void os::discard_input() {
+    std::cin.sync();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
 
   // it gets next value from stack, but doesn't move real $sp register.
