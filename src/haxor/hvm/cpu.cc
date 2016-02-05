@@ -151,7 +151,7 @@ namespace haxor {
 
     case cmd_jal:
       link();
-      jump(regs.read(op.reg1));
+      jump(op.imm);
       break;
 
     default:
