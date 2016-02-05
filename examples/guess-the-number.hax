@@ -1,103 +1,128 @@
 section .data
-welcome_msg:  dw "Simple 'Guess the number' game. Powered by Haxor VM.", 10, 0
-generate_msg: dw "I will pick a number between %d and %d, your job is to guess it in smallest number of tries.", 10, 0
-question_msg: dw 10, "What is the number? ", 0
-bigger_msg:   dw "Sorry, but my number is bigger.", 10, 0
-smaller_msg:  dw "Sorry, but my number is smaller.", 10, 0
-win_msg:      dw "Yeah! You guessed my number after %d tries!", 10, 0
-invalid_msg:  dw "Man, do you need definition of a number?! Try wikipedia then ;)", 10, 0
-answer_fmt:   dw "%d", 0
-min:          dw 1
-max:          dw 1000
+welcome_msg:      dw "Simple 'Guess the number' game. Powered by Haxor VM.", 10, 0
+generate_msg_1:   dw "I will pick a number between ", 0
+generate_msg_2:   dw " and ", 0
+generate_msg_3:   dw ", your job is to guess it in smallest number of tries.", 10, 0
+question_msg:     dw 10, "What is the number? ", 0
+win_msg_1:        dw "You guessed my number after ", 0
+win_msg_2:        dw " tries!", 10, 0
+bigger_msg:       dw "I'm sorry, but my number is bigger, try again.", 10, 0
+smaller_msg:      dw "I'm sorry, but my number is smaller, try again.", 10, 0
+incorrect_msg:    dw "You must provide a number!", 10, 0
+
+range_min:        dw 1
+range_max:        dw 1000
 
 section .bss
-number:       dw
-answer:       dw
-tries:        dw
+number:           dw
+answer:           dw
+tries:            dw
 
 section .text
 
-bigger:
+win:
+  pushi win_msg_1
   addi $sc, $zero, 01h
-  pushi bigger_msg
-  pushi 1
   syscall
-  addi $sp, $sp, 16
+  addi $sp, $sp, 8
+
+  pushm tries
+  addi $sc, $zero, 02h
+  syscall
+  addi $sp, $sp, 8
+
+  pushi win_msg_2
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
+
+  exiti 0
+
+bigger:
+  pushi bigger_msg
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
 
   j question
 
 smaller:
-  addi $sc, $0, 01h
   pushi smaller_msg
-  pushi 1
+  addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 16
-
-  j question
-
-win:
-  addi $sc, $0, 01h
-  pushm tries
-  pushi win_msg
-  pushi 1
-  syscall
-  addi $sp, $sp, 24
-
-  exiti 0
-
-invalid_number:
-  addi $sc, $0, 01h
-  pushi invalid_msg
-  pushi 1
-  syscall
-  addi $sp, $sp, 16
+  addi $sp, $sp, 8
 
   j question
 
 main:
-  addi $sc, $0, 01h
   pushi welcome_msg
-  pushi 1
+  addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 16
+  addi $sp, $sp, 8
+
+  pushi generate_msg_1
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
+
+  pushm range_min
+  addi $sc, $zero, 02h
+  syscall
+  addi $sp, $sp, 8
+
+  pushi generate_msg_2
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
+
+  pushm range_max
+  addi $sc, $zero, 02h
+  syscall
+  addi $sp, $sp, 8
+
+  pushi generate_msg_3
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
 
 generate:
-  addi $sc, $0, 01h
-  pushm max
-  pushm min
-  pushi generate_msg
-  pushi 1
-  syscall
-  addi $sp, $sp, 32
-
-  addi $sc, $0, 03h
-  pushm max
-  pushm min
+  pushm range_max
+  pushm range_min
+  addi $sc, $zero, 05h
   syscall
   addi $sp, $sp, 16
   sw $zero, number, $sc
 
+  # set tries to 0
+  sw $zero, tries, $zero
+
 question:
-  addi $sc, $0, 01h
   pushi question_msg
-  pushi 1
+  addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 16
+  addi $sp, $sp, 8
 
-  addi $sc, $0, 02h
   pushi answer
-  pushi answer_fmt
-  pushi 0
+  addi $sc, $zero, 04h
   syscall
-  addi $sp, $sp, 24
+  addi $sp, $sp, 8
 
-  beq $sc, $0, invalid_number
-  lw $6, $0, tries
-  addi $6, $6, 1
-  sw $0, tries, $6
+  bgtz $sc, correct
 
-  lw $7, $0, number
-  lw $8, $0, answer
-  beq $7, $8, win
-  bgt $7, $8, bigger
-  blt $7, $8, smaller
+  pushi incorrect_msg
+  addi $sc, $zero, 01h
+  syscall
+  addi $sp, $sp, 8
+  j question
+
+correct:
+  lw $t1, $zero, tries
+  addi $t1, $t1, 1
+  sw $0, tries, $t1
+
+compare:
+  lw $t0, $zero, number
+  lw $t1, $zero, answer
+  beq $t0, $t1, win
+  bgt $t0, $t1, bigger
+  blt $t0, $t1, smaller
