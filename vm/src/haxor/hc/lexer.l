@@ -68,6 +68,9 @@
     return haxor::parser::make_NEWLINE(haxor::location());
 }
 
+#.*\n                       {
+}
+
 
 <<EOF>>                     {
     return yyterminate();
