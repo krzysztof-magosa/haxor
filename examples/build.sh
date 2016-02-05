@@ -5,6 +5,5 @@ set -e
 
 for program in *.hax ; do
     echo "Compiling example $program ..."
-    ../bin/hc $program
-    ../bin/hld -o $program.e $program.u
+    hc $program
 done
