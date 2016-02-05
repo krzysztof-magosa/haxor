@@ -11,7 +11,7 @@ namespace haxor {
   const int64_t magic = 0x7265887982;
   const int64_t major = 0;
   const int64_t minor = 6;
-  const int64_t patch = 0;
+  const int64_t patch = 1;
   constexpr int64_t version = (major << 16) | (minor << 8) | patch;
 
   const uint64_t ivt_num = 128;
