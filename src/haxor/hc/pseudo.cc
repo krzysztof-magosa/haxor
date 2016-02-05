@@ -398,7 +398,7 @@ namespace haxor {
       args->push_back(new node::reg("$at"));
       args->push_back(new node::reg("$zero"));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("beq", args));
+      ast->push_back(new node::instr("bne", args));
     }
   }
 
