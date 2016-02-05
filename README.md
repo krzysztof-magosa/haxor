@@ -2,8 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/haxor.svg)](https://badge.fury.io/rb/haxor)
 [![Code Climate](https://codeclimate.com/github/krzysztof-magosa/haxor/badges/gpa.svg)](https://codeclimate.com/github/krzysztof-magosa/haxor)
 
-Haxor consists of compiler _hc_, linker _hld_ and virtual machine _hvm_.
-_hc_ translates asm-like code into tokens, _hld_ links them into bytecode, while _hvm_ runs it.
+Haxor consists of compiler _hc_ and virtual machine _hvm_.
 
 ## Man, why have you written that?
 Writing own implementation of VM gives a lot of knowledge about
@@ -13,16 +12,12 @@ broaden horizons and for fun ;)
 
 ## How to install?
 You need to install these software before installing Haxor:
-* Ruby 2.x
 * cmake 2.8.7 or newer
 * c++11 compiler (I use clang++ bundled with OS X)
+* flex
+* bison 3.x
 
-_hc_ and _hld_ are written in ruby, you can install them by gem:
-```
-gem install haxor
-```
-
-_hvm_ is written in c++, you must compile it before use:
+_haxor_ is written in c++, you must compile it before use:
 ```
 cd vm
 mkdir build
@@ -40,13 +35,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/opt/haxor ..
 ## Usage
 Compilation:
 ```
-hcc program.hax
-```
-
-Linking:
-```
-hld -o program.hax.e program.hax.u
-hld -s 4096 -o program.hax.e program.hax.u # custom stack size
+hc program.hax
 ```
 
 Run:
@@ -116,7 +105,7 @@ vCPU has 64 registers, some of them have special role:
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
 You can add comments in code, but they also need to be separate lines, beginning
-from _#_. Program starts from _main_ label. Labels are created by putting name and color on the end of line (e.g. `main:`).
+from _#_. Program starts from _main_ label. Labels are created by putting name followed by colon.
 
 Most of instructions take 3 registers or 2 registers and immediate value.
 If not stated differently result goes to first specified register.
