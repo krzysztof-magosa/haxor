@@ -1,6 +1,4 @@
 # Haxor VM
-[![Gem Version](https://badge.fury.io/rb/haxor.svg)](https://badge.fury.io/rb/haxor)
-[![Code Climate](https://codeclimate.com/github/krzysztof-magosa/haxor/badges/gpa.svg)](https://codeclimate.com/github/krzysztof-magosa/haxor)
 
 Haxor consists of compiler _hc_ and virtual machine _hvm_.
 
