@@ -13,11 +13,12 @@ You need to install these software before installing Haxor:
 * cmake 2.8.7 or newer
 * c++11 compiler (I use clang++ bundled with OS X)
 * flex
-* bison 3.x
+* bison 3.x (the one bundled with OS X is too old, you can use version from homebrew)
 
 _haxor_ is written in c++, you must compile it before use:
 ```
-cd vm
+git clone https://github.com/krzysztof-magosa/haxor.git
+cd haxor
 mkdir build
 cd build
 cmake ..
