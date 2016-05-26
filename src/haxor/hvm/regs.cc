@@ -13,6 +13,13 @@ namespace haxor {
 
   void regs::write(const size_t id, const word_t value) {
     validate_id(id);
+
+    if (id == 0) {
+      // mimic behaviour of many RISC processors
+      // ignores writes to $zero register so it can be used to discard output of operations etc..
+      return;
+    }
+
     data[id] = value;
   }
 
