@@ -55,7 +55,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 * Instruction: fixed size, 64-bit
 * Arithmetic: integer only, 64-bit
 * Memory model: flat, no protection
-* Syscall call convention: similar to [cdecl](https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl)
+* Syscall call convention: similar to [cdecl](https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl) (caller cleans the stack)
 
 ### OpCodes
 Instruction is 64-bit, and contains:
@@ -179,10 +179,10 @@ Print 0 terminated string located under specific address.
 
 Example:
 ```
-pushi label_msg
-addi $sc, $zero, 01h
-syscall
-addi $sp, $sp, 8
+pushi label_msg # puts address of label_msg onto stack
+addi $sc, $zero, 01h # $sc = $zero + 01h
+syscall # call print
+addi $sp, $sp, 8 # cleanup the stack
 ```
 
 ### printi (02h)
@@ -190,10 +190,10 @@ Print number.
 
 Example:
 ```
-pushi 123
-addi $sc, $zero, 02h
-syscall
-addi $sp, $sp, 8
+pushi 123 # puts number 123 on stack
+addi $sc, $zero, 02h # $sc = $zero + 02h
+syscall # call printi
+addi $sp, $sp, 8 # cleanup the stack
 ```
 
 ### scan (03h)
@@ -202,11 +202,11 @@ Second parameter designated buffer size (including terminating 0).
 
 Example:
 ```
-pushi 100
-pushi destination_label
-addi $sc, $zero, 03h
-syscall
-addi $sp, $sp, 16
+pushi 100 # puts number 100 (buffer size) onto stack
+pushi destination_label # puts address of destination_label onto stack
+addi $sc, $zero, 03h # $sc = $zero + 03h
+syscall # call scan
+addi $sp, $sp, 16 # cleanup the stack (2 arguments by 8 bytes)
 ```
 
 ### scani (04h)
@@ -214,21 +214,21 @@ Reads integer from standard input and writes under specified address.
 
 Example:
 ```
-pushi answer
-addi $sc, $zero, 04h
-syscall
-addi $sp, $sp, 8
+pushi answer # puts address to answer onto stack
+addi $sc, $zero, 04h # $sc = $zero + 04h
+syscall # call scani
+addi $sp, $sp, 8 # cleanup the stack
 ```
 
 ### rand (05h)
 Generate random number between min and max.
 
 ```
-pushi 200
-pushi 100
-addi $sc, $zero, 05h
-syscall
-addi $sp, $sp, 16
+pushi 200 # puts number 200 (maximum value) onto stack
+pushi 100 # puts number 100 (minimum value) onto stack
+addi $sc, $zero, 05h # $sc = $zero + 05h
+syscall # call rand
+addi $sp, $sp, 16 # cleanup the stack (2 arguments by 8 bytes)
 ```
 
 ## Useful knowledge related to (virtual) machines
