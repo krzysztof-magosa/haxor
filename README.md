@@ -179,10 +179,17 @@ Print 0 terminated string located under specific address.
 
 Example:
 ```
-pushi label_msg # puts address of label_msg onto stack
-addi $sc, $zero, 01h # $sc = $zero + 01h
-syscall # call print
-addi $sp, $sp, 8 # cleanup the stack
+# puts address of label_msg onto stack
+pushi label_msg
+
+# $sc = $zero + 01h
+addi $sc, $zero, 01h
+
+# call print
+syscall
+
+# cleanup the stack
+addi $sp, $sp, 8
 ```
 
 ### printi (02h)
@@ -190,10 +197,17 @@ Print number.
 
 Example:
 ```
-pushi 123 # puts number 123 on stack
-addi $sc, $zero, 02h # $sc = $zero + 02h
-syscall # call printi
-addi $sp, $sp, 8 # cleanup the stack
+# puts number 123 on stack
+pushi 123
+
+# $sc = $zero + 02h
+addi $sc, $zero, 02h
+
+# call printi
+syscall
+
+# cleanup the stack
+addi $sp, $sp, 8
 ```
 
 ### scan (03h)
@@ -202,11 +216,20 @@ Second parameter designated buffer size (including terminating 0).
 
 Example:
 ```
-pushi 100 # puts number 100 (buffer size) onto stack
-pushi destination_label # puts address of destination_label onto stack
-addi $sc, $zero, 03h # $sc = $zero + 03h
-syscall # call scan
-addi $sp, $sp, 16 # cleanup the stack (2 arguments by 8 bytes)
+# puts number 100 (buffer size) onto stack
+pushi 100
+
+# puts address of destination_label onto stack
+pushi destination_label
+
+# $sc = $zero + 03h
+addi $sc, $zero, 03h
+
+# call scan
+syscall
+
+# cleanup the stack (2 arguments by 8 bytes)
+addi $sp, $sp, 16
 ```
 
 ### scani (04h)
@@ -214,21 +237,37 @@ Reads integer from standard input and writes under specified address.
 
 Example:
 ```
-pushi answer # puts address to answer onto stack
-addi $sc, $zero, 04h # $sc = $zero + 04h
-syscall # call scani
-addi $sp, $sp, 8 # cleanup the stack
+# puts address to answer onto stack
+pushi answer
+
+# $sc = $zero + 04h
+addi $sc, $zero, 04h
+
+# call scani
+syscall
+
+# cleanup the stack
+addi $sp, $sp, 8
 ```
 
 ### rand (05h)
 Generate random number between min and max.
 
 ```
-pushi 200 # puts number 200 (maximum value) onto stack
-pushi 100 # puts number 100 (minimum value) onto stack
-addi $sc, $zero, 05h # $sc = $zero + 05h
-syscall # call rand
-addi $sp, $sp, 16 # cleanup the stack (2 arguments by 8 bytes)
+# puts number 200 (maximum value) onto stack
+pushi 200
+
+# puts number 100 (minimum value) onto stack
+pushi 100
+
+# $sc = $zero + 05h
+addi $sc, $zero, 05h
+
+# call rand
+syscall
+
+# cleanup the stack (2 arguments by 8 bytes)
+addi $sp, $sp, 16
 ```
 
 ## Useful knowledge related to (virtual) machines
