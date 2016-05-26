@@ -69,7 +69,7 @@ namespace haxor {
     char *buffer = new char[size];
     std::cin.getline(buffer, size);
     vm.get_mem().write_string(addr, buffer);
-    delete buffer;
+    delete[] buffer;
 
     return 0;
   }
