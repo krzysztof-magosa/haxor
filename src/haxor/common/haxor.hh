@@ -35,6 +35,12 @@ namespace haxor {
     }
   };
 
+  class hc_missing_entry_point : public std::exception {
+    virtual const char* what() const throw() {
+      return "Missing entry point, you must created main label.";
+    }
+  };
+
   class regs_range_error : public std::exception {};
   class mem_misalign_error : public std::exception {};
   class mem_range_error : public std::exception {};

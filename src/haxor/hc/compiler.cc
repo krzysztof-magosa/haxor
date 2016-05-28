@@ -119,6 +119,11 @@ namespace haxor {
     hdr_t hdr;
     hdr.magic = magic;
     hdr.version = version;
+
+    if (labels.find("main") == labels.end()) {
+      throw new hc_missing_entry_point();
+    }
+
     hdr.entry_point = labels.at("main");
     hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
     hdr.bss_size = calc_bss_size();
