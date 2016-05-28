@@ -48,7 +48,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 ## Architecture
 
 ### General information
-* Design: RISC
+* Design: RISC, load/store
 * Endianness: Little Endian
 * WORD size: 64-bit
 * Registers size: 64-bit
