@@ -205,5 +205,12 @@ data:           INT
 %%
 
 void haxor::parser::error(const location &loc , const std::string &message) {
-    std::cout << "Error: " << message << std::endl << "Error location: " << compiler.get_location() << std::endl;
+    const std::string error = message
+        + " at "
+        + std::to_string(loc.begin.line) + "." + std::to_string(loc.begin.column)
+        + " - "
+        + std::to_string(loc.end.line) + "." + std::to_string(loc.end.column)
+        + ".";
+
+    throw haxor::hc_syntax_error(error);
 }

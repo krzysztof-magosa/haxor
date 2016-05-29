@@ -13,7 +13,8 @@
 #include "parser.hh"
 #include "location.hh"
 
-#define yyterminate() haxor::parser::make_END(haxor::location());
+#define yyterminate() haxor::parser::make_END(haxor::location(location));
+#define YY_USER_ACTION location.step(); location.columns(yyleng);
 %}
 
 %%
@@ -21,54 +22,55 @@
 [ \t]
 
 \$[a-zA-Z0-9]+              {
-    return haxor::parser::make_REGISTER(yytext, haxor::location());
+    return haxor::parser::make_REGISTER(yytext, haxor::location(location));
 }
 
 "section"                   {
-    return haxor::parser::make_SECTION(haxor::location());
+    return haxor::parser::make_SECTION(haxor::location(location));
 }
 
 "dw"                        {
-    return haxor::parser::make_DATA(sizeof(int64_t), haxor::location());
+    return haxor::parser::make_DATA(sizeof(int64_t), haxor::location(location));
 }
 
 \.[a-zA-Z]+                 {
-    return haxor::parser::make_SECTION_NAME(yytext, haxor::location());
+    return haxor::parser::make_SECTION_NAME(yytext, haxor::location(location));
 }
 
 [a-zA-Z][a-zA-Z_0-9]*:      {
     std::string temp(yytext);
-    return haxor::parser::make_LABEL(temp.substr(0, temp.size() - 1), haxor::location());
+    return haxor::parser::make_LABEL(temp.substr(0, temp.size() - 1), haxor::location(location));
 }
 
 [a-zA-z][a-zA-Z_0-9]*       {
-    return haxor::parser::make_SYMBOL(yytext, haxor::location());
+    return haxor::parser::make_SYMBOL(yytext, haxor::location(location));
 }
 
 ","                         {
-    return haxor::parser::make_COMMA(haxor::location());
+    return haxor::parser::make_COMMA(haxor::location(location));
 }
 
 \"([^\\\"]|\\.)*\"          {
     std::string tmp(yytext);
-    return haxor::parser::make_STRING(tmp.substr(1, tmp.size() - 2), haxor::location());
+    return haxor::parser::make_STRING(tmp.substr(1, tmp.size() - 2), haxor::location(location));
 }
 
 [0-9]+                      {
-    return haxor::parser::make_INT(std::stoi(yytext), haxor::location());
+    return haxor::parser::make_INT(std::stoi(yytext), haxor::location(location));
 }
 
 [0-9]+h                     {
     std::string tmp(yytext);
     int64_t num = std::stoi(tmp.substr(0, tmp.size() - 1), nullptr, 16);
-    return haxor::parser::make_INT(num, haxor::location());
+    return haxor::parser::make_INT(num, haxor::location(location));
 }
 
 \n                          {
-    return haxor::parser::make_NEWLINE(haxor::location());
+    location.lines();
+    return haxor::parser::make_NEWLINE(haxor::location(location));
 }
 
-#.*\n                       {
+#.*                         {
 }
 
 

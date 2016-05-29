@@ -9,7 +9,7 @@
 #include <fstream>
 
 namespace haxor {
-  compiler::compiler() : lexer(*this), parser(lexer, *this), location(0) {
+  compiler::compiler() : lexer(*this), parser(lexer, *this) {
   }
 
   void compiler::verify_code() {
@@ -121,7 +121,7 @@ namespace haxor {
     hdr.version = version;
 
     if (labels.find("main") == labels.end()) {
-      throw new hc_missing_entry_point();
+      throw hc_missing_entry_point();
     }
 
     hdr.entry_point = labels.at("main");
@@ -137,8 +137,6 @@ namespace haxor {
 
   void compiler::compile(const std::string &filename) {
     this->filename = filename;
-
-    location = 0;
 
     std::ifstream source;
     source.open(filename);
@@ -215,14 +213,6 @@ namespace haxor {
     }
 
     // @TODO validation
-  }
-
-  void compiler::increase_location(unsigned int loc) {
-    location += loc;
-  }
-
-  unsigned int compiler::get_location() const {
-    return location;
   }
 
   void compiler::set_ast(std::vector<node::base*> *ast) {

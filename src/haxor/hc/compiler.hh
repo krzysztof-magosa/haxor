@@ -54,13 +54,8 @@ namespace haxor {
     int64_t calc_bss_size();
     uint8_t resolve_reg(const std::string &name);
 
-    void increase_location(unsigned int loc); //
-    unsigned int get_location() const; //
-
     lexer lexer;
     parser parser;
-
-    unsigned int location; //
 
     std::string filename;
     std::vector<node::base*> *ast;

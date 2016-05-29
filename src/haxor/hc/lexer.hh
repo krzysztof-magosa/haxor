@@ -22,6 +22,7 @@ namespace haxor {
 
     private:
     compiler &compiler;
+    haxor::parser::location_type location;
   };
 }
 
