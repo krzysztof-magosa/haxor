@@ -10,3 +10,4 @@ set(CMAKE_MACOSX_RPATH 1)
 
 add_subdirectory (src)
 add_subdirectory (main)
+add_subdirectory (tests)
