@@ -65,7 +65,8 @@ namespace haxor {
   }
 
   void mem::validate_addr(const uint64_t addr) const {
-    if (addr > size - sizeof(word_t)) {
+    // avoid overflow of unsigned int.
+    if (size < sizeof(word_t) || addr > size - sizeof(word_t)) {
       throw mem_range_error();
     }
   }
