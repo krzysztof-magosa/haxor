@@ -15,13 +15,13 @@
 namespace haxor {
   class lexer : public yyFlexLexer {
     public:
-    lexer(compiler &compiler);
+    lexer(class compiler &compiler);
     void set_stream(std::istream &stream);
     virtual ~lexer() {}
     virtual haxor::parser::symbol_type get_next_token();
 
     private:
-    compiler &compiler;
+    class compiler &compiler;
     haxor::parser::location_type location;
   };
 }

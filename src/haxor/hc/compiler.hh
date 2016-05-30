@@ -14,20 +14,20 @@
 namespace haxor {
   class instr_spec {
     public:
-    instr_spec(cmd cmd, std::string args, bool rel, bool x8) {
+    instr_spec(enum cmd cmd, std::string args, bool rel, bool x8) {
       this->cmd = cmd;
       this->args = args;
       this->rel = rel;
       this->x8 = x8;
     }
-    instr_spec(cmd cmd, std::string args) {
+    instr_spec(enum cmd cmd, std::string args) {
       this->cmd = cmd;
       this->args = args;
       this->rel = false;
       this->x8 = false;
     }
 
-    cmd cmd;
+    enum cmd cmd;
     std::string args;
     bool rel;
     bool x8;
@@ -54,8 +54,8 @@ namespace haxor {
     int64_t calc_bss_size();
     uint8_t resolve_reg(const std::string &name);
 
-    lexer lexer;
-    parser parser;
+    class lexer lexer;
+    class parser parser;
 
     std::string filename;
     std::vector<node::base*> *ast;

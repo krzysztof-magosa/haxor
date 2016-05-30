@@ -10,19 +10,19 @@ namespace haxor {
 
   class cpu {
     public:
-    cpu(vm &vm);
+    cpu(class vm &vm);
     void cycle();
     void execute(const opcode_t &op);
     void set_ip(const uint64_t ip);
-    regs& get_regs();
+    class regs& get_regs();
 
     private:
     void link();
     void branch(const uint64_t target);
     void jump(const uint64_t target);
 
-    vm &vm;
-    regs regs;
+    class vm &vm;
+    class regs regs;
     opcode_t opcode;
     uint64_t ip;
   };

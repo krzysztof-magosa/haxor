@@ -92,7 +92,9 @@ namespace haxor {
   word_t os::sc_rand() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(pop(), pop());
+    word_t min = pop();
+    word_t max = pop();
+    std::uniform_int_distribution<word_t> dist(min, max);
 
     return dist(gen);
   }

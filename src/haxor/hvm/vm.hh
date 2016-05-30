@@ -16,17 +16,17 @@ namespace haxor {
     vm();
     void load_exec(const std::string filename);
     int8_t run();
-    cpu& get_cpu();
-    mem& get_mem();
-    os& get_os();
+    class cpu& get_cpu();
+    class mem& get_mem();
+    class os& get_os();
     void exit(int8_t exit_code);
 
     private:
     bool running = true;
     int8_t exit_code;
-    mem mem;
-    cpu cpu;
-    os os;
+    class mem mem;
+    class cpu cpu;
+    class os os;
     hdr_t hdr;
     opcode_t opcode;
   };

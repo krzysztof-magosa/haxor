@@ -10,7 +10,7 @@ namespace haxor {
 
   class os {
     public:
-    os(vm &vm);
+    os(class vm &vm);
     void syscall();
 
     private:
@@ -24,7 +24,7 @@ namespace haxor {
     void discard_input();
 
     word_t sp;
-    vm &vm;
+    class vm &vm;
   };
 }
 
