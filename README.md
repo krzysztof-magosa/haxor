@@ -32,6 +32,11 @@ Optionally you can change installation prefix by invoking this command instead o
 cmake -DCMAKE_INSTALL_PREFIX=/opt/haxor ..
 ```
 
+To specify non-standard Bison location (for example on OS X):
+```
+cmake -DBISON_EXECUTABLE=/opt/homebrew/Cellar/bison/3.0.4/bin/bison ..
+```
+
 ## Usage
 Compilation:
 ```
