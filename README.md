@@ -1,4 +1,5 @@
 # Haxor VM
+[![Build Status](https://travis-ci.org/krzysztof-magosa/haxor.svg?branch=master)](https://travis-ci.org/krzysztof-magosa/haxor)
 
 Haxor consists of compiler _hc_ and virtual machine _hvm_.
 
