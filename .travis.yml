@@ -1,0 +1,24 @@
+os:
+  - osx
+  - linux
+
+sudo: required
+dist: trusty
+language: cpp
+
+compiler:
+  - gcc
+  - clang
+
+before_script:
+  - '[ "$TRAVIS_OS_NAME" = "osx" ] && brew install bison'
+  - '[ "$TRAVIS_OS_NAME" = "osx" ] && brew link bison --force'
+  - bison --version
+  - flex --version
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+
+script:
+  - make test
