@@ -23,7 +23,7 @@ install(TARGETS haxor_hvm
 
 #
 
-find_package(BISON)
+find_package(BISON 3.0.0)
 find_package(FLEX)
 
 bison_target(parser haxor/hc/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cc)
