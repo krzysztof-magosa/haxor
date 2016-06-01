@@ -18,7 +18,7 @@ namespace haxor {
       this->addr = addr;
     }
 
-    void base::set_section(const std::string section) {
+    void base::set_section(const std::string &section) {
       this->section = section;
     }
 

@@ -25,7 +25,7 @@ namespace haxor {
       word_t get_size() const;
       word_t get_addr() const;
       void set_addr(const word_t addr);
-      void set_section(const std::string section);
+      void set_section(const std::string &section);
       std::string get_section() const;
 
       protected:
