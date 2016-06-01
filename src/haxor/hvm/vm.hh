@@ -14,7 +14,7 @@ namespace haxor {
   class vm {
     public:
     vm();
-    void load_exec(const std::string filename);
+    void load_exec(const std::string &filename);
     int8_t run();
     class cpu& get_cpu();
     class mem& get_mem();

@@ -10,7 +10,7 @@ namespace haxor {
   vm::vm() : cpu(*this), os(*this) {
   }
 
-  void vm::load_exec(const std::string filename) {
+  void vm::load_exec(const std::string &filename) {
     std::ifstream exe;
     std::uint64_t esize;
 
