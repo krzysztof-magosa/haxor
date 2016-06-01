@@ -12,8 +12,8 @@ broaden horizons and for fun ;)
 ## How to install?
 You need to install these software before installing Haxor:
 * cmake 2.8.7 or newer
-* c++11 compiler (I use clang++ bundled with OS X)
-* flex
+* c++11 compatible compiler (e.g. clang 3.5, Apple clang 6.0, gcc 4.8)
+* flex (tested on 2.5)
 * bison 3.x (the one bundled with OS X is too old, you can use version from homebrew)
 
 _haxor_ is written in c++, you must compile it before use:
