@@ -53,6 +53,7 @@ namespace haxor {
     hdr_t build_hdr();
     int64_t calc_bss_size();
     uint8_t resolve_reg(const std::string &name);
+    std::string format_location(const class location &location);
 
     class lexer lexer;
     class parser parser;

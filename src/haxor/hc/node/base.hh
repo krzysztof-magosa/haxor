@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "location.hh"
 #include "haxor/common/haxor.hh"
 #include "haxor/hvm/cpu.hh"
 
@@ -27,11 +28,15 @@ namespace haxor {
       void set_addr(const word_t addr);
       void set_section(const std::string &section);
       std::string get_section() const;
+      void set_location(const class location &location);
+      bool has_location();
+      class location& get_location();
 
       protected:
       word_t size = 0;
       word_t addr;
       std::string section;
+      class location *location;
     };
   }
 }

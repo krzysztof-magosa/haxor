@@ -25,6 +25,7 @@
 %code top
 {
     #include <iostream>
+    #include <sstream>
     #include "haxor/hc/lexer.hh"
     #include "parser.hh"
     #include "haxor/hc/compiler.hh"
@@ -105,7 +106,9 @@ line:           label
                         $$->push_back($1);
                     }
 
-                    $$->push_back(new node::instr($2, $3));
+                    auto *node = new node::instr($2, $3);
+                    node->set_location(@$);
+                    $$->push_back(node);
                 }
         |       label DATA data_list
                 {
@@ -205,12 +208,12 @@ data:           INT
 %%
 
 void haxor::parser::error(const location &loc , const std::string &message) {
+    std::stringstream ss;
+    ss << loc;
+
     const std::string error = message
         + " at "
-        + std::to_string(loc.begin.line) + "." + std::to_string(loc.begin.column)
-        + " - "
-        + std::to_string(loc.end.line) + "." + std::to_string(loc.end.column)
-        + ".";
+        + ss.str();
 
     throw haxor::hc_syntax_error(error);
 }

@@ -36,7 +36,11 @@ namespace haxor {
             }
           }
         } else {
-          throw std::runtime_error("Unknown instruction: " + instr->get_name() + ".");
+          std::string error_msg = "Unknown instruction '" + instr->get_name() + "'";
+          if (instr->has_location()) {
+            error_msg += ", at location " + format_location(instr->get_location());
+          }
+          throw hc_syntax_error(error_msg); // set correct exception type
         }
       }
     }
@@ -217,5 +221,11 @@ namespace haxor {
 
   void compiler::set_ast(std::vector<node::base*> *ast) {
     this->ast = ast;
+  }
+
+  std::string compiler::format_location(const class location &location) {
+    std::stringstream ss;
+    ss << location;
+    return ss.str();
   }
 }

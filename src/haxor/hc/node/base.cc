@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "haxor/hc/node/base.hh"
 
 namespace haxor {
@@ -24,6 +25,21 @@ namespace haxor {
 
     std::string base::get_section() const {
       return section;
+    }
+
+    void base::set_location(const class location &location) {
+      this->location = new class location(location);
+    }
+
+    bool base::has_location() {
+      return this->location != nullptr;
+    }
+
+    class location& base::get_location() {
+      if (!has_location()) {
+        throw std::logic_error("This AST node does not have location.");
+      }
+      return *this->location;
     }
   }
 }
