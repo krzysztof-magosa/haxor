@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
+#include <stdexcept>
 
 namespace haxor {
   compiler::compiler() : lexer(*this), parser(lexer, *this) {
@@ -144,6 +145,11 @@ namespace haxor {
 
     std::ifstream source;
     source.open(filename);
+
+    if (source.fail()) {
+      throw std::runtime_error("Cannot open source file: " + filename + ".");
+    }
+
     lexer.set_stream(source);
 
     parser.parse();
