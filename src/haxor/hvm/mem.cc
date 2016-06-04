@@ -56,6 +56,10 @@ namespace haxor {
     }
 
     data = (int8_t*)realloc(data, size + space);
+    if (data == nullptr) {
+      throw std::runtime_error("Cannot allocate memory.");
+    }
+
     memset(data + size, 0, space);
     size += space;
   }
