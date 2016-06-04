@@ -276,6 +276,23 @@ syscall
 addi $sp, $sp, 16
 ```
 
+### sleep (06h)
+Sleeps for specified number of milliseconds.
+
+```
+# puts number 1000 onto stack
+pushi 1000
+
+# $sc = $zero + 06h
+addi $sc, $zero, 06h
+
+# call sleep
+syscall
+
+# cleanup the stack
+addi $sp, $sp, 8
+```
+
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
 * [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))

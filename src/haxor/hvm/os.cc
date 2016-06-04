@@ -10,6 +10,8 @@
 #include <random>
 #include <cinttypes>
 #include <regex>
+#include <chrono>
+#include <thread>
 
 namespace haxor {
   os::os(class vm &vm) : vm(vm) {}
@@ -38,6 +40,10 @@ namespace haxor {
 
     case 0x05:
       ret = sc_rand();
+      break;
+
+    case 0x06:
+      ret = sc_sleep();
       break;
 
     default:
@@ -97,6 +103,13 @@ namespace haxor {
     std::uniform_int_distribution<word_t> dist(min, max);
 
     return dist(gen);
+  }
+
+  word_t os::sc_sleep() {
+    const word_t time = pop();
+    std::this_thread::sleep_for(std::chrono::milliseconds(time));
+
+    return 0;
   }
 
   void os::discard_input() {
