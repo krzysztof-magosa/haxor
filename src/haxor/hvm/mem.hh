@@ -12,7 +12,7 @@ namespace haxor {
     word_t read_word(const uint64_t addr) const;
     void write_word(const uint64_t addr, const word_t value);
     std::string read_string(const uint64_t addr) const;
-    void write_string(const uint64_t addr, const std::string value);
+    void write_string(const uint64_t addr, const std::string &value);
     void alloc(const uint64_t space);
     uint64_t get_size();
 

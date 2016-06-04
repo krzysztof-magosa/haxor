@@ -41,7 +41,7 @@ namespace haxor {
     return result;
   }
 
-  void mem::write_string(const uint64_t addr, const std::string value) {
+  void mem::write_string(const uint64_t addr, const std::string &value) {
     size_t offset = 0;
     for (size_t i = 0; i < value.size(); i++) {
       write_word(addr + offset, value[i]);
