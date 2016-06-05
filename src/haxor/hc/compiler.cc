@@ -28,12 +28,14 @@ namespace haxor {
           }
 
           for (size_t i = 0; i < instr_def.args.size(); i++) {
+            auto * const arg = instr->get_args()->at(i);
+
             if (instr_def.args[i] == 'r') {
-              if (!instr->get_args()->at(i)->is_a(node::type::reg)) {
+              if (!arg->is_a(node::type::reg)) {
                 throw std::runtime_error("Invalid argument, expected register.");
               }
             } else if (instr_def.args[i] == 'i') {
-              if (!instr->get_args()->at(i)->is_a(node::type::num) && !instr->get_args()->at(i)->is_a(node::type::label)) {
+              if (!arg->is_a(node::type::num) && !arg->is_a(node::type::label)) {
                 throw std::runtime_error("Invalid argument, expected number or label.");
               }
             }
