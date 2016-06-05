@@ -8,6 +8,7 @@
 %{
 #include <iostream>
 #include <cstdlib>
+#include <inttypes.h>
 #include "haxor/hc/lexer.hh"
 #include "haxor/hc/compiler.hh"
 #include "parser.hh"
@@ -56,12 +57,11 @@
 }
 
 [0-9]+                      {
-    return haxor::parser::make_INT(std::stoi(yytext), haxor::location(location));
+    return haxor::parser::make_INT(strtoimax(yytext, nullptr, 10), haxor::location(location));
 }
 
 [0-9]+h                     {
-    std::string tmp(yytext);
-    int64_t num = std::stoi(tmp.substr(0, tmp.size() - 1), nullptr, 16);
+    word_t num = strtoimax(yytext, nullptr, 16); // strtoimax ignores suffix 'h'
     return haxor::parser::make_INT(num, haxor::location(location));
 }
 

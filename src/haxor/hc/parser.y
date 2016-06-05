@@ -56,8 +56,8 @@
 %token <std::string> REGISTER
 %token COMMA
 %token <std::string> STRING
-%token <int> INT
-%token <int> DATA;
+%token <word_t> INT
+%token <word_t> DATA;
 %token NEWLINE
 
 %type <std::vector<node::base*>*> program
