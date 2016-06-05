@@ -32,11 +32,19 @@ namespace haxor {
 
             if (instr_def.args[i] == 'r') {
               if (!arg->is_a(node::type::reg)) {
-                throw std::runtime_error("Invalid argument, expected register.");
+                std::string error_msg = "Invalid argument, expected register";
+                if (arg->has_location()) {
+                  error_msg += ", at location " + format_location(arg->get_location());
+                }
+                throw hc_syntax_error(error_msg);
               }
             } else if (instr_def.args[i] == 'i') {
               if (!arg->is_a(node::type::num) && !arg->is_a(node::type::label)) {
-                throw std::runtime_error("Invalid argument, expected number or label.");
+                std::string error_msg = "Invalid argument, expected number or label";
+                if (arg->has_location()) {
+                  error_msg += ", at location " + format_location(arg->get_location());
+                }
+                throw std::runtime_error(error_msg);
               }
             }
           }

@@ -168,14 +168,17 @@ instr_arg_list: instr_arg_list COMMA instr_arg
 instr_arg:      REGISTER
                 {
                     $$ = new node::reg($1);
+                    $$->set_location(@1);
                 }
         |       SYMBOL
                 {
                     $$ = new node::label($1);
+                    $$->set_location(@1);
                 }
         |       INT
                 {
                     $$ = new node::num($1);
+                    $$->set_location(@1);
                 }
         ;
 
