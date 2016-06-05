@@ -3,6 +3,25 @@
 
 namespace haxor {
   namespace node {
+    std::string type_to_string(type type) {
+      switch (type) {
+      case type::program:
+        return "PROGRAM";
+      case type::instr:
+        return "INSTRUCTION";
+      case type::num:
+        return "NUMBER";
+      case type::reg:
+        return "REGISTER";
+      case type::label:
+        return "LABEL";
+      case type::section:
+        return "SECTION";
+      default:
+        return "UNKNOWN";
+      }
+    }
+
     bool base::is_a(type type) {
       return (get_type() == type);
     }

@@ -18,6 +18,8 @@ namespace haxor {
       section
     };
 
+    std::string type_to_string(type type);
+
     class base {
       public:
       virtual ~base() {};

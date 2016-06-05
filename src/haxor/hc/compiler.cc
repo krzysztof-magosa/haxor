@@ -32,17 +32,25 @@ namespace haxor {
 
             if (instr_def.args[i] == 'r') {
               if (!arg->is_a(node::type::reg)) {
-                std::string error_msg = "Invalid argument, expected register";
+                std::string error_msg = "Invalid argument, unexpected "
+                  + type_to_string(arg->get_type())
+                  + ", expecting "
+                  + type_to_string(node::type::reg);
                 if (arg->has_location()) {
-                  error_msg += ", at location " + format_location(arg->get_location());
+                  error_msg += " at " + format_location(arg->get_location());
                 }
                 throw hc_syntax_error(error_msg);
               }
             } else if (instr_def.args[i] == 'i') {
               if (!arg->is_a(node::type::num) && !arg->is_a(node::type::label)) {
-                std::string error_msg = "Invalid argument, expected number or label";
+                std::string error_msg = "Invalid argument, unexpected "
+                  + type_to_string(arg->get_type())
+                  + ", expcting "
+                  + type_to_string(node::type::num)
+                  + " or "
+                  + type_to_string(node::type::label);
                 if (arg->has_location()) {
-                  error_msg += ", at location " + format_location(arg->get_location());
+                  error_msg += ", at " + format_location(arg->get_location());
                 }
                 throw std::runtime_error(error_msg);
               }
