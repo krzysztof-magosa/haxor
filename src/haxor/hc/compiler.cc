@@ -21,16 +21,18 @@ namespace haxor {
         auto it = instr_list.find(instr->get_name());
 
         if (it != instr_list.end()) {
-          if (instr->get_args()->size() != it->second.args.size()) {
+          auto const &instr_def = it->second;
+
+          if (instr->get_args()->size() != instr_def.args.size()) {
             throw std::runtime_error("Invalid number of arguments.");
           }
 
-          for (size_t i = 0; i < it->second.args.size(); i++) {
-            if (it->second.args[i] == 'r') {
+          for (size_t i = 0; i < instr_def.args.size(); i++) {
+            if (instr_def.args[i] == 'r') {
               if (!instr->get_args()->at(i)->is_a(node::type::reg)) {
                 throw std::runtime_error("Invalid argument, expected register.");
               }
-            } else if (it->second.args[i] == 'i') {
+            } else if (instr_def.args[i] == 'i') {
               if (!instr->get_args()->at(i)->is_a(node::type::num) && !instr->get_args()->at(i)->is_a(node::type::label)) {
                 throw std::runtime_error("Invalid argument, expected number or label.");
               }
