@@ -3,8 +3,8 @@
 
 namespace haxor {
   namespace node {
-    std::string type_to_string(type type) {
-      switch (type) {
+    std::string type_to_string(type nodeType) {
+      switch (nodeType) {
       case type::program:
         return "PROGRAM";
       case type::instr:

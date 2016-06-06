@@ -18,7 +18,7 @@ namespace haxor {
       section
     };
 
-    std::string type_to_string(type type);
+    std::string type_to_string(type nodeType);
 
     class base {
       public:
