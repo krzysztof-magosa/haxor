@@ -5,7 +5,7 @@ namespace haxor {
     this->size = sizeof(word_t);
   }
 
-  enum node_type node_instr::get_type() const {
+  node_type node_instr::get_type() const {
     return node_type::instr;
   }
 

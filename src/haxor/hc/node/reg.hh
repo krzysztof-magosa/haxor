@@ -7,7 +7,7 @@ namespace haxor {
   class node_reg : public node_base {
     public:
     node_reg(const std::string &name);
-    enum node_type get_type() const;
+    node_type get_type() const;
     std::string get_name() const;
 
     private:

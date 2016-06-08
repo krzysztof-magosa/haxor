@@ -5,7 +5,7 @@ namespace haxor {
     this->name = name;
   }
 
-  enum node_type node_label::get_type() const {
+  node_type node_label::get_type() const {
     return node_type::label;
   }
 

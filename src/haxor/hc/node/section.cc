@@ -4,7 +4,7 @@ namespace haxor {
   node_section::node_section(const std::string &name) : name(name) {
   }
 
-  enum node_type node_section::get_type() const {
+  node_type node_section::get_type() const {
     return node_type::section;
   }
 

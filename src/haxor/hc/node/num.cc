@@ -11,7 +11,7 @@ namespace haxor {
     this->size = size;
   }
 
-  enum node_type node_num::get_type() const {
+  node_type node_num::get_type() const {
     return node_type::num;
   }
 

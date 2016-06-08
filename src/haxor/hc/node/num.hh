@@ -8,7 +8,7 @@ namespace haxor {
     public:
     node_num(const word_t value);
     node_num(const word_t value, const size_t size);
-    enum node_type get_type() const;
+    node_type get_type() const;
     word_t get_value();
 
     private:
