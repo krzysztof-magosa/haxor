@@ -1,17 +1,15 @@
 #include "haxor/hc/node/label.hh"
 
 namespace haxor {
-  namespace node {
-    label::label(const std::string &name) {
-      this->name = name;
-    }
+  node_label::node_label(const std::string &name) {
+    this->name = name;
+  }
 
-    enum type label::get_type() const {
-      return type::label;
-    }
+  enum node_type node_label::get_type() const {
+    return node_type::label;
+  }
 
-    std::string label::get_name() {
-      return name;
-    }
+  std::string node_label::get_name() {
+    return name;
   }
 }

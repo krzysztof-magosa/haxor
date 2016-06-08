@@ -1,16 +1,14 @@
 #include "haxor/hc/node/section.hh"
 
 namespace haxor {
-  namespace node {
-    section::section(const std::string &name) : name(name) {
-    }
+  node_section::node_section(const std::string &name) : name(name) {
+  }
 
-    enum type section::get_type() const {
-      return type::section;
-    }
+  enum node_type node_section::get_type() const {
+    return node_type::section;
+  }
 
-    std::string section::get_name() const {
-      return name;
-    }
+  std::string node_section::get_name() const {
+    return name;
   }
 }

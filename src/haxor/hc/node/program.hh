@@ -4,11 +4,9 @@
 #include "haxor/hc/node/base.hh"
 
 namespace haxor {
-  namespace node {
-    class program : public base {
-      public:
-    };
-  }
+  class node_program : public node_base {
+    public:
+  };
 }
 
 #endif

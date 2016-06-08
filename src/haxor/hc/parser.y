@@ -60,12 +60,12 @@
 %token <word_t> DATA;
 %token NEWLINE
 
-%type <std::vector<node::base*>*> program
-%type <std::vector<node::base*>*> line_list
-%type <std::vector<node::base*>*> line
-%type <node::base*> label
-%type <std::vector<node::base*>*> instr_arg_list
-%type <node::base*> instr_arg
+%type <std::vector<node_base*>*> program
+%type <std::vector<node_base*>*> line_list
+%type <std::vector<node_base*>*> line
+%type <node_base*> label
+%type <std::vector<node_base*>*> instr_arg_list
+%type <node_base*> instr_arg
 %type <std::vector<word_t>*> data_list
 %type <std::vector<word_t>*> data
 
@@ -87,55 +87,55 @@ line_list:      line_list line NEWLINE
                 }
         |       line
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
                     $$->insert($$->end(), $1->begin(), $1->end());
                 }
         ;
 
 line:           label
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
                     if ($1 != nullptr) {
                         $$->push_back($1);
                     }
                 }
         |       label SYMBOL instr_arg_list
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
                     if ($1 != nullptr) {
                         $$->push_back($1);
                     }
 
-                    auto *node = new node::instr($2, $3);
+                    auto *node = new node_instr($2, $3);
                     node->set_location(@$);
                     $$->push_back(node);
                 }
         |       label DATA data_list
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
 
                     if ($1 != nullptr) {
                         $$->push_back($1);
                     }
 
                     for (auto item : *$3) {
-                        $$->push_back(new node::num(item, $2));
+                        $$->push_back(new node_num(item, $2));
                     }
                 }
         |       label DATA
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
 
                     if ($1 != nullptr) {
                         $$->push_back($1);
                     }
 
-                    $$->push_back(new node::num(0, $2));
+                    $$->push_back(new node_num(0, $2));
                 }
         |       SECTION SECTION_NAME
                 {
-                    $$ = new std::vector<node::base*>();
-                    $$->push_back(new node::section($2));
+                    $$ = new std::vector<node_base*>();
+                    $$->push_back(new node_section($2));
                 }
         ;
 
@@ -145,7 +145,7 @@ label:
                 }
         |       LABEL
                 {
-                    $$ = new node::label($1);
+                    $$ = new node_label($1);
                 }
         ;
 
@@ -156,28 +156,28 @@ instr_arg_list: instr_arg_list COMMA instr_arg
                 }
         |       instr_arg
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
                     $$->push_back($1);
                 }
         |
                 {
-                    $$ = new std::vector<node::base*>();
+                    $$ = new std::vector<node_base*>();
                 }
         ;
 
 instr_arg:      REGISTER
                 {
-                    $$ = new node::reg($1);
+                    $$ = new node_reg($1);
                     $$->set_location(@1);
                 }
         |       SYMBOL
                 {
-                    $$ = new node::label($1);
+                    $$ = new node_label($1);
                     $$->set_location(@1);
                 }
         |       INT
                 {
-                    $$ = new node::num($1);
+                    $$ = new node_num($1);
                     $$->set_location(@1);
                 }
         ;

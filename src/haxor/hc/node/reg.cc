@@ -1,17 +1,15 @@
 #include "haxor/hc/node/reg.hh"
 
 namespace haxor {
-  namespace node {
-    reg::reg(const std::string &name) : name(name) {
-    }
+  node_reg::node_reg(const std::string &name) : name(name) {
+  }
 
-    enum type reg::get_type() const {
-      return type::reg;
-    }
+  enum node_type node_reg::get_type() const {
+    return node_type::reg;
+  }
 
-    std::string reg::get_name() const {
-      return name;
-    }
+  std::string node_reg::get_name() const {
+    return name;
   }
 }
 

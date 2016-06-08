@@ -41,7 +41,7 @@ namespace haxor {
     void compile(const std::string &filename);
 
     private:
-    void set_ast(std::vector<node::base*> *ast);
+    void set_ast(std::vector<node_base*> *ast);
     std::string& get_filename();
 
     void verify_code();
@@ -59,7 +59,7 @@ namespace haxor {
     class parser parser;
 
     std::string filename;
-    std::vector<node::base*> *ast;
+    std::vector<node_base*> *ast;
     std::map<std::string, word_t> labels;
 
     std::map<std::string, uint8_t> reg_aliases = {

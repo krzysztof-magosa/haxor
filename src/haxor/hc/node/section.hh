@@ -4,17 +4,15 @@
 #include "haxor/hc/node/base.hh"
 
 namespace haxor {
-  namespace node {
-    class section : public base {
-      public:
-      section(const std::string &name);
-      enum type get_type() const;
-      std::string get_name() const;
+  class node_section : public node_base {
+    public:
+    node_section(const std::string &name);
+    enum node_type get_type() const;
+    std::string get_name() const;
 
-      private:
-      const std::string name;
-    };
-  }
+    private:
+    const std::string name;
+  };
 }
 
 #endif

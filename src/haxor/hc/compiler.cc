@@ -15,8 +15,8 @@ namespace haxor {
 
   void compiler::verify_code() {
     for (auto *item : *ast) {
-      if (item->is_a(node::type::instr)) {
-        auto *instr = dynamic_cast<node::instr*>(item);
+      if (item->is_a(node_type::instr)) {
+        auto *instr = dynamic_cast<node_instr*>(item);
 
         auto it = instr_list.find(instr->get_name());
 
@@ -31,24 +31,24 @@ namespace haxor {
             auto * const arg = instr->get_args()->at(i);
 
             if (instr_def.args[i] == 'r') {
-              if (!arg->is_a(node::type::reg)) {
+              if (!arg->is_a(node_type::reg)) {
                 std::string error_msg = "Invalid argument, unexpected "
                   + type_to_string(arg->get_type())
                   + ", expecting "
-                  + type_to_string(node::type::reg);
+                  + type_to_string(node_type::reg);
                 if (arg->has_location()) {
                   error_msg += " at " + format_location(arg->get_location());
                 }
                 throw hc_syntax_error(error_msg);
               }
             } else if (instr_def.args[i] == 'i') {
-              if (!arg->is_a(node::type::num) && !arg->is_a(node::type::label)) {
+              if (!arg->is_a(node_type::num) && !arg->is_a(node_type::label)) {
                 std::string error_msg = "Invalid argument, unexpected "
                   + type_to_string(arg->get_type())
                   + ", expcting "
-                  + type_to_string(node::type::num)
+                  + type_to_string(node_type::num)
                   + " or "
-                  + type_to_string(node::type::label);
+                  + type_to_string(node_type::label);
                 if (arg->has_location()) {
                   error_msg += ", at " + format_location(arg->get_location());
                 }
@@ -77,8 +77,8 @@ namespace haxor {
   void compiler::mark_sections() {
     std::string current_section = ".text";
     for (auto *item : *ast) {
-      if (item->get_type() == node::type::section) {
-        current_section = dynamic_cast<node::section*>(item)->get_name();
+      if (item->get_type() == node_type::section) {
+        current_section = dynamic_cast<node_section*>(item)->get_name();
       }
       item->set_section(current_section);
     }
@@ -97,11 +97,11 @@ namespace haxor {
     }
     sections.push_back(".bss"); // bss must be always last one
 
-    auto *sorted = new std::vector<node::base*>();
+    auto *sorted = new std::vector<node_base*>();
     for (auto section : sections) {
       std::copy_if(
         ast->begin(), ast->end(), std::back_inserter(*sorted),
-        [section](node::base *n) {
+        [section](node_base *n) {
           return n->get_section() == section;
         }
       );
@@ -122,8 +122,8 @@ namespace haxor {
   void compiler::collect_labels() {
     labels.clear();
     for (auto *item : *ast) {
-      if (item->is_a(node::type::label)) {
-        auto *label = dynamic_cast<node::label*>(item);
+      if (item->is_a(node_type::label)) {
+        auto *label = dynamic_cast<node_label*>(item);
         labels.insert(std::make_pair(label->get_name(), label->get_addr()));
       }
     }
@@ -193,22 +193,22 @@ namespace haxor {
         continue;
       }
 
-      if (item->is_a(node::type::instr)) {
-        node::instr *instr = dynamic_cast<node::instr*>(item);
+      if (item->is_a(node_type::instr)) {
+        node_instr *instr = dynamic_cast<node_instr*>(item);
         opcode_t opcode;
         opcode.cmd = instr_list.at(instr->get_name()).cmd;
 
         int reg_no = 1;
         for (auto arg : *instr->get_args()) {
-          if (arg->is_a(node::type::reg)) {
-            auto reg = resolve_reg(dynamic_cast<node::reg*>(arg)->get_name());
+          if (arg->is_a(node_type::reg)) {
+            auto reg = resolve_reg(dynamic_cast<node_reg*>(arg)->get_name());
 
             opcode.set_reg(reg_no, reg);
             reg_no ++;
-          } else if (arg->is_a(node::type::num)) {
-            opcode.imm = dynamic_cast<node::num*>(arg)->get_value();
-          } else if (arg->get_type() == node::type::label) {
-            word_t imm = labels.at(dynamic_cast<node::label*>(arg)->get_name());
+          } else if (arg->is_a(node_type::num)) {
+            opcode.imm = dynamic_cast<node_num*>(arg)->get_value();
+          } else if (arg->get_type() == node_type::label) {
+            word_t imm = labels.at(dynamic_cast<node_label*>(arg)->get_name());
 
              if (instr_list.at(instr->get_name()).rel) {
                imm -= (item->get_addr() + sizeof(word_t));
@@ -226,8 +226,8 @@ namespace haxor {
 
          auto value = encode_opcode(opcode);
          haxe.write(reinterpret_cast<char*>(&value), sizeof(value));
-      } else if (item->is_a(node::type::num)) {
-        word_t value = dynamic_cast<node::num*>(item)->get_value();
+      } else if (item->is_a(node_type::num)) {
+        word_t value = dynamic_cast<node_num*>(item)->get_value();
         haxe.write(reinterpret_cast<char*>(&value), item->get_size());
       }
     }
@@ -245,7 +245,7 @@ namespace haxor {
     // @TODO validation
   }
 
-  void compiler::set_ast(std::vector<node::base*> *ast) {
+  void compiler::set_ast(std::vector<node_base*> *ast) {
     this->ast = ast;
   }
 

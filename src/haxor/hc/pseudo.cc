@@ -3,7 +3,7 @@
 
 namespace haxor {
   pseudo::pseudo() {
-    ast = new std::vector<node::base*>();
+    ast = new std::vector<node_base*>();
 
     instr2func.insert(std::make_pair("push",  &pseudo::p_push));
     instr2func.insert(std::make_pair("pushi", &pseudo::p_pushi));
@@ -27,10 +27,10 @@ namespace haxor {
     instr2func.insert(std::make_pair("beqz",  &pseudo::p_beqz));
   }
 
-  void pseudo::process(std::vector<node::base*> *input) {
+  void pseudo::process(std::vector<node_base*> *input) {
     for (auto *item : *input) {
-      if (item->get_type() == node::type::instr) {
-        auto *instr = dynamic_cast<node::instr*>(item);
+      if (item->get_type() == node_type::instr) {
+        auto *instr = dynamic_cast<node_instr*>(item);
         auto it = instr2func.find(instr->get_name());
 
         if (it != instr2func.end()) {
@@ -45,370 +45,370 @@ namespace haxor {
     }
   }
 
-  std::vector<node::base*> *pseudo::get_ast() {
+  std::vector<node_base*> *pseudo::get_ast() {
     return ast;
   }
 
-  void pseudo::p_push(node::instr *input) {
+  void pseudo::p_push(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(-sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(-sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("sw", args));
+      ast->push_back(new node_instr("sw", args));
     }
   }
 
-  void pseudo::p_pushi(node::instr *input) {
+  void pseudo::p_pushi(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("addi", args));
+      ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(-sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(-sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      args->push_back(new node::reg("$at"));
-      ast->push_back(new node::instr("sw", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      args->push_back(new node_reg("$at"));
+      ast->push_back(new node_instr("sw", args));
     }
   }
 
-  void pseudo::p_pushm(node::instr *input) {
+  void pseudo::p_pushm(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("lw", args));
+      ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(-sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(-sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      args->push_back(new node::reg("$at"));
-      ast->push_back(new node::instr("sw", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      args->push_back(new node_reg("$at"));
+      ast->push_back(new node_instr("sw", args));
     }
   }
 
-  void pseudo::p_pop(node::instr *input) {
+  void pseudo::p_pop(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
+      auto args = new std::vector<class node_base*>();
       args->push_back(input->get_args()->at(0));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("lw", args));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
   }
 
-  void pseudo::p_popm(node::instr *input) {
+  void pseudo::p_popm(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("lw", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
-      args->push_back(new node::reg("$at"));
-      ast->push_back(new node::instr("sw", args));
+      args->push_back(new node_reg("$at"));
+      ast->push_back(new node_instr("sw", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
   }
 
-  void pseudo::p_move(node::instr *input) {
+  void pseudo::p_move(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(input->get_args()->at(0));
-      args->push_back(input->get_args()->at(1));
-      args->push_back(new node::reg("$zero"));
-      ast->push_back(new node::instr("add", args));
-    }
-  }
-
-  void pseudo::p_clear(node::instr *input) {
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(input->get_args()->at(0));
-      args->push_back(new node::reg("$zero"));
-      args->push_back(new node::reg("$zero"));
-      ast->push_back(new node::instr("add", args));
-    }
-  }
-
-  void pseudo::p_not(node::instr *input) {
-    {
-      auto args = new std::vector<class node::base*>();
+      auto args = new std::vector<class node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
-      args->push_back(new node::reg("$zero"));
-      ast->push_back(new node::instr("nor", args));
+      args->push_back(new node_reg("$zero"));
+      ast->push_back(new node_instr("add", args));
     }
   }
 
-  void pseudo::p_ret(node::instr *input) {
+  void pseudo::p_clear(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$ra"));
-      ast->push_back(new node::instr("jr", args));
-    }
-  }
-
-  void pseudo::p_prol(node::instr *input) {
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(- sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      args->push_back(new node::reg("$ra"));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(- sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      args->push_back(new node::reg("$fp"));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$fp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      auto arg1 = dynamic_cast<node::num*>(input->get_args()->at(0));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(arg1->get_value()));
-      ast->push_back(new node::instr("addi", args));
-    }
-  }
-
-  void pseudo::p_epil(node::instr *input) {
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$fp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$fp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("lw", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$ra"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(0));
-      ast->push_back(new node::instr("lw", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::reg("$sp"));
-      args->push_back(new node::num(sizeof(word_t)));
-      ast->push_back(new node::instr("addi", args));
-    }
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$ra"));
-      ast->push_back(new node::instr("jr", args));
-    }
-  }
-
-  void pseudo::p_b(node::instr *input) {
-    {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$zero"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("beq", args));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(new node_reg("$zero"));
+      ast->push_back(new node_instr("add", args));
     }
   }
 
-  void pseudo::p_bal(node::instr *input) {
+  void pseudo::p_not(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$zero"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("beql", args));
+      args->push_back(input->get_args()->at(1));
+      args->push_back(new node_reg("$zero"));
+      ast->push_back(new node_instr("nor", args));
     }
   }
 
-  void pseudo::p_bgt(node::instr *input) {
+  void pseudo::p_ret(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$ra"));
+      ast->push_back(new node_instr("jr", args));
+    }
+  }
+
+  void pseudo::p_prol(node_instr *input) {
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(- sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      args->push_back(new node_reg("$ra"));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(- sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      args->push_back(new node_reg("$fp"));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$fp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      auto arg1 = dynamic_cast<node_num*>(input->get_args()->at(0));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(arg1->get_value()));
+      ast->push_back(new node_instr("addi", args));
+    }
+  }
+
+  void pseudo::p_epil(node_instr *input) {
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$fp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$fp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("lw", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$ra"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("lw", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$ra"));
+      ast->push_back(new node_instr("jr", args));
+    }
+  }
+
+  void pseudo::p_b(node_instr *input) {
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$zero"));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(input->get_args()->at(0));
+      ast->push_back(new node_instr("beq", args));
+    }
+  }
+
+  void pseudo::p_bal(node_instr *input) {
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$zero"));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(input->get_args()->at(0));
+      ast->push_back(new node_instr("beql", args));
+    }
+  }
+
+  void pseudo::p_bgt(node_instr *input) {
+    {
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(1));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
-      ast->push_back(new node::instr("bne", args));
+      ast->push_back(new node_instr("bne", args));
     }
   }
 
-  void pseudo::p_blt(node::instr *input) {
+  void pseudo::p_blt(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
-      ast->push_back(new node::instr("bne", args));
+      ast->push_back(new node_instr("bne", args));
     }
   }
 
-  void pseudo::p_bge(node::instr *input) {
+  void pseudo::p_bge(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
-      ast->push_back(new node::instr("beq", args));
+      ast->push_back(new node_instr("beq", args));
     }
   }
 
-  void pseudo::p_ble(node::instr *input) {
+  void pseudo::p_ble(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(1));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
-      ast->push_back(new node::instr("beq", args));
+      ast->push_back(new node_instr("beq", args));
     }
   }
 
-  void pseudo::p_blez(node::instr *input) {
+  void pseudo::p_blez(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("beq", args));
+      ast->push_back(new node_instr("beq", args));
     }
   }
 
-  void pseudo::p_bgtz(node::instr *input) {
+  void pseudo::p_bgtz(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
-      ast->push_back(new node::instr("slt", args));
+      ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node::base*>();
-      args->push_back(new node::reg("$at"));
-      args->push_back(new node::reg("$zero"));
+      auto args = new std::vector<class node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("bne", args));
+      ast->push_back(new node_instr("bne", args));
     }
   }
 
-  void pseudo::p_beqz(node::instr *input) {
+  void pseudo::p_beqz(node_instr *input) {
     {
-      auto args = new std::vector<class node::base*>();
+      auto args = new std::vector<class node_base*>();
       args->push_back(input->get_args()->at(0));
-      args->push_back(new node::reg("$zero"));
+      args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
-      ast->push_back(new node::instr("beq", args));
+      ast->push_back(new node_instr("beq", args));
     }
   }
 }

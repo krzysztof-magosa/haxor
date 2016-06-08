@@ -4,19 +4,17 @@
 #include "haxor/hc/node/base.hh"
 
 namespace haxor {
-  namespace node {
-    class instr : public base {
-      public:
-      instr(const std::string &instr, std::vector<node::base*> *args);
-      enum type get_type() const;
-      std::string get_name() const;
-      const std::vector<node::base*>* get_args() const;
+  class node_instr : public node_base {
+    public:
+    node_instr(const std::string &instr, std::vector<node_base*> *args);
+    enum node_type get_type() const;
+    std::string get_name() const;
+    const std::vector<node_base*>* get_args() const;
 
-      private:
-      const std::string name;
-      const std::vector<node::base*> *args;
-    };
-  }
+    private:
+    const std::string name;
+    const std::vector<node_base*> *args;
+  };
 }
 
 #endif
