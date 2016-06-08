@@ -51,14 +51,14 @@ namespace haxor {
 
   void pseudo::p_push(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(-sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(input->get_args()->at(0));
@@ -68,21 +68,21 @@ namespace haxor {
 
   void pseudo::p_pushi(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(-sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$at"));
@@ -92,21 +92,21 @@ namespace haxor {
 
   void pseudo::p_pushm(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(-sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$at"));
@@ -116,14 +116,14 @@ namespace haxor {
 
   void pseudo::p_pop(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(sizeof(word_t)));
@@ -133,21 +133,21 @@ namespace haxor {
 
   void pseudo::p_popm(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
       args->push_back(new node_reg("$at"));
       ast->push_back(new node_instr("sw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(sizeof(word_t)));
@@ -157,7 +157,7 @@ namespace haxor {
 
   void pseudo::p_move(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
       args->push_back(new node_reg("$zero"));
@@ -167,7 +167,7 @@ namespace haxor {
 
   void pseudo::p_clear(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(new node_reg("$zero"));
       args->push_back(new node_reg("$zero"));
@@ -177,7 +177,7 @@ namespace haxor {
 
   void pseudo::p_not(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
       args->push_back(new node_reg("$zero"));
@@ -187,7 +187,7 @@ namespace haxor {
 
   void pseudo::p_ret(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$ra"));
       ast->push_back(new node_instr("jr", args));
     }
@@ -195,40 +195,40 @@ namespace haxor {
 
   void pseudo::p_prol(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(- sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$ra"));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(- sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$fp"));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$fp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       auto arg1 = dynamic_cast<node_num*>(input->get_args()->at(0));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
@@ -239,42 +239,42 @@ namespace haxor {
 
   void pseudo::p_epil(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$fp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$fp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$ra"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("lw", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$ra"));
       ast->push_back(new node_instr("jr", args));
     }
@@ -282,7 +282,7 @@ namespace haxor {
 
   void pseudo::p_b(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$zero"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
@@ -292,7 +292,7 @@ namespace haxor {
 
   void pseudo::p_bal(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$zero"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
@@ -302,14 +302,14 @@ namespace haxor {
 
   void pseudo::p_bgt(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(1));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
@@ -319,14 +319,14 @@ namespace haxor {
 
   void pseudo::p_blt(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
@@ -336,14 +336,14 @@ namespace haxor {
 
   void pseudo::p_bge(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(1));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
@@ -353,14 +353,14 @@ namespace haxor {
 
   void pseudo::p_ble(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(input->get_args()->at(1));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(2));
@@ -370,14 +370,14 @@ namespace haxor {
 
   void pseudo::p_blez(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
@@ -387,14 +387,14 @@ namespace haxor {
 
   void pseudo::p_bgtz(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(0));
       ast->push_back(new node_instr("slt", args));
     }
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$at"));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
@@ -404,7 +404,7 @@ namespace haxor {
 
   void pseudo::p_beqz(node_instr *input) {
     {
-      auto args = new std::vector<class node_base*>();
+      auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
