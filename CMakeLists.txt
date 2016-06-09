@@ -4,7 +4,7 @@ enable_testing()
 
 include_directories(src)
 
-set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_MACOSX_RPATH 1)
 
 include(CheckCXXCompilerFlag)
