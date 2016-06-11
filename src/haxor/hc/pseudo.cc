@@ -194,6 +194,7 @@ namespace haxor {
   }
 
   void pseudo::p_prol(node_instr *input) {
+    // push $ra
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
@@ -206,7 +207,9 @@ namespace haxor {
       args->push_back(new node_reg("$sp"));
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$ra"));
+      ast->push_back(new node_instr("sw", args));
     }
+    // push $fp
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
@@ -220,6 +223,7 @@ namespace haxor {
       args->push_back(new node_num(0));
       args->push_back(new node_reg("$fp"));
     }
+    // $fp = $sp
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$fp"));
@@ -227,6 +231,7 @@ namespace haxor {
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("addi", args));
     }
+    // $sp -= imm
     {
       auto args = new std::vector<node_base*>();
       auto arg1 = dynamic_cast<node_num*>(input->get_args()->at(0));
@@ -238,6 +243,7 @@ namespace haxor {
   }
 
   void pseudo::p_epil(node_instr *input) {
+    // $sp = $fp
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$sp"));
@@ -245,6 +251,7 @@ namespace haxor {
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("addi", args));
     }
+    // pop $fp
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$fp"));
@@ -259,6 +266,7 @@ namespace haxor {
       args->push_back(new node_num(sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
+    // pop $ra
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$ra"));
@@ -273,6 +281,7 @@ namespace haxor {
       args->push_back(new node_num(sizeof(word_t)));
       ast->push_back(new node_instr("addi", args));
     }
+    // ret
     {
       auto args = new std::vector<node_base*>();
       args->push_back(new node_reg("$ra"));
