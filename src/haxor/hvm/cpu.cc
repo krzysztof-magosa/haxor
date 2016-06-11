@@ -9,6 +9,9 @@ namespace haxor {
   cpu::cpu(class vm &vm) : vm(vm) {}
 
   void cpu::cycle() {
+    if (determine_segment(ip) != memory_segment::code) {
+      throw segfault_error();
+    }
     decode_opcode(vm.get_mem().read_word(ip), opcode);
     ip += sizeof(word_t);
     execute(opcode);
