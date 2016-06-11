@@ -63,12 +63,31 @@ namespace haxor {
     std::map<std::string, word_t> labels;
 
     std::map<std::string, uint8_t> reg_aliases = {
-      { "$zero", reg_zero }, { "$at",  reg_accumulator },
-      { "$a0",   2 }, { "$a1",  3 }, { "$a2",  4 }, { "$a3",  5 }, { "$a4",  6 },
-      { "$a5",   7 }, { "$a6",  8 }, { "$a7",  9 }, { "$a8", 10 }, { "$a9", 11 },
-      { "$t0",  12 }, { "$t1", 13 }, { "$t2", 14 }, { "$t3", 15 }, { "$t4", 16 },
-      { "$t5",  17 }, { "$t6", 18 }, { "$t7", 19 }, { "$t8", 20 }, { "$t9", 21 },
-      { "$sp",  reg_stack }, { "$ra", reg_return }, { "$sc", reg_syscall }
+      { "$zero", reg_zero },
+      { "$at",   reg_accumulator },
+      { "$a0",    2 },
+      { "$a1",    3 },
+      { "$a2",    4 },
+      { "$a3",    5 },
+      { "$a4",    6 },
+      { "$a5",    7 },
+      { "$a6",    8 },
+      { "$a7" ,   9 },
+      { "$a8",   10 },
+      { "$a9",   11 },
+      { "$t0",   12 },
+      { "$t1",   13 },
+      { "$t2",   14 },
+      { "$t3",   15 },
+      { "$t4",   16 },
+      { "$t5",   17 },
+      { "$t6",   18 },
+      { "$t7",   19 },
+      { "$t8",   20 },
+      { "$t9",   21 },
+      { "$sp",   reg_stack },
+      { "$ra",   reg_return },
+      { "$sc",   reg_syscall }
     };
 
     std::map<std::string, instr_spec> instr_list = {
