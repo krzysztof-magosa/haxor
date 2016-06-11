@@ -94,6 +94,7 @@ namespace haxor {
       { "$t7",   19 },
       { "$t8",   20 },
       { "$t9",   21 },
+      { "$fp",   reg_frame },
       { "$cs",   reg_code_segment },
       { "$ds",   reg_data_segment },
       { "$ss",   reg_stack_segment },
