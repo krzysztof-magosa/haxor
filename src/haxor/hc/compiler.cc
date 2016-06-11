@@ -148,8 +148,10 @@ namespace haxor {
     }
 
     hdr.entry_point = labels.at("main");
-    hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
+    hdr.text_size = calc_section_size(".text");
+    hdr.data_size = calc_section_size(".data");
     hdr.bss_size = calc_section_size(".bss");
+    hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
 
     return hdr;
   }

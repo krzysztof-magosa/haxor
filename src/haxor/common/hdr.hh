@@ -8,11 +8,11 @@ namespace haxor {
     int64_t magic = 0;
     int64_t version = 0;
     int64_t entry_point = 0;
+    int64_t text_size = 0;
+    int64_t data_size = 0;
     int64_t bss_size = 0;
     int64_t stack_size = 0;
     int64_t _reserved1 = 0;
-    int64_t _reserved2 = 0;
-    int64_t _reserved3 = 0;
   };
 }
 
