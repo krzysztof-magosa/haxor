@@ -54,7 +54,7 @@ namespace haxor {
 
     const uint64_t code_addr = ivt_size;
     const uint64_t data_addr = code_addr + hdr.text_size;
-    const uint64_t stack_addr = data_addr + hdr.data_size;
+    const uint64_t stack_addr = data_addr + hdr.data_size + hdr.bss_size;
     cpu.get_regs().write(reg_code_segment, code_addr);
     cpu.get_regs().write(reg_data_segment, data_addr);
     cpu.get_regs().write(reg_stack_segment, stack_addr);
