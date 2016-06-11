@@ -129,15 +129,15 @@ namespace haxor {
     }
   }
 
-  int64_t compiler::calc_bss_size() {
-    int64_t bss_size = 0;
+  int64_t compiler::calc_section_size(const std::string &name) {
+    int64_t size = 0;
     for (auto *item : *ast) {
-      if (item->get_section() == ".bss") {
-        bss_size += item->get_size();
+      if (item->get_section() == name) {
+        size += item->get_size();
       }
     }
 
-    return bss_size;
+    return size;
   }
 
   hdr_t compiler::build_hdr() {
@@ -151,7 +151,7 @@ namespace haxor {
 
     hdr.entry_point = labels.at("main");
     hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
-    hdr.bss_size = calc_bss_size();
+    hdr.bss_size = calc_section_size(".bss");
 
     return hdr;
   }

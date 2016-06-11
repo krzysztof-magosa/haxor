@@ -51,7 +51,7 @@ namespace haxor {
     void calc_addresses();
     void collect_labels();
     hdr_t build_hdr();
-    int64_t calc_bss_size();
+    int64_t calc_section_size(const std::string &name);
     uint8_t resolve_reg(const std::string &name);
     std::string format_location(const class location &location);
 
