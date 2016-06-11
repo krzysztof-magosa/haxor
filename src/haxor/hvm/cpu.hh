@@ -10,7 +10,7 @@ namespace haxor {
 
   class cpu {
     public:
-    cpu(class vm &vm);
+    explicit cpu(class vm &vm);
     void cycle();
     void execute(const opcode_t &op);
     void set_ip(const uint64_t ip);
