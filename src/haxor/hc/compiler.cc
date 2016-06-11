@@ -85,7 +85,7 @@ namespace haxor {
   }
 
   void compiler::mark_sections() {
-    std::string current_section = ".text";
+    std::string current_section = section_text;
     for (auto *item : *ast) {
       if (item->get_type() == node_type::section) {
         current_section = dynamic_cast<node_section*>(item)->get_name();
@@ -148,9 +148,9 @@ namespace haxor {
     }
 
     hdr.entry_point = labels.at("main");
-    hdr.text_size = calc_section_size(".text");
-    hdr.data_size = calc_section_size(".data");
-    hdr.bss_size = calc_section_size(".bss");
+    hdr.text_size = calc_section_size(section_text);
+    hdr.data_size = calc_section_size(section_data);
+    hdr.bss_size = calc_section_size(section_bss);
     hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
 
     return hdr;

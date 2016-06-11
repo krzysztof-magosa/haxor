@@ -62,10 +62,13 @@ namespace haxor {
     std::vector<node_base*> *ast;
     std::map<std::string, word_t> labels;
 
+    const std::string section_text = ".text";
+    const std::string section_data = ".data";
+    const std::string section_bss  = ".bss";
     const std::vector<const std::string> sections = {
-      ".text",
-      ".data",
-      ".bss"
+      section_text,
+      section_data,
+      section_bss
     };
 
     std::map<std::string, uint8_t> reg_aliases = {
