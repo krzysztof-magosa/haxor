@@ -28,6 +28,7 @@ namespace haxor {
     void link();
     void branch(const uint64_t target);
     void jump(const uint64_t target);
+    void validate_reg_write(const uint8_t reg);
 
     class vm &vm;
     class regs regs;

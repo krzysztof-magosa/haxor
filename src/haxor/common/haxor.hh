@@ -47,6 +47,7 @@ namespace haxor {
   class regs_range_error : public std::exception {};
   class mem_misalign_error : public std::exception {};
   class mem_range_error : public std::exception {};
+  class regs_fault_error : public std::exception {};
   class segfault_error : public std::exception {};
 }
 

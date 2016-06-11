@@ -31,30 +31,37 @@ namespace haxor {
       break;
 
     case cmd_add:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) + regs.read(op.reg3));
       break;
 
     case cmd_addi:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) + op.imm);
       break;
 
     case cmd_sub:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) - regs.read(op.reg3));
       break;
 
     case cmd_mult:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) * regs.read(op.reg3));
       break;
 
     case cmd_div:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) / regs.read(op.reg3));
       break;
 
     case cmd_mod:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) % regs.read(op.reg3));
       break;
 
     case cmd_lw:
+      validate_reg_write(op.reg1);
       tmp = regs.read(op.reg2) + op.imm;
       regs.write(op.reg1, vm.get_mem().read_word(tmp));
       break;
@@ -72,54 +79,67 @@ namespace haxor {
       break;
 
     case cmd_lui:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, op.imm << 32);
       break;
 
     case cmd_and:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) & regs.read(op.reg3));
       break;
 
     case cmd_andi:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) & op.imm);
       break;
 
     case cmd_or:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) | regs.read(op.reg3));
       break;
 
     case cmd_ori:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) | op.imm);
       break;
 
     case cmd_xor:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) ^ regs.read(op.reg3));
       break;
 
     case cmd_nor:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, ~(regs.read(op.reg2) | regs.read(op.reg3)));
       break;
 
     case cmd_slt:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) < regs.read(op.reg3) ? 1 : 0);
       break;
 
     case cmd_slti:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) < op.imm ? 1 : 0);
       break;
 
     case cmd_slli:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) << op.imm);
       break;
 
     case cmd_srli:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) >> op.imm);
       break;
 
     case cmd_sll:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) << regs.read(op.reg3));
       break;
 
     case cmd_srl:
+      validate_reg_write(op.reg1);
       regs.write(op.reg1, regs.read(op.reg2) >> regs.read(op.reg3));
       break;
 
@@ -197,5 +217,11 @@ namespace haxor {
 
   void cpu::jump(const uint64_t target) {
     ip = target * sizeof(word_t);
+  }
+
+  void cpu::validate_reg_write(const uint8_t reg) {
+    if (reg == reg_code_segment || reg == reg_data_segment || reg == reg_stack_segment) {
+      throw regs_fault_error();
+    }
   }
 }
