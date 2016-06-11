@@ -101,15 +101,22 @@ vCPU has 64 registers, some of them have special role:
 |21    |$t9  |temporary (local variable)|
 |...   |...  |...|
 |57    |$fp  |frame pointer|
-|58    |$cs  |code segment pointer|
-|59    |$ds  |data segment pointer|
-|60    |$ss  |stack segment pointer|
+|58    |$cs  |code segment pointer, read-only|
+|59    |$ds  |data segment pointer, read-only|
+|60    |$ss  |stack segment pointer, read-only|
 |61    |$sp  |stack pointer|
 |62    |$ra  |return address for linked jumps/branches|
 |63    |$sc  |syscall function id and return code|
 
 ## Memory map
-<img src="media/memory.png">
+<img src="media/memory.png" width="75%">
+
+|Segment|Write|Execute    |
+|-------|-----|-----------|
+|ivt    |:white_check_mark:|:no_entry_sign:|
+|code   |:no_entry_sign:   |:white_check_mark:|
+|data   |:white_check_mark:|:no_entry_sign:|
+|stack  |:white_check_mark:|:no_entry_sign:|
 
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
