@@ -65,7 +65,7 @@ namespace haxor {
     const std::string section_text = ".text";
     const std::string section_data = ".data";
     const std::string section_bss  = ".bss";
-    const std::vector<const std::string> sections = {
+    const std::vector<std::string> sections = {
       section_text,
       section_data,
       section_bss
