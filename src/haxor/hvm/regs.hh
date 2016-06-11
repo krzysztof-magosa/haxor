@@ -7,6 +7,7 @@
 namespace haxor {
   enum special_reg {
     reg_zero    = 0,
+    reg_accumulator = 1,
     reg_stack   = 61,
     reg_return  = 62,
     reg_syscall = 63
