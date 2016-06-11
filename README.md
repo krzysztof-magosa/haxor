@@ -109,7 +109,7 @@ vCPU has 64 registers, some of them have special role:
 |63    |$sc  |syscall function id and return code|
 
 ## Memory map
-<img src="media/memory.png" width="50%">
+<img src="media/memory.png">
 
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
