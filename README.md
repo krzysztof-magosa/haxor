@@ -100,6 +100,9 @@ vCPU has 64 registers, some of them have special role:
 |20    |$t8  |temporary (local variable)|
 |21    |$t9  |temporary (local variable)|
 |...   |...  |...|
+|58    |$cs  |code segment pointer|
+|59    |$ds  |data segment pointer|
+|60    |$ss  |stack segment pointer|
 |61    |$sp  |stack pointer|
 |62    |$ra  |return address for linked jumps/branches|
 |63    |$sc  |syscall function id and return code|
