@@ -135,7 +135,9 @@ line:           label
         |       SECTION SECTION_NAME
                 {
                     $$ = new std::vector<node_base*>();
-                    $$->push_back(new node_section($2));
+                    auto *node = new node_section($2);
+                    node->set_location(@$);
+                    $$->push_back(node);
                 }
         ;
 

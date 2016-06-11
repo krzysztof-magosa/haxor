@@ -63,6 +63,16 @@ namespace haxor {
           }
           throw hc_syntax_error(error_msg); // set correct exception type
         }
+      } else if (item->is_a(node_type::section)) {
+        auto *section = dynamic_cast<node_section*>(item);
+
+        if (std::find(sections.begin(), sections.end(), section->get_name()) == sections.end()) {
+          std::string error_msg = "Unsupported section '" + section->get_name() + "'";
+          if (section->has_location()) {
+            error_msg += ", at location " + format_location(section->get_location());
+          }
+          throw hc_syntax_error(error_msg);
+        }
       }
     }
   }
@@ -85,18 +95,6 @@ namespace haxor {
   }
 
   void compiler::order_sections() {
-    std::vector<std::string> sections = { ".text", ".data" };
-    for (auto *item : *ast) {
-      if (item->get_section() == ".bss") {
-        continue;
-      }
-
-      if (std::find(sections.begin(), sections.end(), item->get_section()) == sections.end()) {
-        sections.push_back(item->get_section());
-      }
-    }
-    sections.push_back(".bss"); // bss must be always last one
-
     auto *sorted = new std::vector<node_base*>();
     for (auto section : sections) {
       std::copy_if(
