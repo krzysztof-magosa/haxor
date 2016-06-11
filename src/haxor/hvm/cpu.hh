@@ -8,12 +8,20 @@
 namespace haxor {
   class vm;
 
+  enum class memory_segment {
+    ivt,
+    code,
+    data,
+    stack
+  };
+
   class cpu {
     public:
     explicit cpu(class vm &vm);
     void cycle();
     void execute(const opcode_t &op);
     void set_ip(const uint64_t ip);
+    memory_segment determine_segment(const word_t addr);
     class regs& get_regs();
 
     private:

@@ -16,6 +16,7 @@ namespace haxor {
 
   void cpu::execute(const opcode_t &op) {
     uint64_t tmp;
+    memory_segment ms;
 
     switch(op.cmd) {
     case cmd_nop:
@@ -60,7 +61,14 @@ namespace haxor {
 
     case cmd_sw:
       tmp = regs.read(op.reg1) + op.imm;
-      vm.get_mem().write_word(tmp, regs.read(op.reg2));
+      ms = determine_segment(tmp);
+
+      if (ms == memory_segment::ivt || ms == memory_segment::data || ms == memory_segment::stack) {
+        vm.get_mem().write_word(tmp, regs.read(op.reg2));
+      } else {
+        throw segfault_error();
+      }
+
       break;
 
     case cmd_lui:
@@ -161,6 +169,18 @@ namespace haxor {
 
   void cpu::set_ip(const uint64_t ip) {
     this->ip = ip;
+  }
+
+  memory_segment cpu::determine_segment(const word_t addr) {
+    if (addr >= get_regs().read(reg_stack_segment)) {
+      return memory_segment::stack;
+    } else if (addr >= get_regs().read(reg_data_segment)) {
+      return memory_segment::data;
+    } else if (addr >= get_regs().read(reg_code_segment)) {
+      return memory_segment::code;
+    } else {
+      return memory_segment::ivt;
+    }
   }
 
   regs& cpu::get_regs() {
