@@ -60,7 +60,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 * Registers size: 64-bit
 * Instruction: fixed size, 64-bit
 * Arithmetic: integer only, 64-bit
-* Memory model: flat, no protection
+* Memory model: flat, segments used only for protection
 * Syscall call convention: similar to [cdecl](https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl) (caller cleans the stack)
 
 ### OpCodes
