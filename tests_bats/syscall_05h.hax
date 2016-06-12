@@ -1,0 +1,12 @@
+section .text
+main:
+  addi $sc, $zero, 05h
+  addi $a0, $zero, 0
+  addi $a1, $zero, 100
+  syscall
+
+  addi $sc, $zero, 02h
+  add $a0, $zero, $v0
+  syscall
+
+  exiti 0

@@ -1,0 +1,10 @@
+section .data
+msg:    dw "test_string", 0
+
+section .text
+main:
+  addi $a0, $zero, msg
+  addi $sc, $zero, 01h
+  syscall
+
+  exiti 0

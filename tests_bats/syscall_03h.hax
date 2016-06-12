@@ -1,0 +1,28 @@
+section .bss
+temp:
+  dw # t
+  dw # e
+  dw # s
+  dw # t
+  dw # _
+  dw # s
+  dw # t
+  dw # r
+  dw # i
+  dw # n
+  dw # g
+  dw # \0
+
+section .text
+main:
+  addi $sc, $zero, 03h
+  addi $a0, $zero, temp
+  addi $a1, $zero, 12
+  syscall
+
+  addi $sc, $zero, 01h
+  addi $a0, $zero, temp
+  syscall
+
+  exiti 0
+

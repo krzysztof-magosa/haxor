@@ -13,12 +13,22 @@ compiler:
 before_script:
   - 'if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew install bison ; fi'
   - 'if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew link bison --force ; fi'
+
+  - 'if [ "$TRAVIS_OS_NAME" = "osx" ] ; then brew install bats ; fi'
+  - 'if [ "$TRAVIS_OS_NAME" = "linux" ] ; then git clone https://github.com/sstephenson/bats.git ; fi'
+  - 'if [ "$TRAVIS_OS_NAME" = "linux" ] ; then cd bats ; fi'
+  - 'if [ "$TRAVIS_OS_NAME" = "linux" ] ; then sudo ./install.sh /usr/local ; fi'
+  - 'if [ "$TRAVIS_OS_NAME" = "linux" ] ; then cd .. ; fi'
+
   - bison --version
   - flex --version
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
   - make
+  - sudo make install
 
 script:
   - make test
+  - cd ../tests_bats
+  - bats *.bats

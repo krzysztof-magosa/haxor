@@ -1,0 +1,15 @@
+section .data
+temp:   dw
+
+section .text
+main:
+  addi $sc, $zero, 04h
+  addi $a0, $zero, temp
+  syscall
+
+  addi $sc, $zero, 02h
+  lw $a0, $zero, temp
+  syscall
+
+  exiti 0
+ 
