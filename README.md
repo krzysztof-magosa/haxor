@@ -102,10 +102,10 @@ vCPU has 64 registers, some of them have special role:
 |22    |$v0  |return value|
 |23    |$v1  |return value|
 |...   |...  |...|
-|57    |$fp  |frame pointer|
-|58    |$cs  |code segment pointer, read-only|
-|59    |$ds  |data segment pointer, read-only|
-|60    |$ss  |stack segment pointer, read-only|
+|57    |$cs  |code segment pointer, read-only|
+|58    |$ds  |data segment pointer, read-only|
+|59    |$ss  |stack segment pointer, read-only|
+|60    |$fp  |frame pointer|
 |61    |$sp  |stack pointer|
 |62    |$ra  |return address for linked jumps/branches|
 |63    |$sc  |syscall function id and return code|
