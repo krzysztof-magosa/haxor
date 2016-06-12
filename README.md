@@ -99,6 +99,8 @@ vCPU has 64 registers, some of them have special role:
 |19    |$t7  |temporary (local variable)|
 |20    |$t8  |temporary (local variable)|
 |21    |$t9  |temporary (local variable)|
+|22    |$v0  |return value|
+|23    |$v1  |return value|
 |...   |...  |...|
 |57    |$fp  |frame pointer|
 |58    |$cs  |code segment pointer, read-only|
