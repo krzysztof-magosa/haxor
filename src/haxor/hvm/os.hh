@@ -10,7 +10,7 @@ namespace haxor {
 
   class os {
     public:
-    os(class vm &vm);
+    explicit os(class vm &vm);
     void syscall();
 
     private:
