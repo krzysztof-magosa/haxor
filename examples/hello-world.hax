@@ -3,10 +3,8 @@ hello_msg:   dw "Hello World!", 10, 0
 
 section .text
 main:
-  pushi hello_msg
   addi $sc, $zero, 01h
+  addi $a0, $zero, hello_msg
   syscall
-  addi $sp, $sp, 8
 
   exiti 0
-

@@ -24,7 +24,6 @@ namespace haxor {
     word_t pop();
     void discard_input();
 
-    word_t sp;
     class vm &vm;
   };
 }

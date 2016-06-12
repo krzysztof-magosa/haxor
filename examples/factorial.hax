@@ -7,15 +7,13 @@ number:     dw              # temporary variable for number
 
 section .text
 main:
-  pushi question
+  addi $a0, $zero, question
   addi $sc, $zero, 01h      # $sc = 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushi number
+  addi $a0, $zero, number
   addi $sc, $zero, 04h      # $sc = 04h
   syscall
-  addi $sp, $sp, 8
 
   lw $t0, $zero, number     # $t0 = number
   addi $t1, $zero, 1        # $t1 = 1 // result
@@ -27,14 +25,12 @@ loop:
   ble $t2, $t0, loop        # if $t2 <= $t0 goto jump
 
 exit:
-  push $t1
+  add $a0, $zero, $t1
   addi $sc, $zero, 02h      # $sc = 02h
   syscall
-  addi $sp, $sp, 8
 
-  pushi newline
+  addi $a0, $zero, newline
   addi $sc, $zero, 01h      # $sc = 01h
   syscall
-  addi $sp, $sp, 8
 
   exiti 0

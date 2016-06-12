@@ -61,7 +61,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 * Instruction: fixed size, 64-bit
 * Arithmetic: integer only, 64-bit
 * Memory model: flat, segments used only for protection
-* Syscall call convention: similar to [cdecl](https://en.wikipedia.org/wiki/X86_calling_conventions#cdecl) (caller cleans the stack)
+* Call convention: parameters are passed by $a0-$a9 registers, return values by $v0, $v1
 
 ### OpCodes
 Instruction is 64-bit, and contains:
@@ -108,7 +108,7 @@ vCPU has 64 registers, some of them have special role:
 |60    |$fp  |frame pointer|
 |61    |$sp  |stack pointer|
 |62    |$ra  |return address for linked jumps/branches|
-|63    |$sc  |syscall function id and return code|
+|63    |$sc  |syscall function id|
 
 ## Memory map
 <img src="media/memory.png" width="75%">
@@ -190,25 +190,22 @@ If not stated differently result goes to first specified register.
 
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.
-System call number is passed via _$sc_ register, arguments go via stack in reversed order.
-Return value is written into _$sc_ register.
+System call number is passed via _$sc_ register, arguments are passed by registers _$a0_-_$a9_.
+Return value is written into _$v0_ register.
 
 ### print (01h)
 Print 0 terminated string located under specific address.
 
 Example:
 ```
-# puts address of label_msg onto stack
-pushi label_msg
+# puts address of label_msg into $a0 register
+addi $a0, $zero, label_msg
 
 # $sc = $zero + 01h
 addi $sc, $zero, 01h
 
 # call print
 syscall
-
-# cleanup the stack
-addi $sp, $sp, 8
 ```
 
 ### printi (02h)
@@ -216,39 +213,33 @@ Print number.
 
 Example:
 ```
-# puts number 123 on stack
-pushi 123
+# puts number 123 into $a0 register
+addi $a0, $zero, 123
 
 # $sc = $zero + 02h
 addi $sc, $zero, 02h
 
 # call printi
 syscall
-
-# cleanup the stack
-addi $sp, $sp, 8
 ```
 
 ### scan (03h)
 Reads line from standard input and writes under specified address.
-Second parameter designated buffer size (including terminating 0).
+Second parameter designates buffer size (including terminating 0).
 
 Example:
 ```
-# puts number 100 (buffer size) onto stack
-pushi 100
+# puts address of destination_label into $a0 register
+addi $a0, $zero, destination_label
 
-# puts address of destination_label onto stack
-pushi destination_label
+# puts number 100 (buffer size) into $a1 register
+addi $a1, $zero, 100
 
 # $sc = $zero + 03h
 addi $sc, $zero, 03h
 
 # call scan
 syscall
-
-# cleanup the stack (2 arguments by 8 bytes)
-addi $sp, $sp, 16
 ```
 
 ### scani (04h)
@@ -257,44 +248,39 @@ Reads integer from standard input and writes under specified address.
 Example:
 ```
 # puts address to answer onto stack
-pushi answer
+addi $a0, $zero, answer
 
 # $sc = $zero + 04h
 addi $sc, $zero, 04h
 
 # call scani
 syscall
-
-# cleanup the stack
-addi $sp, $sp, 8
 ```
 
 ### rand (05h)
 Generate random number between min and max.
 
 ```
-# puts number 200 (maximum value) onto stack
-pushi 200
+# puts number 100 (minimum value) into $a0 register
+addi $a0, $zero, 100
 
-# puts number 100 (minimum value) onto stack
-pushi 100
+# puts number 200 (maximum value) into $a1 register
+addi $a1, $zero, 200
+
 
 # $sc = $zero + 05h
 addi $sc, $zero, 05h
 
 # call rand
 syscall
-
-# cleanup the stack (2 arguments by 8 bytes)
-addi $sp, $sp, 16
 ```
 
 ### sleep (06h)
 Sleeps for specified number of milliseconds.
 
 ```
-# puts number 1000 onto stack
-pushi 1000
+# puts number 1000 into $a0 register
+addi $a0, $zero, 1000
 
 # $sc = $zero + 06h
 addi $sc, $zero, 06h
@@ -302,8 +288,6 @@ addi $sc, $zero, 06h
 # call sleep
 syscall
 
-# cleanup the stack
-addi $sp, $sp, 8
 ```
 
 ## Useful knowledge related to (virtual) machines

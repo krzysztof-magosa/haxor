@@ -21,98 +21,83 @@ tries:            dw
 section .text
 
 win:
-  pushi win_msg_1
+  addi $a0, $zero, win_msg_1
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushm tries
+  lw $a0, $zero, tries
   addi $sc, $zero, 02h
   syscall
-  addi $sp, $sp, 8
 
-  pushi win_msg_2
+  addi $a0, $zero, win_msg_2
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
   exiti 0
 
 bigger:
-  pushi bigger_msg
+  addi $a0, $zero, bigger_msg
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
   j question
 
 smaller:
-  pushi smaller_msg
+  addi $a0, $zero, smaller_msg
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
   j question
 
 main:
-  pushi welcome_msg
+  addi $a0, $zero, welcome_msg
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushi generate_msg_1
+  addi $a0, $zero, generate_msg_1
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushm range_min
+  lw $a0, $zero, range_min
   addi $sc, $zero, 02h
   syscall
-  addi $sp, $sp, 8
 
-  pushi generate_msg_2
+  addi $a0, $zero, generate_msg_2
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushm range_max
+  lw $a0, $zero, range_max
   addi $sc, $zero, 02h
   syscall
-  addi $sp, $sp, 8
 
-  pushi generate_msg_3
+  addi $a0, $zero, generate_msg_3
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
 generate:
-  pushm range_max
-  pushm range_min
+  lw $a0, $zero, range_min
+  lw $a1, $zero, range_max
   addi $sc, $zero, 05h
   syscall
-  addi $sp, $sp, 16
   sw $zero, number, $sc
 
   # set tries to 0
   sw $zero, tries, $zero
 
 question:
-  pushi question_msg
+  addi $a0, $zero, question_msg
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
 
-  pushi answer
+  addi $a0, $zero, answer
   addi $sc, $zero, 04h
   syscall
-  addi $sp, $sp, 8
 
-  bgtz $sc, correct
+  bgtz $v0, correct
 
-  pushi incorrect_msg
+  addi $a0, $zero, incorrect_msg
   addi $sc, $zero, 01h
   syscall
-  addi $sp, $sp, 8
   j question
 
 correct:

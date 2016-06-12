@@ -18,6 +18,8 @@ namespace haxor {
     reg_arg7 = 9,
     reg_arg8 = 10,
     reg_arg9 = 11,
+    reg_ret0 = 22,
+    reg_ret1 = 23,
     reg_code_segment = 57,
     reg_data_segment = 58,
     reg_stack_segment = 59,

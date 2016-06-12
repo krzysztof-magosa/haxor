@@ -17,7 +17,6 @@ namespace haxor {
   os::os(class vm &vm) : vm(vm) {}
 
   void os::syscall() {
-    sp = vm.get_cpu().get_regs().read(reg_stack);
     word_t id = vm.get_cpu().get_regs().read(reg_syscall);
     word_t ret;
 
@@ -50,11 +49,11 @@ namespace haxor {
       ret = -1;
     }
 
-    vm.get_cpu().get_regs().write(reg_syscall, ret);
+    vm.get_cpu().get_regs().write(reg_ret0, ret);
   }
 
   word_t os::sc_print() {
-    word_t addr = pop();
+    word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
     std::string string = vm.get_mem().read_string(addr);
     std::cout << string;
 
@@ -62,15 +61,15 @@ namespace haxor {
   }
 
   word_t os::sc_printi() {
-    word_t num = pop();
+    word_t num = vm.get_cpu().get_regs().read(reg_arg0);
     std::cout << num;
 
     return 0;
   }
 
   word_t os::sc_scan() {
-    word_t addr = pop();
-    word_t size = pop();
+    word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
+    word_t size = vm.get_cpu().get_regs().read(reg_arg1);
 
     char *buffer = new char[size];
     std::cin.getline(buffer, size);
@@ -81,7 +80,7 @@ namespace haxor {
   }
 
   word_t os::sc_scani() {
-    word_t addr = pop();
+    word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
     word_t value;
     word_t ret;
 
@@ -98,15 +97,15 @@ namespace haxor {
   word_t os::sc_rand() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    word_t min = pop();
-    word_t max = pop();
+    word_t min = vm.get_cpu().get_regs().read(reg_arg0);
+    word_t max = vm.get_cpu().get_regs().read(reg_arg1);
     std::uniform_int_distribution<word_t> dist(min, max);
 
     return dist(gen);
   }
 
   word_t os::sc_sleep() {
-    const word_t time = pop();
+    const word_t time = vm.get_cpu().get_regs().read(reg_arg0);
     std::this_thread::sleep_for(std::chrono::milliseconds(time));
 
     return 0;
@@ -115,14 +114,5 @@ namespace haxor {
   void os::discard_input() {
     std::cin.sync();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-  }
-
-  // it gets next value from stack, but doesn't move real $sp register.
-  // finally it works like we had prologue/epilogue with frame stack.
-  word_t os::pop() {
-    word_t result = vm.get_mem().read_word(sp);
-    sp += sizeof(word_t);
-
-    return result;
   }
 }
