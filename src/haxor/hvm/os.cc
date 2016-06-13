@@ -91,7 +91,9 @@ namespace haxor {
       discard_input();
     }
 
-    return ret;
+    vm.get_cpu().get_regs().write(reg_ret1, ret);
+
+    return value;
   }
 
   word_t os::sc_rand() {

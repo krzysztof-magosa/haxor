@@ -243,13 +243,11 @@ syscall
 ```
 
 ### scani (04h)
-Reads integer from standard input and writes under specified address.
+Reads integer from standard input.
+Value is passed via _$v0_, error code via _$v1_.
 
 Example:
 ```
-# puts address to answer onto stack
-addi $a0, $zero, answer
-
 # $sc = $zero + 04h
 addi $sc, $zero, 04h
 
