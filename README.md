@@ -288,6 +288,20 @@ syscall
 
 ```
 
+### exit (07h)
+Stops virtual machine and exits with specified exit code.
+
+```
+# puts exit code into $a0 register
+addi $a0, $zero, 5
+
+# $sc = $zero + 07h
+addi $sc, $zero, 07h
+
+# call exit
+syscall
+```
+
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
 * [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))

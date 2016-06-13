@@ -45,6 +45,10 @@ namespace haxor {
       ret = sc_sleep();
       break;
 
+    case 0x07:
+      ret = sc_exit();
+      break;
+
     default:
       ret = -1;
     }
@@ -109,6 +113,12 @@ namespace haxor {
   word_t os::sc_sleep() {
     const word_t time = vm.get_cpu().get_regs().read(reg_arg0);
     std::this_thread::sleep_for(std::chrono::milliseconds(time));
+
+    return 0;
+  }
+
+  word_t os::sc_exit() {
+    vm.exit(vm.get_cpu().get_regs().read(reg_arg0));
 
     return 0;
   }

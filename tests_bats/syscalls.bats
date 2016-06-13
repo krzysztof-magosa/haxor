@@ -44,3 +44,11 @@
     [ $delay -ge 2 ]
     [ $delay -le 3 ]
 }
+
+@test "syscall: exit" {
+    hc syscall_07h.hax
+
+    run hvm syscall_07h.hax.e
+
+    [ "$status" = 5 ]
+}
