@@ -1,25 +1,25 @@
-@test "syscall: print" {
+@test "syscall: print_string" {
     hc syscall_01h.hax
     run hvm syscall_01h.hax.e
 
     [ "$output" = "test_string" ]
 }
 
-@test "syscall: printi" {
+@test "syscall: print_int" {
     hc syscall_02h.hax
     run hvm syscall_02h.hax.e
 
     [ "$output" = "165" ]
 }
 
-@test "syscall: scan" {
+@test "syscall: read_string" {
     hc syscall_03h.hax
     result=$(echo "test_string" | hvm syscall_03h.hax.e)
 
     [ "$result" = "test_string" ]
 }
 
-@test "syscall: scani" {
+@test "syscall: read_int" {
     hc syscall_04h.hax
     result=$(echo "290" | hvm syscall_04h.hax.e)
 

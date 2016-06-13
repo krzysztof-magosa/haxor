@@ -14,10 +14,10 @@ namespace haxor {
     void syscall();
 
     private:
-    word_t sc_print();
-    word_t sc_printi();
-    word_t sc_scan();
-    word_t sc_scani();
+    word_t sc_print_string();
+    word_t sc_print_int();
+    word_t sc_read_string();
+    word_t sc_read_int();
     word_t sc_rand();
     word_t sc_sleep();
 

@@ -193,7 +193,7 @@ Using _syscall_ command you can run some system calls provided by Haxor VM.
 System call number is passed via _$sc_ register, arguments are passed by registers _$a0_-_$a9_.
 Return value is written into _$v0_ register.
 
-### print (01h)
+### print_string (01h)
 Print 0 terminated string located under specific address.
 
 Example:
@@ -208,7 +208,7 @@ addi $sc, $zero, 01h
 syscall
 ```
 
-### printi (02h)
+### print_int (02h)
 Print number.
 
 Example:
@@ -223,7 +223,7 @@ addi $sc, $zero, 02h
 syscall
 ```
 
-### scan (03h)
+### read_string (03h)
 Reads line from standard input and writes under specified address.
 Second parameter designates buffer size (including terminating 0).
 
@@ -242,7 +242,7 @@ addi $sc, $zero, 03h
 syscall
 ```
 
-### scani (04h)
+### read_int (04h)
 Reads integer from standard input.
 Value is passed via _$v0_, error code via _$v1_.
 

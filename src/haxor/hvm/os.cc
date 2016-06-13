@@ -22,19 +22,19 @@ namespace haxor {
 
     switch(id) {
     case 0x01:
-      ret = sc_print();
+      ret = sc_print_string();
       break;
 
     case 0x02:
-      ret = sc_printi();
+      ret = sc_print_int();
       break;
 
     case 0x03:
-      ret = sc_scan();
+      ret = sc_read_string();
       break;
 
     case 0x04:
-      ret = sc_scani();
+      ret = sc_read_int();
       break;
 
     case 0x05:
@@ -52,7 +52,7 @@ namespace haxor {
     vm.get_cpu().get_regs().write(reg_ret0, ret);
   }
 
-  word_t os::sc_print() {
+  word_t os::sc_print_string() {
     word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
     std::string string = vm.get_mem().read_string(addr);
     std::cout << string;
@@ -60,14 +60,14 @@ namespace haxor {
     return 0;
   }
 
-  word_t os::sc_printi() {
+  word_t os::sc_print_int() {
     word_t num = vm.get_cpu().get_regs().read(reg_arg0);
     std::cout << num;
 
     return 0;
   }
 
-  word_t os::sc_scan() {
+  word_t os::sc_read_string() {
     word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
     word_t size = vm.get_cpu().get_regs().read(reg_arg1);
 
@@ -79,7 +79,7 @@ namespace haxor {
     return 0;
   }
 
-  word_t os::sc_scani() {
+  word_t os::sc_read_int() {
     word_t addr = vm.get_cpu().get_regs().read(reg_arg0);
     word_t value;
     word_t ret;
