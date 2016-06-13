@@ -79,38 +79,10 @@ vCPU has 64 registers, some of them have special role:
 |------|-----|-----------|
 |0     |$zero|always zero register, writes are ignored|
 |1     |$at  |reserved for assembler (pseudo-instructions etc.)|
-|2     |$a0  |argument for routine|
-|3     |$a1  |argument for routine|
-|4     |$a2  |argument for routine|
-|5     |$a3  |argument for routine|
-|6     |$a4  |argument for routine|
-|7     |$a5  |argument for routine|
-|8     |$a6  |argument for routine|
-|9     |$a7  |argument for routine|
-|10    |$a8  |argument for routine|
-|11    |$a9  |argument for routine|
-|12    |$t0  |temporary (local variable)|
-|13    |$t1  |temporary (local variable)|
-|14    |$t2  |temporary (local variable)|
-|15    |$t3  |temporary (local variable)|
-|16    |$t4  |temporary (local variable)|
-|17    |$t5  |temporary (local variable)|
-|18    |$t6  |temporary (local variable)|
-|19    |$t7  |temporary (local variable)|
-|20    |$t8  |temporary (local variable)|
-|21    |$t9  |temporary (local variable)|
-|22    |$v0  |return value|
-|23    |$v1  |return value|
-|24    |$s0  |saved temporary (preserved across function call)|
-|25    |$s1  |saved temporary (preserved across function call)|
-|26    |$s2  |saved temporary (preserved across function call)|
-|27    |$s3  |saved temporary (preserved across function call)|
-|28    |$s4  |saved temporary (preserved across function call)|
-|29    |$s5  |saved temporary (preserved across function call)|
-|30    |$s6  |saved temporary (preserved across function call)|
-|31    |$s7  |saved temporary (preserved across function call)|
-|32    |$s8  |saved temporary (preserved across function call)|
-|33    |$s9  |saved temporary (preserved across function call)|
+|2-11  |$a0-$a9  |argument for routine|
+|12-21 |$t0-$t9  |temporary (local variable)|
+|22-23 |$v0-$v1  |return value|
+|24-33    |$s0-$s9  |saved temporary (preserved across function call)|
 |...   |...  |...|
 |57    |$cs  |code segment pointer, read-only|
 |58    |$ds  |data segment pointer, read-only|
