@@ -92,6 +92,8 @@ vCPU has 64 registers, some of them have special role:
 |62    |$ra  |return address for linked jumps/branches|
 |63    |$sc  |syscall function id|
 
+Please always use aliases and not register numbers.
+
 ## Memory map
 <img src="media/memory.png" width="75%">
 
