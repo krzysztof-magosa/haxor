@@ -101,6 +101,16 @@ vCPU has 64 registers, some of them have special role:
 |21    |$t9  |temporary (local variable)|
 |22    |$v0  |return value|
 |23    |$v1  |return value|
+|24    |$s0  |saved temporary (preserved across function call)|
+|25    |$s1  |saved temporary (preserved across function call)|
+|26    |$s2  |saved temporary (preserved across function call)|
+|27    |$s3  |saved temporary (preserved across function call)|
+|28    |$s4  |saved temporary (preserved across function call)|
+|29    |$s5  |saved temporary (preserved across function call)|
+|30    |$s6  |saved temporary (preserved across function call)|
+|31    |$s7  |saved temporary (preserved across function call)|
+|32    |$s8  |saved temporary (preserved across function call)|
+|33    |$s9  |saved temporary (preserved across function call)|
 |...   |...  |...|
 |57    |$cs  |code segment pointer, read-only|
 |58    |$ds  |data segment pointer, read-only|

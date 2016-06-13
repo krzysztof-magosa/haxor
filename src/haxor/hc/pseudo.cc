@@ -195,35 +195,19 @@ namespace haxor {
   }
 
   void pseudo::p_prol(node_instr *input) {
-    // push $ra
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(- sizeof(word_t)));
-      ast->push_back(new node_instr("addi", args));
-    }
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(0));
-      args->push_back(new node_reg("$ra"));
-      ast->push_back(new node_instr("sw", args));
-    }
-    // push $fp
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(- sizeof(word_t)));
-      ast->push_back(new node_instr("addi", args));
-    }
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(0));
-      args->push_back(new node_reg("$fp"));
-    }
+    make_push("$ra");
+    make_push("$fp");
+    make_push("$s0");
+    make_push("$s1");
+    make_push("$s2");
+    make_push("$s3");
+    make_push("$s4");
+    make_push("$s5");
+    make_push("$s6");
+    make_push("$s7");
+    make_push("$s8");
+    make_push("$s9");
+
     // $fp = $sp
     {
       auto args = new std::vector<node_base*>();
@@ -252,36 +236,20 @@ namespace haxor {
       args->push_back(new node_num(0));
       ast->push_back(new node_instr("addi", args));
     }
-    // pop $fp
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$fp"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(0));
-      ast->push_back(new node_instr("lw", args));
-    }
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(sizeof(word_t)));
-      ast->push_back(new node_instr("addi", args));
-    }
-    // pop $ra
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$ra"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(0));
-      ast->push_back(new node_instr("lw", args));
-    }
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_reg("$sp"));
-      args->push_back(new node_num(sizeof(word_t)));
-      ast->push_back(new node_instr("addi", args));
-    }
+
+    make_pop("$s9");
+    make_pop("$s8");
+    make_pop("$s7");
+    make_pop("$s6");
+    make_pop("$s5");
+    make_pop("$s4");
+    make_pop("$s3");
+    make_pop("$s2");
+    make_pop("$s1");
+    make_pop("$s0");
+    make_pop("$fp");
+    make_pop("$ra");
+
     // ret
     {
       auto args = new std::vector<node_base*>();
@@ -437,6 +405,40 @@ namespace haxor {
       args->push_back(input->get_args()->at(0));
       args->push_back(new node_num(num & 0xffffffff));
       ast->push_back(new node_instr("ori", args));
+    }
+  }
+
+  void pseudo::make_push(const std::string &reg) {
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(- sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
+    }
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      args->push_back(new node_reg(reg));
+      ast->push_back(new node_instr("sw", args));
+    }
+  }
+
+  void pseudo::make_pop(const std::string &reg) {
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg(reg));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(0));
+      ast->push_back(new node_instr("lw", args));
+    }
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_reg("$sp"));
+      args->push_back(new node_num(sizeof(word_t)));
+      ast->push_back(new node_instr("addi", args));
     }
   }
 }

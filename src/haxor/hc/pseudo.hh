@@ -35,6 +35,9 @@ namespace haxor {
     void p_beqz(node_instr *input);
     void p_li(node_instr *input);
 
+    void make_push(const std::string &reg);
+    void make_pop(const std::string &reg);
+
     std::vector<node_base*> *ast;
 
     typedef void (pseudo::*pseudo_member)(node_instr*);
