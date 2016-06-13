@@ -162,6 +162,7 @@ namespace haxor {
       { "blez",    instr_spec(cmd_pseudo,  "ri") },
       { "bgtz",    instr_spec(cmd_pseudo,  "ri") },
       { "beqz",    instr_spec(cmd_pseudo,  "ri") },
+      { "li",      instr_spec(cmd_pseudo,  "ri") },
       { "prol",    instr_spec(cmd_pseudo,  "i") },
       { "epil",    instr_spec(cmd_pseudo,  "") }
     };

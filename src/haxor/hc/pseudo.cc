@@ -25,6 +25,7 @@ namespace haxor {
     instr2func.insert(std::make_pair("blez",  &pseudo::p_blez));
     instr2func.insert(std::make_pair("bgtz",  &pseudo::p_bgtz));
     instr2func.insert(std::make_pair("beqz",  &pseudo::p_beqz));
+    instr2func.insert(std::make_pair("li",    &pseudo::p_li));
   }
 
   void pseudo::process(std::vector<node_base*> *input) {
@@ -418,6 +419,24 @@ namespace haxor {
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
       ast->push_back(new node_instr("beq", args));
+    }
+  }
+
+  void pseudo::p_li(node_instr *input) {
+    word_t num = dynamic_cast<node_num*>(input->get_args()->at(1))->get_value();
+
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(input->get_args()->at(0));
+      args->push_back(new node_num(num >> 32));
+      ast->push_back(new node_instr("lui", args));
+    }
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(input->get_args()->at(0));
+      args->push_back(input->get_args()->at(0));
+      args->push_back(new node_num(num & 0xffffffff));
+      ast->push_back(new node_instr("ori", args));
     }
   }
 }
