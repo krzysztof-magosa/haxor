@@ -25,10 +25,6 @@ namespace haxor {
     case cmd_nop:
       break;
 
-    case cmd_exiti:
-      vm.exit(op.imm);
-      break;
-
     case cmd_syscall:
       vm.get_os().syscall();
       break;

@@ -33,4 +33,7 @@ exit:
   addi $sc, $zero, 01h      # $sc = 01h
   syscall
 
-  exiti 0
+  addi $a0, $zero, 0
+  addi $sc, $zero, 07h
+  syscall                   # exit
+

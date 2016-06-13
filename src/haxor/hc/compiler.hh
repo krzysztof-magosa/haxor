@@ -107,7 +107,6 @@ namespace haxor {
 
     std::map<std::string, instr_spec> instr_list = {
       { "nop",     instr_spec(cmd_nop,     "") },
-      { "exiti",   instr_spec(cmd_exiti,   "i") },
       { "syscall", instr_spec(cmd_syscall, "") },
 
       { "add",     instr_spec(cmd_add,     "rrr") },

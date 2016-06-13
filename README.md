@@ -133,7 +133,7 @@ If not stated differently result goes to first specified register.
 |Syntax|OpCode|Description|
 |------|------|-----------|
 |nop                  |0x00|Does nothing.|
-|exiti imm            |0x01|Closes VM with specified exit code.|
+|-                    |0x01|-|
 |syscall              |0x02|Performs Syscall with ID stored in $sc register.|
 |add reg1, reg2, reg3 |0x10|reg1 = reg2 + reg3|
 |addi reg1, reg2, imm |0x11|reg1 = reg2 + imm|

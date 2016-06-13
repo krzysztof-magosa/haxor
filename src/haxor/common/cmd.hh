@@ -6,7 +6,6 @@ namespace haxor {
     cmd_pseudo  = -1,
 
     cmd_nop     = 0x00,
-    cmd_exiti   = 0x01,
     cmd_syscall = 0x02,
 
     cmd_add     = 0x10,
