@@ -56,11 +56,11 @@
     return haxor::parser::make_STRING(tmp.substr(1, tmp.size() - 2), haxor::location(location));
 }
 
-[0-9]+                      {
+-?[0-9]+                      {
     return haxor::parser::make_INT(strtoimax(yytext, nullptr, 10), haxor::location(location));
 }
 
-[0-9]+h                     {
+-?[0-9]+h                     {
     word_t num = strtoimax(yytext, nullptr, 16); // strtoimax ignores suffix 'h'
     return haxor::parser::make_INT(num, haxor::location(location));
 }
