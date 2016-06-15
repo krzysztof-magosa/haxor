@@ -33,6 +33,10 @@ namespace haxor {
     bool has_location();
     class location& get_location();
 
+    virtual node_base* clone() {
+      throw std::logic_error("Not implemented.");
+    }
+
     protected:
     word_t size = 0;
     word_t addr;

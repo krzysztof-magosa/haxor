@@ -12,4 +12,8 @@ namespace haxor {
   std::string node_label::get_name() {
     return name;
   }
+
+  node_label* node_label::clone() {
+    return new node_label(*this);
+  }
 }

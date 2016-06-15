@@ -1,6 +1,7 @@
 #include "haxor/hc/node/base.hh"
 #include "haxor/hc/node/program.hh"
 #include "haxor/hc/node/instr.hh"
+#include "haxor/hc/node/imm.hh"
 #include "haxor/hc/node/num.hh"
 #include "haxor/hc/node/reg.hh"
 #include "haxor/hc/node/label.hh"

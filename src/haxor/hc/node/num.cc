@@ -18,4 +18,8 @@ namespace haxor {
   word_t node_num::get_value() {
     return value;
   }
+
+  node_num* node_num::clone() {
+    return new node_num(*this);
+  }
 }

@@ -1,4 +1,5 @@
 #include <utility>
+#include "haxor/hc/node/all.hh"
 #include "haxor/hc/pseudo.hh"
 
 namespace haxor {
@@ -391,19 +392,23 @@ namespace haxor {
   }
 
   void pseudo::p_li(node_instr *input) {
-    word_t num = dynamic_cast<node_num*>(input->get_args()->at(1))->get_value();
-
     {
+      auto *imm = dynamic_cast<node_imm*>(input->get_args()->at(1)->clone());
+      imm->set_attr(imm_attr_t::upper_half_lowered);
+
       auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
-      args->push_back(new node_num(num >> 32));
+      args->push_back(imm); // new node_num(num >> 32)
       ast->push_back(new node_instr("lui", args));
     }
     {
+      auto *imm = dynamic_cast<node_imm*>(input->get_args()->at(1)->clone());
+      imm->set_attr(imm_attr_t::lower_half);
+
       auto args = new std::vector<node_base*>();
       args->push_back(input->get_args()->at(0));
       args->push_back(input->get_args()->at(0));
-      args->push_back(new node_num(num & 0xffffffff));
+      args->push_back(imm); //new node_num(num & 0xffffffff));
       ast->push_back(new node_instr("ori", args));
     }
   }

@@ -205,18 +205,31 @@ namespace haxor {
 
             opcode.set_reg(reg_no, reg);
             reg_no ++;
-          } else if (arg->is_a(node_type::num)) {
-            opcode.imm = dynamic_cast<node_num*>(arg)->get_value();
-          } else if (arg->get_type() == node_type::label) {
-            word_t imm = labels.at(dynamic_cast<node_label*>(arg)->get_name());
+          } else if (arg->is_a(node_type::num) || arg->is_a(node_type::label)) {
+            node_imm *arg_imm = dynamic_cast<node_imm*>(arg);
+            word_t imm;
 
-             if (instr_list.at(instr->get_name()).rel) {
-               imm -= (item->get_addr() + sizeof(word_t));
-             }
+            if (arg->is_a(node_type::num)) {
+              imm = dynamic_cast<node_num*>(arg)->get_value();
+            } else if (arg->is_a(node_type::label)) {
+              imm = labels.at(dynamic_cast<node_label*>(arg)->get_name());
+            }
 
-             if (instr_list.at(instr->get_name()).x8) {
-               imm /= sizeof(word_t);
-             }
+            if (arg_imm->has_attr(imm_attr_t::upper_half_lowered)) {
+              imm = imm >> 32;
+            }
+
+            if (arg_imm->has_attr(imm_attr_t::lower_half)) {
+              imm &= 0xffffffff;
+            }
+
+            if (instr_list.at(instr->get_name()).rel) {
+              imm -= (item->get_addr() + sizeof(word_t));
+            }
+
+            if (instr_list.at(instr->get_name()).x8) {
+              imm /= sizeof(word_t);
+            }
 
              opcode.imm = imm;
            } else {
