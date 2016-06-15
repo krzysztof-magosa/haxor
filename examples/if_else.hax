@@ -1,0 +1,33 @@
+section .data
+question:             dw "Please enter integer number: ", 0
+greater_than_zero:    dw "Greater than zero!", 10, 0
+less_or_equal_zero:   dw "Less or equal to zero!", 10, 0
+
+section .text
+
+main:
+  li $sc, 01h                   # $sc = 01h (print_string)
+  li $a0, question              # $a0 = question
+  syscall                       # call print_string
+
+  li $sc, 04h                   # $sc = 04h (read_int)
+  syscall                       # call read_int
+
+if:
+  blez $v0, else                # if $v0 < 0 goto else
+
+  li $sc, 01h                   # $sc = 01h (print_string)
+  li $a0, greater_than_zero     # $a0 = greater_than_zero
+  syscall                       # call print_string
+
+  j end_if                      # goto end_if
+else:
+  li $sc, 01h                   # $sc = 01h (print_string)
+  li $a0, less_or_equal_zero    # a0 = less_or_equal_zero
+  syscall                       # call print_string
+
+end_if:
+
+  li $sc, 07h                   # $sc = 07h (exit)
+  li $a0, 0                     # $a0 = 0
+  syscall                       # call exit
