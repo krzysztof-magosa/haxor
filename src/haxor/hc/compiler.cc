@@ -77,6 +77,29 @@ namespace haxor {
     }
   }
 
+  void compiler::verify_labels () {
+    for (auto item : *ast) {
+      if (item->is_a(node_type::instr)) {
+        auto *instr = dynamic_cast<node_instr*>(item);
+
+        for (auto *arg : *instr->get_args()) {
+          if (arg->is_a(node_type::label)) {
+            auto *label = dynamic_cast<node_label*>(arg);
+
+            if (labels.find(label->get_name()) == labels.end()) {
+              std::string error_msg = "Reference to not existing label '" + label->get_name() + "'";
+              if (label->has_location()) {
+                error_msg += ", at location " + format_location(label->get_location());
+              }
+
+              throw hc_syntax_error(error_msg);
+            }
+          }
+        }
+      }
+    }
+  }
+
   void compiler::unwind_pseudo() {
     pseudo pseudo;
     pseudo.process(ast);
@@ -180,6 +203,7 @@ namespace haxor {
     order_sections();
     calc_addresses();
     collect_labels();
+    verify_labels();
 
     auto hdr = build_hdr();
 

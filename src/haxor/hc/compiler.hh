@@ -45,6 +45,7 @@ namespace haxor {
     std::string& get_filename();
 
     void verify_code();
+    void verify_labels();
     void unwind_pseudo();
     void mark_sections();
     void order_sections();
