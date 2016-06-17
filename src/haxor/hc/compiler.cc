@@ -37,7 +37,7 @@ namespace haxor {
       if (arg->has_location()) {
         error_msg += ", at " + format_location(arg->get_location());
       }
-      throw std::runtime_error(error_msg);
+      throw hc_syntax_error(error_msg);
     }
   }
 
