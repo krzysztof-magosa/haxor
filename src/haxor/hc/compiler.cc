@@ -13,6 +13,34 @@ namespace haxor {
   compiler::compiler() : lexer(*this), parser(lexer, *this) {
   }
 
+  void compiler::ensure_its_register(node_base * const arg) {
+    if (!arg->is_a(node_type::reg)) {
+      std::string error_msg = "Invalid argument, unexpected "
+        + type_to_string(arg->get_type())
+        + ", expecting "
+        + type_to_string(node_type::reg);
+      if (arg->has_location()) {
+        error_msg += " at " + format_location(arg->get_location());
+      }
+      throw hc_syntax_error(error_msg);
+    }
+  }
+
+  void compiler::ensure_its_immediate(node_base * const arg) {
+    if (!arg->is_a(node_type::num) && !arg->is_a(node_type::label)) {
+      std::string error_msg = "Invalid argument, unexpected "
+        + type_to_string(arg->get_type())
+        + ", expcting "
+        + type_to_string(node_type::num)
+        + " or "
+        + type_to_string(node_type::label);
+      if (arg->has_location()) {
+        error_msg += ", at " + format_location(arg->get_location());
+      }
+      throw std::runtime_error(error_msg);
+    }
+  }
+
   void compiler::verify_code() {
     for (auto *item : *ast) {
       if (item->is_a(node_type::instr)) {
@@ -31,29 +59,9 @@ namespace haxor {
             auto * const arg = instr->get_args()->at(i);
 
             if (instr_def.args[i] == 'r') {
-              if (!arg->is_a(node_type::reg)) {
-                std::string error_msg = "Invalid argument, unexpected "
-                  + type_to_string(arg->get_type())
-                  + ", expecting "
-                  + type_to_string(node_type::reg);
-                if (arg->has_location()) {
-                  error_msg += " at " + format_location(arg->get_location());
-                }
-                throw hc_syntax_error(error_msg);
-              }
+              ensure_its_register(arg);
             } else if (instr_def.args[i] == 'i') {
-              if (!arg->is_a(node_type::num) && !arg->is_a(node_type::label)) {
-                std::string error_msg = "Invalid argument, unexpected "
-                  + type_to_string(arg->get_type())
-                  + ", expcting "
-                  + type_to_string(node_type::num)
-                  + " or "
-                  + type_to_string(node_type::label);
-                if (arg->has_location()) {
-                  error_msg += ", at " + format_location(arg->get_location());
-                }
-                throw std::runtime_error(error_msg);
-              }
+              ensure_its_immediate(arg);
             }
           }
         } else {
