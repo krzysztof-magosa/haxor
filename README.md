@@ -172,6 +172,7 @@ If not stated differently result goes to first specified register.
 |li reg1, imm       |load immediate value into register|
 |prol imm           |function prologue, imm - numbers of bytes to reserve on stack|
 |epil               |function epilogue|
+|resw imm           |reserves `imm` of words|
 
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.

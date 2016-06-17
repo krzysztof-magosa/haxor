@@ -46,6 +46,7 @@ namespace haxor {
 
     void ensure_its_register(node_base * const arg);
     void ensure_its_immediate(node_base * const arg);
+    void ensure_its_num(node_base * const arg);
     void verify_code();
     void verify_labels();
     void unwind_pseudo();
@@ -177,7 +178,8 @@ namespace haxor {
       { "beqz",    instr_spec(cmd_pseudo,  "ri") },
       { "li",      instr_spec(cmd_pseudo,  "ri") },
       { "prol",    instr_spec(cmd_pseudo,  "i") },
-      { "epil",    instr_spec(cmd_pseudo,  "") }
+      { "epil",    instr_spec(cmd_pseudo,  "") },
+      { "resw",    instr_spec(cmd_pseudo,  "n") }
     };
   };
 }
