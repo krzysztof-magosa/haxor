@@ -1,0 +1,12 @@
+section .text
+main:
+  li $t0, 27
+  li $t1, 21
+
+  li $sc, 02h
+  and $a0, $t0, $t1
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall
