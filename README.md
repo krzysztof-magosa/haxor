@@ -185,13 +185,8 @@ Print 0 terminated string located under specific address.
 
 Example:
 ```
-# puts address of label_msg into $a0 register
-addi $a0, $zero, label_msg
-
-# $sc = $zero + 01h
-addi $sc, $zero, 01h
-
-# call print
+li $sc, 01h
+la $a0, label_msg
 syscall
 ```
 
@@ -200,13 +195,8 @@ Print number.
 
 Example:
 ```
-# puts number 123 into $a0 register
-addi $a0, $zero, 123
-
-# $sc = $zero + 02h
-addi $sc, $zero, 02h
-
-# call printi
+li $sc, 02h
+li $a0, 123
 syscall
 ```
 
@@ -216,29 +206,19 @@ Second parameter designates buffer size (including terminating 0).
 
 Example:
 ```
-# puts address of destination_label into $a0 register
-addi $a0, $zero, destination_label
-
-# puts number 100 (buffer size) into $a1 register
-addi $a1, $zero, 100
-
-# $sc = $zero + 03h
-addi $sc, $zero, 03h
-
-# call scan
+li $sc, 03h
+la $a0, destination_label
+li $a1, 100
 syscall
 ```
 
 ### read_int (04h)
 Reads integer from standard input.
-Value is passed via _$v0_, error code via _$v1_.
+Value is returned via _$v0_, error code via _$v1_.
 
 Example:
 ```
-# $sc = $zero + 04h
-addi $sc, $zero, 04h
-
-# call scani
+li $sc, 04h
 syscall
 ```
 
@@ -246,17 +226,9 @@ syscall
 Generate random number between min and max.
 
 ```
-# puts number 100 (minimum value) into $a0 register
-addi $a0, $zero, 100
-
-# puts number 200 (maximum value) into $a1 register
-addi $a1, $zero, 200
-
-
-# $sc = $zero + 05h
-addi $sc, $zero, 05h
-
-# call rand
+li $sc, 05h
+li $a0, 100
+li $a1, 200
 syscall
 ```
 
@@ -264,13 +236,8 @@ syscall
 Sleeps for specified number of milliseconds.
 
 ```
-# puts number 1000 into $a0 register
-addi $a0, $zero, 1000
-
-# $sc = $zero + 06h
-addi $sc, $zero, 06h
-
-# call sleep
+li $sc, 06h
+li $a0, 1000
 syscall
 
 ```
@@ -279,13 +246,8 @@ syscall
 Stops virtual machine and exits with specified exit code.
 
 ```
-# puts exit code into $a0 register
-addi $a0, $zero, 5
-
-# $sc = $zero + 07h
-addi $sc, $zero, 07h
-
-# call exit
+li $sc, 07h
+li $a0, 5
 syscall
 ```
 
