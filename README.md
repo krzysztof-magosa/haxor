@@ -178,7 +178,7 @@ If not stated differently result goes to first specified register.
 ## System calls
 Using _syscall_ command you can run some system calls provided by Haxor VM.
 System call number is passed via _$sc_ register, arguments are passed by registers _$a0_-_$a9_.
-Return value is written into _$v0_ register.
+Return value is written into _$v0_ register, some syscalls return error code in $_v1_.
 
 ### print_string (01h)
 Print 0 terminated string located under specific address.
