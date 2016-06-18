@@ -1,0 +1,15 @@
+section .data
+label:  dw 300
+
+section .text
+main:
+  la $t0, label
+  addi $t0, $t0, -100
+
+  li $sc, 02h
+  lw $a0, $t0, 100
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall

@@ -1,0 +1,18 @@
+section .bss
+label:  dw
+
+section .text
+main:
+  la $t0, label
+  addi $t0, $t0, -100
+
+  li $t1, 300
+  sw $t0, 100, $t1
+
+  li $sc, 02h
+  lw $a0, $zero, label
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall
