@@ -54,6 +54,19 @@ namespace haxor {
     }
   }
 
+  void compiler::ensure_its_label(node_base * const arg) {
+    if (!arg->is_a(node_type::label)) {
+      std::string error_msg = "Invalid argument, unexpected "
+        + type_to_string(arg->get_type())
+        + ", expcting "
+        + type_to_string(node_type::label);
+      if (arg->has_location()) {
+        error_msg += ", at " + format_location(arg->get_location());
+      }
+      throw hc_syntax_error(error_msg);
+    }
+  }
+
   void compiler::verify_code() {
     for (auto *item : *ast) {
       if (item->is_a(node_type::instr)) {
@@ -77,6 +90,8 @@ namespace haxor {
               ensure_its_immediate(arg);
             } else if (instr_def.args[i] == 'n') {
               ensure_its_num(arg);
+            } else if (instr_def.args[i] == 'l') {
+              ensure_its_label(arg);
             }
           }
         } else {

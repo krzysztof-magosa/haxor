@@ -34,6 +34,7 @@ namespace haxor {
     void p_bgtz(node_instr *input);
     void p_beqz(node_instr *input);
     void p_li(node_instr *input);
+    void p_la(node_instr *input);
     void p_resw(node_instr *input);
 
     void make_push(const std::string &reg);

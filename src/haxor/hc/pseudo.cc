@@ -27,6 +27,7 @@ namespace haxor {
     instr2func.insert(std::make_pair("bgtz",  &pseudo::p_bgtz));
     instr2func.insert(std::make_pair("beqz",  &pseudo::p_beqz));
     instr2func.insert(std::make_pair("li",    &pseudo::p_li));
+    instr2func.insert(std::make_pair("la",    &pseudo::p_la));
     instr2func.insert(std::make_pair("resw",  &pseudo::p_resw));
   }
 
@@ -412,6 +413,10 @@ namespace haxor {
       args->push_back(imm); //new node_num(num & 0xffffffff));
       ast->push_back(new node_instr("ori", args));
     }
+  }
+
+  void pseudo::p_la(node_instr *input) {
+    p_li(input);
   }
 
   void pseudo::p_resw(node_instr *input) {
