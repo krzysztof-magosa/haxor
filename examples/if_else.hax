@@ -7,7 +7,7 @@ section .text
 
 main:
   li $sc, 01h                   # $sc = 01h (print_string)
-  li $a0, question              # $a0 = question
+  la $a0, question              # $a0 = question
   syscall                       # call print_string
 
   li $sc, 04h                   # $sc = 04h (read_int)
@@ -17,13 +17,13 @@ if:
   blez $v0, else                # if $v0 < 0 goto else
 
   li $sc, 01h                   # $sc = 01h (print_string)
-  li $a0, greater_than_zero     # $a0 = greater_than_zero
+  la $a0, greater_than_zero     # $a0 = greater_than_zero
   syscall                       # call print_string
 
   j end_if                      # goto end_if
 else:
   li $sc, 01h                   # $sc = 01h (print_string)
-  li $a0, less_or_equal_zero    # a0 = less_or_equal_zero
+  la $a0, less_or_equal_zero    # a0 = less_or_equal_zero
   syscall                       # call print_string
 
 end_if:
