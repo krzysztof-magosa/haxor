@@ -30,7 +30,7 @@ namespace haxor {
     if (!arg->is_a(node_type::num) && !arg->is_a(node_type::label)) {
       std::string error_msg = "Invalid argument, unexpected "
         + type_to_string(arg->get_type())
-        + ", expcting "
+        + ", expecting "
         + type_to_string(node_type::num)
         + " or "
         + type_to_string(node_type::label);
@@ -45,7 +45,7 @@ namespace haxor {
     if (!arg->is_a(node_type::num)) {
       std::string error_msg = "Invalid argument, unexpected "
         + type_to_string(arg->get_type())
-        + ", expcting "
+        + ", expecting "
         + type_to_string(node_type::num);
       if (arg->has_location()) {
         error_msg += ", at " + format_location(arg->get_location());
@@ -58,7 +58,7 @@ namespace haxor {
     if (!arg->is_a(node_type::label)) {
       std::string error_msg = "Invalid argument, unexpected "
         + type_to_string(arg->get_type())
-        + ", expcting "
+        + ", expecting "
         + type_to_string(node_type::label);
       if (arg->has_location()) {
         error_msg += ", at " + format_location(arg->get_location());
