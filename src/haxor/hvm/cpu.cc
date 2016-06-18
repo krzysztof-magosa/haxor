@@ -181,6 +181,11 @@ namespace haxor {
       jump(op.imm);
       break;
 
+    case cmd_jalr:
+      link();
+      ip = regs.read(op.reg1);
+      break;
+
     default:
       std::cerr << "BROKEN OPCODE" << std::endl;
     }

@@ -155,6 +155,7 @@ namespace haxor {
       { "bnel",    instr_spec(cmd_bnel,    "rri", true,  true) },
       { "j",       instr_spec(cmd_j,       "i",   false, true) },
       { "jr",      instr_spec(cmd_jr,      "r") },
+      { "jalr",    instr_spec(cmd_jalr,    "r") },
       { "jal",     instr_spec(cmd_jal,     "i",   false, true) },
 
       // pseudo

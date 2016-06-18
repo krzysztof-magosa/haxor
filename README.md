@@ -147,6 +147,7 @@ If not stated differently result goes to first specified register.
 |j imm                |0x54|goto imm|
 |jr reg1              |0x55|goto reg1|
 |jal imm              |0x56|$ra = pc, goto imm|
+|jalr reg1            |0x57|$ra = pc, goto reg1|
 
 ### Pseudo instructions
 |Syntax|Description|

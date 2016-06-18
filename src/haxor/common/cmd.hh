@@ -39,7 +39,8 @@ namespace haxor {
     cmd_bnel    = 0x53,
     cmd_j       = 0x54,
     cmd_jr      = 0x55,
-    cmd_jal     = 0x56
+    cmd_jal     = 0x56,
+    cmd_jalr    = 0x57
   };
 }
 
