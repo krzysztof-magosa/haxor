@@ -75,34 +75,34 @@ Instruction is 64-bit, and contains:
 ### vCPU
 vCPU has 64 registers, some of them have special role:
 
-|Number|Alias|Description|
-|------|-----|-----------|
-|0     |$zero|always zero register, writes are ignored|
-|1     |$at  |reserved for assembler (pseudo-instructions etc.)|
-|2-11  |$a0-$a9  |argument for routine|
-|12-21 |$t0-$t9  |temporary (local variable)|
-|22-23 |$v0-$v1  |return value|
-|24-33    |$s0-$s9  |saved temporary (preserved across function call)|
-|...   |...  |...|
-|57    |$cs  |code segment pointer, read-only|
-|58    |$ds  |data segment pointer, read-only|
-|59    |$ss  |stack segment pointer, read-only|
-|60    |$fp  |frame pointer|
-|61    |$sp  |stack pointer|
-|62    |$ra  |return address for linked jumps/branches|
-|63    |$sc  |syscall function id|
+|Number|Alias    |Description                                           |
+|------|---------|------------------------------------------------------|
+|0     |$zero    |always zero register, writes are ignored              |
+|1     |$at      |reserved for assembler (pseudo-instructions etc.)     |
+|2-11  |$a0-$a9  |argument for routine                                  |
+|12-21 |$t0-$t9  |temporary (local variable)                            |
+|22-23 |$v0-$v1  |return value                                          |
+|24-33 |$s0-$s9  |saved temporary (preserved across function call)      |
+|...   |...      |...                                                   |
+|57    |$cs      |code segment pointer, read-only                       |
+|58    |$ds      |data segment pointer, read-only                       |
+|59    |$ss      |stack segment pointer, read-only                      |
+|60    |$fp      |frame pointer                                         |
+|61    |$sp      |stack pointer                                         |
+|62    |$ra      |return address for linked jumps/branches              |
+|63    |$sc      |syscall function id                                   |
 
 Please always use aliases and not register numbers.
 
 ## Memory map
 <img src="media/memory.png" width="75%">
 
-|Segment|Write|Execute    |
-|-------|-----|-----------|
-|ivt    |:white_check_mark:|:no_entry_sign:|
+|Segment|Write             |Execute           |
+|-------|------------------|------------------|
+|ivt    |:white_check_mark:|:no_entry_sign:   |
 |code   |:no_entry_sign:   |:white_check_mark:|
-|data   |:white_check_mark:|:no_entry_sign:|
-|stack  |:white_check_mark:|:no_entry_sign:|
+|data   |:white_check_mark:|:no_entry_sign:   |
+|stack  |:white_check_mark:|:no_entry_sign:   |
 
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
@@ -239,7 +239,6 @@ Sleeps for specified number of milliseconds.
 li $sc, 06h
 li $a0, 1000
 syscall
-
 ```
 
 ### exit (07h)
