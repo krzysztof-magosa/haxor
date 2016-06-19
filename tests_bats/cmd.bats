@@ -144,3 +144,31 @@
 
     [ "$output" = "8" ]
 }
+
+@test "cmd: beq" {
+    hc beq.hax
+    run hvm beq.hax.e
+
+    [ "$status" = "100" ]
+}
+
+@test "cmd: beql" {
+    hc beql.hax
+    run hvm beql.hax.e
+
+    [ "$output" = "12" ]
+}
+
+@test "cmd: bne" {
+    hc bne.hax
+    run hvm bne.hax.e
+
+    [ "$status" = "100" ]
+}
+
+@test "cmd: bnel" {
+    hc bnel.hax
+    run hvm bnel.hax.e
+
+    [ "$output" = "12" ]
+}

@@ -1,0 +1,11 @@
+section .text
+equal:
+  li $sc, 07h
+  li $a0, 100
+  syscall
+
+main:
+  li $t0, 100
+  li $t1, 100
+
+  beq $t0, $t1, equal
