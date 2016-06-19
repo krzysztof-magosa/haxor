@@ -249,3 +249,72 @@
 
     [ "$status" = "0" ]
 }
+
+#@test "cmd: not" {
+#    hc not.hax
+#    run hvm not.hax.e
+#
+#    [ "$status" = "0" ]
+#}
+
+@test "cmd: ret" {
+    hc ret.hax
+    run hvm ret.hax.e
+
+    [ "$output" = "12" ]
+}
+
+@test "cmd: b" {
+    hc b.hax
+    run hvm b.hax.e
+
+    [ "$status" = "155" ]
+}
+
+@test "cmd: bal" {
+    hc bal.hax
+    run hvm bal.hax.e
+
+    [ "$output" = "20" ]
+}
+
+# bgt
+# blt
+# bge
+# ble
+# blez
+# bgtz
+# beqz
+
+@test "cmd: li" {
+    hc li.hax
+    run hvm li.hax.e
+
+    [ "$output" = "1125899906842624" ]
+}
+
+@test "cmd: la" {
+    hc la.hax
+    run hvm la.hax.e
+
+    [ "$output" = "hello" ]
+}
+
+@test "cmd: prol" {
+    hc prol.hax
+    run hvm prol.hax.e
+
+    [ "$output" = "9|8|7|6|5|4|3|2|1|0|987|156|" ]
+
+    # missing: $fp=$sp
+    # missing: $sp-=imm
+}
+
+# epil
+
+@test "cmd: resw" {
+    hc resw.hax
+    run hvm resw.hax.e
+
+    [ "$output" = "80" ]
+}

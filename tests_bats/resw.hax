@@ -1,0 +1,16 @@
+section .bss
+a:      resw 10 # each one has 8 bytes
+b:
+
+section .text
+main:
+  la $t0, a
+  la $t1, b
+
+  li $sc, 02h
+  sub $a0, $t1, $t0
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall

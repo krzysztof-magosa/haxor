@@ -10,10 +10,3 @@
 
     [ "$output" = "Reference to not existing label 'nonExistingLabel', at location 3.5-20" ]
 }
-
-@test "misc: big value passed to li" {
-    hc li.hax
-    run hvm li.hax.e
-
-    [ "$output" = "1125899906842624" ]
-}

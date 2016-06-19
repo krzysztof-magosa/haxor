@@ -1,0 +1,12 @@
+section .data
+label: dw "hello", 0
+
+section .text
+main:
+  li $sc, 01h
+  la $a0, label
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall
