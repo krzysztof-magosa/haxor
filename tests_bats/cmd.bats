@@ -172,3 +172,80 @@
 
     [ "$output" = "12" ]
 }
+
+@test "cmd: j" {
+    hc j.hax
+    run hvm j.hax.e
+
+    [ "$status" = "10" ]
+}
+
+@test "cmd: jr" {
+    hc jr.hax
+    run hvm jr.hax.e
+
+    [ "$status" = "20" ]
+}
+
+@test "cmd: jal" {
+    hc jal.hax
+    run hvm jal.hax.e
+
+    [ "$output" = "20" ]
+}
+
+@test "cmd: jalr" {
+    hc jalr.hax
+    run hvm jalr.hax.e
+
+    [ "$output" = "20" ]
+}
+
+@test "cmd: push" {
+    hc push.hax
+    run hvm push.hax.e
+
+    [ "$status" = "50" ]
+}
+
+@test "cmd: pushi" {
+    hc pushi.hax
+    run hvm pushi.hax.e
+
+    [ "$status" = "50" ]
+}
+
+@test "cmd: pushm" {
+    hc pushm.hax
+    run hvm pushm.hax.e
+
+    [ "$status" = "33" ]
+}
+
+@test "cmd: pop" {
+    hc pop.hax
+    run hvm pop.hax.e
+
+    [ "$status" = "150" ]
+}
+
+@test "cmd: popm" {
+    hc popm.hax
+    run hvm popm.hax.e
+
+    [ "$status" = "166" ]
+}
+
+@test "cmd: move" {
+    hc move.hax
+    run hvm move.hax.e
+
+    [ "$status" = "177" ]
+}
+
+@test "cmd: clear" {
+    hc clear.hax
+    run hvm clear.hax.e
+
+    [ "$status" = "0" ]
+}

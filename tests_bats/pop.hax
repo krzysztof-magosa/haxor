@@ -1,0 +1,7 @@
+section .text
+main:
+  pushi 150
+
+  li $sc, 07h
+  pop $a0
+  syscall

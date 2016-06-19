@@ -1,0 +1,18 @@
+section .text
+test:
+  li $sc, 02h
+  li $a0, 2
+  syscall
+  ret
+
+main:
+  la $t0, test
+  jalr $t0
+
+  li $sc, 02h
+  li $a0, 0
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall

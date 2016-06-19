@@ -1,0 +1,12 @@
+section .bss
+temp: dw
+
+section .text
+main:
+  pushi 166
+  popm temp
+
+  li $sc, 07h
+  lw $a0, $zero, temp
+  syscall
+

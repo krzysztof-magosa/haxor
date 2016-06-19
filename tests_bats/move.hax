@@ -1,0 +1,7 @@
+section .text
+main:
+  li $t0, 177
+
+  li $sc, 07h
+  move $a0, $t0
+  syscall

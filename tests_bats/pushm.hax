@@ -1,0 +1,10 @@
+section .data
+x:      dw  33
+
+section .text
+main:
+  pushm x
+
+  li $sc, 07h
+  lw $a0, $sp, 0
+  syscall

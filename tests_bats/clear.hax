@@ -1,0 +1,7 @@
+section .text
+main:
+  li $sc, 07h
+  li $a0, 50
+  clear $a0
+  syscall
+

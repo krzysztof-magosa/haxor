@@ -1,0 +1,9 @@
+section .text
+test:
+  li $sc, 07h
+  li $a0, 20
+  syscall
+
+main:
+  la $t0, test
+  jr $t0
