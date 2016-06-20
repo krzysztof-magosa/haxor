@@ -78,7 +78,12 @@ namespace haxor {
           auto const &instr_def = it->second;
 
           if (instr->get_args()->size() != instr_def.args.size()) {
-            throw std::runtime_error("Invalid number of arguments.");
+            std::string error_msg = "Invalid number of arguments";
+            if (instr->has_location()) {
+              error_msg += ", at location " + format_location(instr->get_location());
+            }
+
+            throw hc_syntax_error(error_msg);
           }
 
           for (size_t i = 0; i < instr_def.args.size(); i++) {
