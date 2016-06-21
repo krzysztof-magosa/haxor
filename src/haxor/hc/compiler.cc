@@ -13,55 +13,23 @@ namespace haxor {
   compiler::compiler() : lexer(*this), parser(lexer, *this) {
   }
 
-  void compiler::ensure_its_register(node_base * const arg) {
-    if (!arg->is_a(node_type::reg)) {
+  void compiler::ensure_node_type(node_base * const node, const std::vector<node_type> &types) {
+    if (std::find(types.begin(), types.end(), node->get_type()) == types.end()) {
       std::string error_msg = "Invalid argument, unexpected "
-        + type_to_string(arg->get_type())
-        + ", expecting "
-        + type_to_string(node_type::reg);
-      if (arg->has_location()) {
-        error_msg += " at " + format_location(arg->get_location());
-      }
-      throw hc_syntax_error(error_msg);
-    }
-  }
+        + type_to_string(node->get_type())
+        + ", expecting ";
 
-  void compiler::ensure_its_immediate(node_base * const arg) {
-    if (!arg->is_a(node_type::num) && !arg->is_a(node_type::label)) {
-      std::string error_msg = "Invalid argument, unexpected "
-        + type_to_string(arg->get_type())
-        + ", expecting "
-        + type_to_string(node_type::num)
-        + " or "
-        + type_to_string(node_type::label);
-      if (arg->has_location()) {
-        error_msg += ", at " + format_location(arg->get_location());
+      // @TODO: make more elegant join()
+      const std::string delim = " or ";
+      for (auto type : types) {
+        error_msg += type_to_string(type) + delim;
       }
-      throw hc_syntax_error(error_msg);
-    }
-  }
-
-  void compiler::ensure_its_num(node_base * const arg) {
-    if (!arg->is_a(node_type::num)) {
-      std::string error_msg = "Invalid argument, unexpected "
-        + type_to_string(arg->get_type())
-        + ", expecting "
-        + type_to_string(node_type::num);
-      if (arg->has_location()) {
-        error_msg += ", at " + format_location(arg->get_location());
+      for (size_t i = 0; i < delim.size(); i++) {
+        error_msg.pop_back();
       }
-      throw hc_syntax_error(error_msg);
-    }
-  }
 
-  void compiler::ensure_its_label(node_base * const arg) {
-    if (!arg->is_a(node_type::label)) {
-      std::string error_msg = "Invalid argument, unexpected "
-        + type_to_string(arg->get_type())
-        + ", expecting "
-        + type_to_string(node_type::label);
-      if (arg->has_location()) {
-        error_msg += ", at " + format_location(arg->get_location());
+      if (node->has_location()) {
+        error_msg += ", at " + format_location(node->get_location());
       }
       throw hc_syntax_error(error_msg);
     }
@@ -90,13 +58,13 @@ namespace haxor {
             auto * const arg = instr->get_args()->at(i);
 
             if (instr_def.args[i] == 'r') {
-              ensure_its_register(arg);
+              ensure_node_type(arg, { node_type::reg });
             } else if (instr_def.args[i] == 'i') {
-              ensure_its_immediate(arg);
+              ensure_node_type(arg, { node_type::num, node_type::label });
             } else if (instr_def.args[i] == 'n') {
-              ensure_its_num(arg);
+              ensure_node_type(arg, { node_type::num });
             } else if (instr_def.args[i] == 'l') {
-              ensure_its_label(arg);
+              ensure_node_type(arg, { node_type::label });
             }
           }
         } else {

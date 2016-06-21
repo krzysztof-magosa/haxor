@@ -44,10 +44,7 @@ namespace haxor {
     void set_ast(std::vector<node_base*> *ast);
     std::string& get_filename();
 
-    void ensure_its_register(node_base * const arg);
-    void ensure_its_immediate(node_base * const arg);
-    void ensure_its_num(node_base * const arg);
-    void ensure_its_label(node_base * const arg);
+    void ensure_node_type(node_base * const arg, const std::vector<node_type> &types);
     void verify_code();
     void verify_labels();
     void unwind_pseudo();
