@@ -5,6 +5,36 @@
 #include <string>
 
 namespace haxor {
+  mem_page::mem_page(const uint64_t size) : data(new int8_t[size]), size(size) {
+    memset(data, 0, size);
+  }
+
+  word_t mem_page::read_word(const uint64_t addr) const {
+    validate_addr(addr);
+    word_t temp;
+    memcpy(&temp, data + addr, sizeof(word_t));
+    return temp;
+  }
+
+  void mem_page::write_word(const uint64_t addr, const word_t value) {
+    validate_addr(addr);
+    memcpy(data + addr, &value, sizeof(word_t));
+  }
+
+  void mem_page::validate_addr(const uint64_t addr) const {
+    // avoid overflow of unsigned int.
+    if (addr > size - sizeof(word_t)) {
+      throw mem_range_error();
+    }
+  }
+
+  uint64_t mem_page::get_size() const {
+    return size;
+  }
+
+  mem_addr::mem_addr(const uint64_t page, const uint64_t offset) : page(page), offset(offset) {
+  }
+
   mem::mem() {
     data = NULL;
     size = 0;
@@ -16,14 +46,16 @@ namespace haxor {
 
   word_t mem::read_word(const uint64_t addr) const {
     validate_addr(addr);
-    word_t temp;
-    memcpy(&temp, data + addr, sizeof(word_t));
-    return temp;
+
+    mem_addr maddr = convert_addr(addr);
+    return pages.at(maddr.page).read_word(maddr.offset);
   }
 
   void mem::write_word(const uint64_t addr, const word_t value) {
     validate_addr(addr);
-    memcpy(data + addr, &value, sizeof(word_t));
+
+    mem_addr maddr = convert_addr(addr);
+    return pages.at(maddr.page).write_word(maddr.offset, value);
   }
 
   std::string mem::read_string(const uint64_t addr) const {
@@ -55,12 +87,20 @@ namespace haxor {
       throw mem_misalign_error();
     }
 
-    data = (int8_t*)realloc(data, size + space);
-    if (data == nullptr) {
-      throw std::runtime_error("Cannot allocate memory.");
+    const uint64_t aligned_size = size + (space + (page_size - (space % page_size)));
+    const uint64_t number_of_pages = aligned_size / page_size;
+
+    if (number_of_pages < pages.size()) {
+      throw std::invalid_argument("You cannot deallocate memory.");
     }
 
-    memset(data + size, 0, space);
+    const uint64_t prev_pages = pages.size();
+
+    for (uint64_t i = prev_pages; i < number_of_pages; i++) {
+      mem_page page(page_size);
+      pages.push_back(page);
+    }
+
     size += space;
   }
 
@@ -73,5 +113,13 @@ namespace haxor {
     if (size < sizeof(word_t) || addr > size - sizeof(word_t)) {
       throw mem_range_error();
     }
+  }
+
+  mem_addr mem::convert_addr(const uint64_t addr) const {
+    const uint64_t lowest_address = addr - (addr % page_size);
+    const uint64_t page = lowest_address / page_size;
+    const uint64_t offset = addr - lowest_address;
+
+    return mem_addr(page, offset);
   }
 }

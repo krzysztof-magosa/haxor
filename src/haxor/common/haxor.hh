@@ -17,6 +17,8 @@ namespace haxor {
   const uint64_t ivt_num = 128;
   constexpr uint64_t ivt_size = sizeof(word_t) * ivt_num;
 
+  const uint64_t page_size = 4096;
+
   class haxe_open_error : public std::exception {
     virtual const char* what() const throw() {
       return "Cannot open specified file. Check path and try again.";
