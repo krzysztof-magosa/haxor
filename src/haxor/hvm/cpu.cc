@@ -9,9 +9,10 @@ namespace haxor {
   cpu::cpu(class vm &vm) : vm(vm) {}
 
   void cpu::cycle() {
-    if (determine_segment(ip) != memory_segment::code) {
+    if (!vm.get_mem().get_page(ip).get_attrs().exec) {
       throw segfault_error();
     }
+
     decode_opcode(vm.get_mem().read_word(ip), opcode);
     ip += sizeof(word_t);
     execute(opcode);
@@ -62,18 +63,18 @@ namespace haxor {
     case cmd_lw:
       validate_reg_write(op.reg1);
       tmp = regs.read(op.reg2) + op.imm;
+      if (!vm.get_mem().get_page(tmp).get_attrs().read) {
+        throw segfault_error();
+      }
       regs.write(op.reg1, vm.get_mem().read_word(tmp));
       break;
 
     case cmd_sw:
       tmp = regs.read(op.reg1) + op.imm;
-      ms = determine_segment(tmp);
-
-      if (ms == memory_segment::ivt || ms == memory_segment::data || ms == memory_segment::stack) {
-        vm.get_mem().write_word(tmp, regs.read(op.reg2));
-      } else {
+      if (!vm.get_mem().get_page(tmp).get_attrs().write) {
         throw segfault_error();
       }
+      vm.get_mem().write_word(tmp, regs.read(op.reg2));
 
       break;
 
@@ -195,18 +196,6 @@ namespace haxor {
     this->ip = ip;
   }
 
-  memory_segment cpu::determine_segment(const word_t addr) {
-    if (addr >= get_regs().read(reg_stack_segment)) {
-      return memory_segment::stack;
-    } else if (addr >= get_regs().read(reg_data_segment)) {
-      return memory_segment::data;
-    } else if (addr >= get_regs().read(reg_code_segment)) {
-      return memory_segment::code;
-    } else {
-      return memory_segment::ivt;
-    }
-  }
-
   regs& cpu::get_regs() {
     return regs;
   }
@@ -224,8 +213,6 @@ namespace haxor {
   }
 
   void cpu::validate_reg_write(const uint8_t reg) {
-    if (reg == reg_code_segment || reg == reg_data_segment || reg == reg_stack_segment) {
-      throw regs_fault_error();
-    }
+    //
   }
 }

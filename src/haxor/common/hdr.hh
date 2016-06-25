@@ -5,14 +5,20 @@
 
 namespace haxor {
   struct hdr_t {
-    int64_t magic = 0;
-    int64_t version = 0;
-    int64_t entry_point = 0;
-    int64_t text_size = 0;
-    int64_t data_size = 0;
-    int64_t bss_size = 0;
-    int64_t stack_size = 0;
-    int64_t _reserved1 = 0;
+    uint64_t magic = 0;
+    uint64_t version = 0;
+    uint64_t entry_point = 0;
+
+    uint64_t text_begin = 0;
+    uint64_t text_size = 0;
+
+    uint64_t data_begin = 0;
+    uint64_t data_size = 0;
+
+    uint64_t bss_begin = 0;
+    uint64_t bss_size = 0;
+
+    uint64_t _reserved1 = 0;
   };
 }
 

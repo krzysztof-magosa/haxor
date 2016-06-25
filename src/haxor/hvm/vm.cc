@@ -12,7 +12,6 @@ namespace haxor {
 
   void vm::load_exec(const std::string &filename) {
     std::ifstream exe;
-    std::uint64_t esize;
 
     exe.open(filename, std::ios::binary | std::ifstream::ate);
 
@@ -20,7 +19,6 @@ namespace haxor {
       throw haxe_open_error();
     }
 
-    esize = static_cast<uint64_t>(exe.tellg()) - sizeof(hdr_t);
     exe.seekg(0, std::ios::beg);
 
     exe.read(reinterpret_cast<char*>(&hdr), sizeof(hdr_t));
@@ -32,32 +30,40 @@ namespace haxor {
       throw hdr_version_error();
     }
 
-    mem.alloc(ivt_size + esize + hdr.bss_size + hdr.stack_size);
+    const uint64_t stack_size = 512 * page_size;
 
-    uint64_t index = ivt_size;
-    while (true) {
+    mem.alloc_range(0, hdr.text_begin, mem_page_attrs(true, true, false));
+
+    if (hdr.text_size) {
+      mem.alloc_range(hdr.text_begin, hdr.text_size, mem_page_attrs(false, false, true));
+    }
+
+    if (hdr.data_size) {
+      mem.alloc_range(hdr.data_begin, hdr.data_size, mem_page_attrs(true, true, false));
+    }
+
+    if (hdr.bss_size) {
+      mem.alloc_range(hdr.bss_begin,  hdr.bss_size, mem_page_attrs(true, true, false));
+    }
+
+    mem.alloc_range(mem.max_size() + 1 - stack_size, stack_size, mem_page_attrs(true, true, false));
+
+    for (uint64_t i = hdr.text_begin; i < hdr.text_begin + hdr.text_size; i += sizeof(word_t)) {
       word_t x;
       exe.read(reinterpret_cast<char*>(&x), sizeof(word_t));
+      mem.write_word(i, x);
+    }
 
-      if (exe.eof()) {
-        break;
-      }
-
-      mem.write_word(index, x);
-      index += sizeof(word_t);
+    for (uint64_t i = hdr.data_begin; i < hdr.data_begin + hdr.data_size; i += sizeof(word_t)) {
+      word_t x;
+      exe.read(reinterpret_cast<char*>(&x), sizeof(word_t));
+      mem.write_word(i, x);
     }
   }
 
   int8_t vm::run() {
     cpu.set_ip(hdr.entry_point);
-    cpu.get_regs().write(reg_stack, mem.get_size());
-
-    const uint64_t code_addr = ivt_size;
-    const uint64_t data_addr = code_addr + hdr.text_size;
-    const uint64_t stack_addr = data_addr + hdr.data_size + hdr.bss_size;
-    cpu.get_regs().write(reg_code_segment, code_addr);
-    cpu.get_regs().write(reg_data_segment, data_addr);
-    cpu.get_regs().write(reg_stack_segment, stack_addr);
+    cpu.get_regs().write(reg_stack, mem.max_size() - 1);
 
     while (running) {
       cpu.cycle();

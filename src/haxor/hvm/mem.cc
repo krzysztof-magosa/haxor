@@ -3,9 +3,14 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <cassert>
+#include <limits>
 
 namespace haxor {
-  mem_page::mem_page(const uint64_t size) : data(new int8_t[size]), size(size) {
+  mem_page_attrs::mem_page_attrs(const bool read, const bool write, const bool exec) : read(read), write(write), exec(exec) {
+  }
+
+  mem_page::mem_page(const uint64_t size, const mem_page_attrs &attrs) : data(new int8_t[size]), attrs(attrs), size(size) {
     memset(data, 0, size);
   }
 
@@ -32,29 +37,28 @@ namespace haxor {
     return size;
   }
 
+  const mem_page_attrs &mem_page::get_attrs() const {
+    return attrs;
+  }
+
   mem_addr::mem_addr(const uint64_t page, const uint64_t offset) : page(page), offset(offset) {
   }
 
   mem::mem() {
-    data = NULL;
-    size = 0;
   }
 
   mem::~mem() {
-    free(data);
   }
 
   word_t mem::read_word(const uint64_t addr) const {
-    validate_addr(addr);
-
     mem_addr maddr = convert_addr(addr);
+    validate_mem_addr(maddr);
     return pages.at(maddr.page).read_word(maddr.offset);
   }
 
   void mem::write_word(const uint64_t addr, const word_t value) {
-    validate_addr(addr);
-
     mem_addr maddr = convert_addr(addr);
+    validate_mem_addr(maddr);
     return pages.at(maddr.page).write_word(maddr.offset, value);
   }
 
@@ -82,37 +86,30 @@ namespace haxor {
     write_word(addr + offset, 0); // ending '\0'
   }
 
-  void mem::alloc(const uint64_t space) {
-    if (space % sizeof(word_t) != 0) {
-      throw mem_misalign_error();
+  void mem::alloc_range(const uint64_t begin, const uint64_t size, const mem_page_attrs &attrs) {
+    if (begin % page_size != 0) {
+      // std::cout << begin << std::endl;
+      throw std::invalid_argument("Begin address must be page aligned.");
     }
 
-    const uint64_t aligned_size = size + (space + (page_size - (space % page_size)));
-    const uint64_t number_of_pages = aligned_size / page_size;
-
-    if (number_of_pages < pages.size()) {
-      throw std::invalid_argument("You cannot deallocate memory.");
+    uint64_t rem = (page_size - (size % page_size));
+    if (rem == page_size) {
+      rem = 0;
     }
+    const uint64_t aligned_size = ((size + page_size - 1) / page_size) * page_size;
+    const uint64_t page_from = begin / page_size;
+    const uint64_t page_to   = page_from + (aligned_size / page_size) - 1;
 
-    const uint64_t prev_pages = pages.size();
+    assert(page_to >= page_from);
 
-    for (uint64_t i = prev_pages; i < number_of_pages; i++) {
-      mem_page page(page_size);
-      pages.push_back(page);
+    for (uint64_t i = page_from; i <= page_to; i++) {
+      pages.emplace(i, mem_page(page_size, attrs));
     }
-
-    size += space;
   }
 
-  uint64_t mem::get_size() {
-    return size;
-  }
-
-  void mem::validate_addr(const uint64_t addr) const {
-    // avoid overflow of unsigned int.
-    if (size < sizeof(word_t) || addr > size - sizeof(word_t)) {
-      throw mem_range_error();
-    }
+  const mem_page &mem::get_page(const uint64_t addr) {
+    const uint64_t aligned_addr = addr - (addr % page_size);
+    return pages.at(aligned_addr / page_size);
   }
 
   mem_addr mem::convert_addr(const uint64_t addr) const {
@@ -121,5 +118,17 @@ namespace haxor {
     const uint64_t offset = addr - lowest_address;
 
     return mem_addr(page, offset);
+  }
+
+  uint64_t mem::max_size() {
+    return std::numeric_limits<int64_t>::max();
+  }
+
+  void mem::validate_mem_addr(const mem_addr &maddr) const {
+    if (pages.find(maddr.page) == pages.end()) {
+      throw mem_range_error();
+    }
+
+    // offset within page is checked there.
   }
 }

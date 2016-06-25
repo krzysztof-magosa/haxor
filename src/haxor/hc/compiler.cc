@@ -144,8 +144,14 @@ namespace haxor {
 
   void compiler::calc_addresses() {
     int64_t current_address = ivt_size;
+    std::string last_section;
 
     for (auto *item : *ast) {
+      if (last_section != item->get_section()) {
+        last_section = item->get_section();
+        current_address = ((current_address + page_size - 1) / page_size) * page_size;
+      }
+
       item->set_addr(current_address);
       current_address += item->get_size();
     }
@@ -159,6 +165,17 @@ namespace haxor {
         labels.insert(std::make_pair(label->get_name(), label->get_addr()));
       }
     }
+  }
+
+  int64_t compiler::calc_section_begin(const std::string &name) {
+    int64_t size = 0;
+    for (auto *item : *ast) {
+      if (item->get_section() == name) {
+        return item->get_addr();
+      }
+    }
+
+    return 0; // this is ignored if section size equals to 0
   }
 
   int64_t compiler::calc_section_size(const std::string &name) {
@@ -182,10 +199,14 @@ namespace haxor {
     }
 
     hdr.entry_point = labels.at("main");
+    hdr.text_begin = calc_section_begin(section_text);
     hdr.text_size = calc_section_size(section_text);
+
+    hdr.data_begin = calc_section_begin(section_data);
     hdr.data_size = calc_section_size(section_data);
+
+    hdr.bss_begin = calc_section_begin(section_bss);
     hdr.bss_size = calc_section_size(section_bss);
-    hdr.stack_size = 4096 * sizeof(word_t); // @TODO add option to customize
 
     return hdr;
   }

@@ -54,6 +54,7 @@ namespace haxor {
     void collect_labels();
     hdr_t build_hdr();
     int64_t calc_section_size(const std::string &name);
+    int64_t calc_section_begin(const std::string &name);
     uint8_t resolve_reg(const std::string &name);
     std::string format_location(const class location &location);
 
@@ -109,9 +110,6 @@ namespace haxor {
       { "$s8",   32 },
       { "$s9",   33 },
       { "$fp",   reg_frame },
-      { "$cs",   reg_code_segment },
-      { "$ds",   reg_data_segment },
-      { "$ss",   reg_stack_segment },
       { "$sp",   reg_stack },
       { "$ra",   reg_return },
       { "$sc",   reg_syscall }

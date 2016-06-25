@@ -60,7 +60,7 @@ Haxor is licensed under BSD 3-clause license. You can read it [here](LICENSE.txt
 * Registers size: 64-bit
 * Instruction: fixed size, 64-bit
 * Arithmetic: integer only, 64-bit
-* Memory model: flat, segments used only for protection
+* Memory model: paging with protection flags (read, write, exec)
 * Call convention: parameters are passed by $a0-$a9 registers, return values by $v0, $v1
 
 ### OpCodes
@@ -84,9 +84,6 @@ vCPU has 64 registers, some of them have special role:
 |22-23 |$v0-$v1  |return value                                          |
 |24-33 |$s0-$s9  |saved temporary (preserved across function call)      |
 |...   |...      |...                                                   |
-|57    |$cs      |code segment pointer, read-only                       |
-|58    |$ds      |data segment pointer, read-only                       |
-|59    |$ss      |stack segment pointer, read-only                      |
 |60    |$fp      |frame pointer                                         |
 |61    |$sp      |stack pointer                                         |
 |62    |$ra      |return address for linked jumps/branches              |

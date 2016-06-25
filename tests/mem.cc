@@ -2,25 +2,6 @@
 #include "gtest/gtest.h"
 #include "haxor/hvm/mem.hh"
 
-TEST(mem_tests, initial_size)
-{
-  haxor::mem mem;
-  EXPECT_EQ(mem.get_size(), 0);
-}
-
-TEST(mem_tests, alloc)
-{
-  haxor::mem mem;
-  mem.alloc(1024);
-  EXPECT_EQ(mem.get_size(), 1024);
-}
-
-TEST(mem_tests, alloc_alignment)
-{
-  haxor::mem mem;
-  EXPECT_THROW(mem.alloc(7), haxor::mem_misalign_error);
-}
-
 TEST(mem_tests, read_word_range_1)
 {
   haxor::mem mem;
@@ -30,7 +11,7 @@ TEST(mem_tests, read_word_range_1)
 TEST(mem_tests, read_word_range_2)
 {
   haxor::mem mem;
-  mem.alloc(4096);
+  mem.alloc_range(0, 4096, haxor::mem_page_attrs(true, true, true));
   EXPECT_THROW(mem.read_word(4096), haxor::mem_range_error);
 }
 
@@ -39,7 +20,7 @@ TEST(mem_tests, write_string)
   haxor::mem mem;
   haxor::word_t addr = 1024;
 
-  mem.alloc(4096);
+  mem.alloc_range(0, 4096, haxor::mem_page_attrs(true, true, true));
   mem.write_string(addr, "Haxor");
 
   // strings in Haxor are also aligned to 8 bytes.
@@ -53,7 +34,7 @@ TEST(mem_tests, write_string)
 TEST(mem_tests, read_string)
 {
   haxor::mem mem;
-  mem.alloc(4096);
+  mem.alloc_range(0, 4096, haxor::mem_page_attrs(true, true, true));
   mem.write_string(2048, "Virtual");
   const std::string result = mem.read_string(2048);
 

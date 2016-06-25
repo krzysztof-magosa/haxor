@@ -3,19 +3,29 @@
 
 #include "haxor/common/haxor.hh"
 #include <cstdint>
-#include <vector>
+#include <map>
 
 namespace haxor {
+  class mem_page_attrs {
+    public:
+    mem_page_attrs(const bool read, const bool write, const bool exec);
+    const bool read;
+    const bool write;
+    const bool exec;
+  };
+
   class mem_page {
     public:
-    explicit mem_page(const uint64_t size);
+    mem_page(const uint64_t size, const mem_page_attrs &attrs);
     word_t read_word(const uint64_t addr) const;
     void write_word(const uint64_t addr, const word_t value);
     void validate_addr(const uint64_t addr) const;
     uint64_t get_size() const;
+    const mem_page_attrs &get_attrs() const;
 
     private:
     int8_t * const data;
+    const mem_page_attrs attrs;
     const uint64_t size;
   };
 
@@ -35,17 +45,15 @@ namespace haxor {
     void write_word(const uint64_t addr, const word_t value);
     std::string read_string(const uint64_t addr) const;
     void write_string(const uint64_t addr, const std::string &value);
-    void alloc(const uint64_t space);
+    void alloc_range(const uint64_t begin, const uint64_t size, const mem_page_attrs &attrs);
     mem_addr convert_addr(const uint64_t addr) const;
-    uint64_t get_size();
+    uint64_t max_size();
+    const mem_page &get_page(const uint64_t addr);
 
     private:
-    void validate_addr(const uint64_t addr) const;
+    void validate_mem_addr(const mem_addr &maddr) const;
 
-    std::vector<mem_page> pages;
-
-    int8_t *data;
-    uint64_t size;
+    std::map<uint64_t, mem_page> pages;
   };
 }
 
