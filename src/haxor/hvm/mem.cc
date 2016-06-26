@@ -15,6 +15,7 @@ namespace haxor {
   }
 
   word_t mem_page::read_word(const uint64_t addr) const {
+    assert(addr % sizeof(word_t) == 0);
     validate_addr(addr);
     word_t temp;
     memcpy(&temp, data + addr, sizeof(word_t));
@@ -22,6 +23,7 @@ namespace haxor {
   }
 
   void mem_page::write_word(const uint64_t addr, const word_t value) {
+    assert(addr % sizeof(word_t) == 0);
     validate_addr(addr);
     memcpy(data + addr, &value, sizeof(word_t));
   }
@@ -88,7 +90,6 @@ namespace haxor {
 
   void mem::alloc_range(const uint64_t begin, const uint64_t size, const mem_page_attrs &attrs) {
     if (begin % page_size != 0) {
-      // std::cout << begin << std::endl;
       throw std::invalid_argument("Begin address must be page aligned.");
     }
 
@@ -99,6 +100,9 @@ namespace haxor {
     assert(page_to >= page_from);
 
     for (uint64_t i = page_from; i <= page_to; i++) {
+      if (pages.find(i) != pages.end()) {
+        throw std::invalid_argument("This memory range has been already allocated.");
+      }
       pages.emplace(i, mem_page(page_size, attrs));
     }
   }
@@ -117,7 +121,9 @@ namespace haxor {
   }
 
   uint64_t mem::max_size() {
-    return std::numeric_limits<int64_t>::max();
+    uint64_t max = std::numeric_limits<int64_t>::max();
+    max -= (max / page_size); // make it page aligned
+    return max + 1;
   }
 
   void mem::validate_mem_addr(const mem_addr &maddr) const {

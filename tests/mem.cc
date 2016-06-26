@@ -40,3 +40,35 @@ TEST(mem_tests, read_string)
 
   EXPECT_EQ("Virtual", result);
 }
+
+TEST(mem_tests, convert_addr_1)
+{
+  haxor::mem mem;
+  haxor::mem_addr maddr = mem.convert_addr(0);
+  EXPECT_EQ(0, maddr.page);
+  EXPECT_EQ(0, maddr.offset);
+}
+
+TEST(mem_tests, convert_addr_2)
+{
+  haxor::mem mem;
+  haxor::mem_addr maddr = mem.convert_addr(1024);
+  EXPECT_EQ(0, maddr.page);
+  EXPECT_EQ(1024, maddr.offset);
+}
+
+TEST(mem_tests, convert_addr_3)
+{
+  haxor::mem mem;
+  haxor::mem_addr maddr = mem.convert_addr(haxor::page_size + 512);
+  EXPECT_EQ(1, maddr.page);
+  EXPECT_EQ(512, maddr.offset);
+}
+
+TEST(mem_tests, convert_addr_4)
+{
+  haxor::mem mem;
+  haxor::mem_addr maddr = mem.convert_addr(haxor::page_size - 8);
+  EXPECT_EQ(0, maddr.page);
+  EXPECT_EQ(haxor::page_size - 8, maddr.offset);
+}
