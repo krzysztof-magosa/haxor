@@ -48,6 +48,9 @@ namespace haxor {
 
     mem.alloc_range(mem.max_size() + 1 - stack_size, stack_size, mem_page_attrs(true, true, false));
 
+    // guard page below stack.
+    mem.alloc_range(mem.max_size() + 1 - stack_size - page_size, page_size, mem_page_attrs(false, false, false));
+
     for (uint64_t i = hdr.text_begin; i < hdr.text_begin + hdr.text_size; i += sizeof(word_t)) {
       word_t x;
       exe.read(reinterpret_cast<char*>(&x), sizeof(word_t));
