@@ -20,7 +20,6 @@ namespace haxor {
 
   void cpu::execute(const opcode_t &op) {
     uint64_t tmp;
-    memory_segment ms;
 
     switch(op.cmd) {
     case cmd_nop:
