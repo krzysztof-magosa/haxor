@@ -94,12 +94,16 @@ Please always use aliases and not register numbers.
 ## Memory map
 <img src="media/memory.png" width="75%">
 
-|Segment|Write             |Execute           |
-|-------|------------------|------------------|
-|ivt    |:white_check_mark:|:no_entry_sign:   |
-|code   |:no_entry_sign:   |:white_check_mark:|
-|data   |:white_check_mark:|:no_entry_sign:   |
-|stack  |:white_check_mark:|:no_entry_sign:   |
+|Segment|Read              |Write             |Execute           |
+|-------|------------------|------------------|------------------|c
+|ivt    |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
+|code   |:no_entry_sign:   |:no_entry_sign:   |:white_check_mark:|
+|data   |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
+|bss    |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
+|heap   |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
+|stack  |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
+
+\* Heap is not implemented yet.
 
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
