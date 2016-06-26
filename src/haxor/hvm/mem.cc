@@ -92,10 +92,6 @@ namespace haxor {
       throw std::invalid_argument("Begin address must be page aligned.");
     }
 
-    uint64_t rem = (page_size - (size % page_size));
-    if (rem == page_size) {
-      rem = 0;
-    }
     const uint64_t aligned_size = ((size + page_size - 1) / page_size) * page_size;
     const uint64_t page_from = begin / page_size;
     const uint64_t page_to   = page_from + (aligned_size / page_size) - 1;
