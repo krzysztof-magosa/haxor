@@ -26,6 +26,7 @@ namespace haxor {
     instr2func.insert(std::make_pair("blez",  &pseudo::p_blez));
     instr2func.insert(std::make_pair("bgtz",  &pseudo::p_bgtz));
     instr2func.insert(std::make_pair("beqz",  &pseudo::p_beqz));
+    instr2func.insert(std::make_pair("bgez",  &pseudo::p_bgez));
     instr2func.insert(std::make_pair("li",    &pseudo::p_li));
     instr2func.insert(std::make_pair("la",    &pseudo::p_la));
     instr2func.insert(std::make_pair("resw",  &pseudo::p_resw));
@@ -390,6 +391,33 @@ namespace haxor {
       args->push_back(new node_reg("$zero"));
       args->push_back(input->get_args()->at(1));
       ast->push_back(new node_instr("beq", args));
+    }
+  }
+
+  void pseudo::p_bgez(node_instr *input) {
+    {
+      // x == 0
+      auto args = new std::vector<node_base*>();
+      args->push_back(input->get_args()->at(0));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(input->get_args()->at(1));
+      ast->push_back(new node_instr("beq", args));
+    }
+
+    // y = 0 < x
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(input->get_args()->at(0));
+      ast->push_back(new node_instr("slt", args));
+    }
+    {
+      auto args = new std::vector<node_base*>();
+      args->push_back(new node_reg("$at"));
+      args->push_back(new node_reg("$zero"));
+      args->push_back(input->get_args()->at(1));
+      ast->push_back(new node_instr("bne", args));
     }
   }
 

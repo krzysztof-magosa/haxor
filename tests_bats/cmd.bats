@@ -286,6 +286,13 @@
 # bgtz
 # beqz
 
+@test "cmd: bgez" {
+    hc bgez.hax
+    run hvm bgez.hax.e
+
+    [ "$output" = "12" ]
+}
+
 @test "cmd: li" {
     hc li.hax
     run hvm li.hax.e

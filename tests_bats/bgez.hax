@@ -1,0 +1,26 @@
+section .text
+eq0:
+  li $sc, 02h
+  li $a0, 1
+  syscall
+  j step2
+
+gt0:
+  li $sc, 02h
+  li $a0, 2
+  syscall
+  j exit
+
+main:
+  li $a0, -5
+  bgez $a0, exit
+step1:
+  li $a0, 0
+  bgez $a0, eq0
+step2:
+  li $a0, 1
+  bgez $a0, gt0
+exit:
+  li $sc, 07h
+  li $a0, 0
+  syscall

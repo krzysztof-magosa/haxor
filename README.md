@@ -171,6 +171,7 @@ If not stated differently result goes to first specified register.
 |blez reg1, imm     |goto imm if reg1 <= 0|
 |bgtz reg1, imm     |goto imm if reg1 > 0|
 |beqz reg1, imm     |goto imm if reg1 == 0|
+|bgez reg1, imm     |goto imm if reg1 >= 0|
 |li reg1, num       |load number into register|
 |la reg1, label     |load address of label into register|
 |prol imm           |function prologue, imm - numbers of bytes to reserve on stack|

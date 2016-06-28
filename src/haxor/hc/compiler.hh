@@ -173,6 +173,7 @@ namespace haxor {
       { "blez",    instr_spec(cmd_pseudo,  "ri") },
       { "bgtz",    instr_spec(cmd_pseudo,  "ri") },
       { "beqz",    instr_spec(cmd_pseudo,  "ri") },
+      { "bgez",    instr_spec(cmd_pseudo,  "ri") },
       { "li",      instr_spec(cmd_pseudo,  "rn") },
       { "la",      instr_spec(cmd_pseudo,  "rl") },
       { "prol",    instr_spec(cmd_pseudo,  "i") },

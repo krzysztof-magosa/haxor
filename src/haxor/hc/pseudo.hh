@@ -33,6 +33,7 @@ namespace haxor {
     void p_blez(node_instr *input);
     void p_bgtz(node_instr *input);
     void p_beqz(node_instr *input);
+    void p_bgez(node_instr *input);
     void p_li(node_instr *input);
     void p_la(node_instr *input);
     void p_resw(node_instr *input);
