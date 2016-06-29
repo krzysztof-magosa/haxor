@@ -253,13 +253,6 @@ namespace haxor {
     make_pop("$s0");
     make_pop("$fp");
     make_pop("$ra");
-
-    // ret
-    {
-      auto args = new std::vector<node_base*>();
-      args->push_back(new node_reg("$ra"));
-      ast->push_back(new node_instr("jr", args));
-    }
   }
 
   void pseudo::p_b(node_instr *input) {

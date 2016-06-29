@@ -10,6 +10,7 @@ delim:
   syscall
 
   epil
+  jr $ra
 
 func:
   prol 0
@@ -24,6 +25,7 @@ func:
   li $s8, 18
   li $s9, 19
   epil
+  jr $ra
 
 main:
   li $s0, 0
