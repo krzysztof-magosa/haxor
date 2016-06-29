@@ -40,7 +40,10 @@ namespace haxor {
     cmd_j       = 0x54,
     cmd_jr      = 0x55,
     cmd_jal     = 0x56,
-    cmd_jalr    = 0x57
+    cmd_jalr    = 0x57,
+
+    cmd_int     = 0x58,
+    cmd_reti    = 0x59
   };
 }
 

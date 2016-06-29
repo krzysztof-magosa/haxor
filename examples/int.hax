@@ -1,0 +1,17 @@
+section .text
+isr:
+  li $sc, 02h
+  li $a0, 123
+  syscall
+
+  reti
+
+main:
+  la $t0, isr
+  sw $zero, 0, $t0
+
+  int 0
+
+  li $sc, 07h
+  li $a0, 0
+  syscall

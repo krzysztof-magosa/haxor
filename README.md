@@ -149,6 +149,8 @@ If not stated differently result goes to first specified register.
 |jr reg1              |0x55|goto reg1|
 |jal imm              |0x56|$ra = pc, goto imm|
 |jalr reg1            |0x57|$ra = pc, goto reg1|
+|int num              |0x58|generates software interrupt|
+|reti                 |0x59|comes back from interrupt|
 
 ### Pseudo instructions
 |Syntax|Description|

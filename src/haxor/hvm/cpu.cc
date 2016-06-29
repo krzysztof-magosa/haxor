@@ -186,6 +186,32 @@ namespace haxor {
       ip = regs.read(op.reg1);
       break;
 
+    case cmd_int:
+      if (op.imm < 0 || op.imm >= ivt_num) {
+        throw std::invalid_argument("Invalid INT number.");
+      }
+
+      // push ip
+      regs.add(reg_stack, -sizeof(word_t));
+      vm.get_mem().write_word(regs.read(reg_stack), ip);
+
+      // push $ra
+      regs.add(reg_stack, -sizeof(word_t));
+      vm.get_mem().write_word(regs.read(reg_stack), regs.read(reg_return));
+
+      set_ip(vm.get_mem().read_word(op.imm * sizeof(word_t)));
+      break;
+
+    case cmd_reti:
+      // pop $ra
+      regs.write(reg_return, vm.get_mem().read_word(regs.read(reg_stack)));
+      regs.add(reg_stack, sizeof(word_t));
+
+      // pop ip
+      set_ip(vm.get_mem().read_word(regs.read(reg_stack)));
+      regs.add(reg_stack, sizeof(word_t));
+      break;
+
     default:
       std::cerr << "BROKEN OPCODE" << std::endl;
     }
