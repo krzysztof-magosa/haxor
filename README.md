@@ -255,6 +255,18 @@ li $a0, 5
 syscall
 ```
 
+### create_timer (08h)
+Schedule interrupt to be run every N ticks of system clock.
+
+```
+la $t0, isr0     # load address of isr0 label into register $t0
+sw $zero, 0, $t0 # load $t0 value into memory[0]
+
+li $sc, 08h
+li $a0, 0 # int number
+syscall
+```
+
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
 * [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))

@@ -68,9 +68,11 @@ namespace haxor {
     cpu.set_ip(hdr.entry_point);
     cpu.get_regs().write(reg_stack, mem.max_size() - 1);
 
+    cpu.start_sys_timer();
     while (running) {
       cpu.cycle();
     }
+    cpu.stop_sys_timer();
 
     return exit_code;
   }

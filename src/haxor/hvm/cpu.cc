@@ -6,7 +6,57 @@
 #include <iostream>
 
 namespace haxor {
-  cpu::cpu(class vm &vm) : vm(vm) {}
+  timer::timer(const word_t step, const word_t int_no) : step(step), int_no(int_no) {
+    schedule();
+  }
+
+  void timer::schedule() {
+    remaining_ticks = step;
+  }
+
+  void timer::tick() {
+    if (remaining_ticks > 0) {
+      remaining_ticks--;
+    }
+  }
+
+  bool timer::check() {
+    if (remaining_ticks == 0) {
+      schedule();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  word_t timer::get_int_no() {
+    return int_no;
+  }
+
+  cpu::cpu(class vm &vm) : vm(vm) {
+  }
+
+  void cpu::start_sys_timer() {
+    sys_timer = std::thread([this] { sys_timer_loop(); });
+  }
+
+  void cpu::stop_sys_timer() {
+    sys_timer_kill = true;
+    sys_timer.join();
+  }
+
+  void cpu::sys_timer_loop() {
+    while (!sys_timer_kill) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      for (auto &item : timers) {
+        item.tick();
+      }
+    }
+  }
+
+  std::vector<timer> &cpu::get_timers() {
+    return timers;
+  }
 
   void cpu::cycle() {
     if (!vm.get_mem().get_page(ip).get_attrs().exec) {
@@ -16,6 +66,12 @@ namespace haxor {
     decode_opcode(vm.get_mem().read_word(ip), opcode);
     ip += sizeof(word_t);
     execute(opcode);
+
+    for (auto &item : timers) {
+      if (item.check()) {
+        perform_int(item.get_int_no());
+      }
+    }
   }
 
   void cpu::execute(const opcode_t &op) {
@@ -187,19 +243,7 @@ namespace haxor {
       break;
 
     case cmd_int:
-      if (op.imm < 0 || op.imm >= ivt_num) {
-        throw std::invalid_argument("Invalid INT number.");
-      }
-
-      // push ip
-      regs.add(reg_stack, -sizeof(word_t));
-      vm.get_mem().write_word(regs.read(reg_stack), ip);
-
-      // push $ra
-      regs.add(reg_stack, -sizeof(word_t));
-      vm.get_mem().write_word(regs.read(reg_stack), regs.read(reg_return));
-
-      set_ip(vm.get_mem().read_word(op.imm * sizeof(word_t)));
+      perform_int(regs.read(op.reg1));
       break;
 
     case cmd_reti:
@@ -239,5 +283,21 @@ namespace haxor {
 
   void cpu::validate_reg_write(const uint8_t reg) {
     //
+  }
+
+  void cpu::perform_int(const word_t int_no) {
+    if (int_no < 0 || int_no >= ivt_num) {
+        throw std::invalid_argument("Invalid INT number.");
+      }
+
+      // push ip
+      regs.add(reg_stack, -sizeof(word_t));
+      vm.get_mem().write_word(regs.read(reg_stack), ip);
+
+      // push $ra
+      regs.add(reg_stack, -sizeof(word_t));
+      vm.get_mem().write_word(regs.read(reg_stack), regs.read(reg_return));
+
+      set_ip(vm.get_mem().read_word(int_no * sizeof(word_t)));
   }
 }

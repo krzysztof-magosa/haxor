@@ -49,6 +49,10 @@ namespace haxor {
       ret = sc_exit();
       break;
 
+    case 0x08:
+      ret = sc_create_timer();
+      break;
+
     default:
       ret = -1;
     }
@@ -66,7 +70,7 @@ namespace haxor {
 
   word_t os::sc_print_int() {
     word_t num = vm.get_cpu().get_regs().read(reg_arg0);
-    std::cout << num;
+    std::cout << num << std::flush;
 
     return 0;
   }
@@ -119,6 +123,15 @@ namespace haxor {
 
   word_t os::sc_exit() {
     vm.exit(vm.get_cpu().get_regs().read(reg_arg0));
+
+    return 0;
+  }
+
+  word_t os::sc_create_timer() {
+    const word_t step   = vm.get_cpu().get_regs().read(reg_arg0);
+    const word_t int_no = vm.get_cpu().get_regs().read(reg_arg1);
+
+    vm.get_cpu().get_timers().emplace_back(step, int_no);
 
     return 0;
   }

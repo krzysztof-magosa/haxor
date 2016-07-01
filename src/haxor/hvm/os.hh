@@ -21,6 +21,7 @@ namespace haxor {
     word_t sc_rand();
     word_t sc_sleep();
     word_t sc_exit();
+    word_t sc_create_timer();
 
     word_t pop();
     void discard_input();
