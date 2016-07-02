@@ -256,7 +256,7 @@ syscall
 ```
 
 ### create_timer (08h)
-Schedule interrupt to be run every N ticks of system clock.
+Schedule interrupt to be run every N ticks of system timer (it runs 1000 ticks per second).
 Timer identificator is returned in _$v0_ register.
 
 ```
