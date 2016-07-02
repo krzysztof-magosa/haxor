@@ -133,7 +133,7 @@ namespace haxor {
 
     vm.get_cpu().get_timers().emplace_back(step, int_no);
 
-    return 0;
+    return vm.get_cpu().get_timers().size() - 1;
   }
 
   void os::discard_input() {

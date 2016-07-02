@@ -257,6 +257,7 @@ syscall
 
 ### create_timer (08h)
 Schedule interrupt to be run every N ticks of system clock.
+Timer identificator is returned in _$v0_ register.
 
 ```
 la $t0, isr0     # load address of isr0 label into register $t0
