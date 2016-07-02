@@ -47,7 +47,7 @@ namespace haxor {
 
   void cpu::sys_timer_loop() {
     while (!sys_timer_kill) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      std::this_thread::sleep_for(std::chrono::milliseconds(system_timer_period));
       for (auto &item : timers) {
         item.tick();
       }

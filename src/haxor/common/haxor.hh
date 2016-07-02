@@ -19,6 +19,8 @@ namespace haxor {
 
   const uint64_t page_size = 4096;
 
+  const uint64_t system_timer_period = 1; // milliseconds
+
   class haxe_open_error : public std::exception {
     virtual const char* what() const throw() {
       return "Cannot open specified file. Check path and try again.";
