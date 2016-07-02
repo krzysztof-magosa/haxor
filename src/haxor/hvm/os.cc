@@ -53,6 +53,14 @@ namespace haxor {
       ret = sc_create_timer();
       break;
 
+    case 0x09:
+      ret = sc_enable_timer();
+      break;
+
+    case 0x0a:
+      ret = sc_disable_timer();
+      break;
+
     default:
       ret = -1;
     }
@@ -134,6 +142,18 @@ namespace haxor {
     vm.get_cpu().get_timers().emplace_back(step, int_no);
 
     return vm.get_cpu().get_timers().size() - 1;
+  }
+
+  word_t os::sc_enable_timer() {
+    const word_t id = vm.get_cpu().get_regs().read(reg_arg0);
+    vm.get_cpu().get_timers().at(id).enable();
+    return 0;
+  }
+
+  word_t os::sc_disable_timer() {
+    const word_t id = vm.get_cpu().get_regs().read(reg_arg0);
+    vm.get_cpu().get_timers().at(id).disable();
+    return 0;
   }
 
   void os::discard_input() {

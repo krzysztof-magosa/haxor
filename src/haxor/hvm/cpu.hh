@@ -18,11 +18,14 @@ namespace haxor {
     void tick();
     bool check();
     word_t get_int_no();
+    void enable();
+    void disable();
 
     private:
     const word_t step;
     const word_t int_no;
 
+    bool enabled;
     word_t remaining_ticks;
   };
 

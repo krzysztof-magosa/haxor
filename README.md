@@ -268,6 +268,25 @@ li $a0, 0 # int number
 syscall
 ```
 
+### enable_timer (09h)
+Enables previously disabled timer.
+
+```
+li $sc, 09h
+li $a0, 0 # timer id
+syscall
+```
+
+### disable_timer (0ah)
+Disables calling interrupt by timer. Ticks are still counted so it does not impair the cycle..
+
+```
+li $sc, 0ah
+li $a0, 0 # timer id
+syscall
+```
+
+
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
 * [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))

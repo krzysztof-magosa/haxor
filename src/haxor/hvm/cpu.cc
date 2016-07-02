@@ -7,7 +7,16 @@
 
 namespace haxor {
   timer::timer(const word_t step, const word_t int_no) : step(step), int_no(int_no) {
+    enable();
     schedule();
+  }
+
+  void timer::enable() {
+    enabled = true;
+  }
+
+  void timer::disable() {
+    enabled = false;
   }
 
   void timer::schedule() {
@@ -23,7 +32,7 @@ namespace haxor {
   bool timer::check() {
     if (remaining_ticks == 0) {
       schedule();
-      return true;
+      return enabled; //
     } else {
       return false;
     }
