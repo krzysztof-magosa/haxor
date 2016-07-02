@@ -60,7 +60,7 @@
     return haxor::parser::make_INT(strtoimax(yytext, nullptr, 10), haxor::location(location));
 }
 
--?[0-9]+h                     {
+-?0[0-9a-zA-Z]+h                     {
     word_t num = strtoimax(yytext, nullptr, 16); // strtoimax ignores suffix 'h'
     return haxor::parser::make_INT(num, haxor::location(location));
 }
