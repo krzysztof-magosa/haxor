@@ -1,0 +1,4 @@
+section .text
+main:
+  pushi 1
+  j main

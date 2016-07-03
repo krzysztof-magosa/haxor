@@ -286,6 +286,26 @@ li $a0, 0 # timer id
 syscall
 ```
 
+### time (0bh)
+*Reserved*
+
+### steady_time (0ch)
+Returns steady time which cannot be decreased. It's suitable for measuring intervals.
+
+|$a0|Return as    |
+|---|-------------|
+|0  |hours        |
+|1  |minutes      |
+|2  |seconds      |
+|3  |milliseconds |
+|4  |microseconds |
+|5  |nanoseconds  |
+
+```
+li $sc, 0ch
+li $a0, 3
+syscall
+```
 
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)

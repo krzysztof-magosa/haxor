@@ -24,6 +24,7 @@ namespace haxor {
     word_t sc_create_timer();
     word_t sc_enable_timer();
     word_t sc_disable_timer();
+    word_t sc_steady_time();
 
     word_t pop();
     void discard_input();

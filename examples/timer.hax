@@ -1,0 +1,36 @@
+section .text
+isr0:
+  li $sc, 02h
+  li $a0, 0
+  syscall
+  reti
+
+isr1:
+  li $sc, 02h
+  li $a0, 1
+  syscall
+  reti
+
+main:
+  la $t0, isr0
+  sw $zero, 0, $t0
+
+  la $t0, isr1
+  sw $zero, 8, $t0
+
+  li $sc, 08h
+  li $a0, 1000
+  li $a1, 0
+  syscall
+
+  li $sc, 08h
+  li $a0, 1000
+  li $a1, 1
+  syscall
+
+loop:
+  li $sc, 06h
+  li $a0, 1000
+  syscall
+
+  j loop

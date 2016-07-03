@@ -61,6 +61,10 @@ namespace haxor {
       ret = sc_disable_timer();
       break;
 
+    case 0x0c:
+      ret = sc_steady_time();
+      break;
+
     default:
       ret = -1;
     }
@@ -154,6 +158,47 @@ namespace haxor {
     const word_t id = vm.get_cpu().get_regs().read(reg_arg0);
     vm.get_cpu().get_timers().at(id).disable();
     return 0;
+  }
+
+  word_t os::sc_steady_time() {
+    const word_t return_as = vm.get_cpu().get_regs().read(reg_arg0);
+    auto now = std::chrono::steady_clock::now();
+
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::hours> hours;
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::minutes> minutes;
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::seconds> seconds;
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> milliseconds;
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::microseconds> microseconds;
+    std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> nanoseconds;
+
+    switch (return_as) {
+    case 0:
+      hours = std::chrono::time_point_cast<std::chrono::hours>(now);
+      return hours.time_since_epoch().count();
+      break;
+    case 1:
+      minutes = std::chrono::time_point_cast<std::chrono::minutes>(now);
+      return minutes.time_since_epoch().count();
+      break;
+    case 2:
+      seconds = std::chrono::time_point_cast<std::chrono::seconds>(now);
+      return seconds.time_since_epoch().count();
+      break;
+    case 3:
+      milliseconds = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+      return milliseconds.time_since_epoch().count();
+      break;
+    case 4:
+      microseconds = std::chrono::time_point_cast<std::chrono::microseconds>(now);
+      return microseconds.time_since_epoch().count();
+      break;
+    case 5:
+      nanoseconds = std::chrono::time_point_cast<std::chrono::nanoseconds>(now);
+      return nanoseconds.time_since_epoch().count();
+      break;
+    default:
+      throw std::invalid_argument("Invalid return_as parameter.");
+    }
   }
 
   void os::discard_input() {

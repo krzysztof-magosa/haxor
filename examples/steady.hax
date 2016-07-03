@@ -1,0 +1,21 @@
+section .text
+main:
+  li $sc, 0ch
+  li $a0, 4
+  syscall
+  move $t0, $v0
+
+  nop
+
+  li $sc, 0ch
+  li $a0, 4
+  syscall
+  move $t1, $v0
+
+  li $sc, 02h
+  sub $a0, $t1, $t0
+  syscall
+
+  li $sc, 07h
+  li $a0, 0
+  syscall
