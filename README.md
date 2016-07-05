@@ -259,6 +259,10 @@ syscall
 Schedule interrupt to be run every N ticks of system timer (it runs 1000 ticks per second).
 Timer identificator is returned in _$v0_ register.
 
+Please note that because of way how syscalls are implemented they are not preemptive.
+It means that if you for example use _sleep_ syscall, timer interrupt may be fired *after* sleep.
+You can implement your own sleep routine based on _steady_time_ to bypass this limitation.
+
 ```
 la $t0, isr0     # load address of isr0 label into register $t0
 sw $zero, 0, $t0 # load $t0 value into memory[0]
