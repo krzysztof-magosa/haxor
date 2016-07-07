@@ -1,0 +1,12 @@
+section .bss
+temp:   dw
+
+section .text
+main:
+  # this is fine because .bss section is writable
+  sw $zero, temp, $zero
+
+  # tries to store 0 at address of main routine
+  # because .text segment is read only
+  # segmentation fault error will be raised
+  sw $zero, main, $zero
