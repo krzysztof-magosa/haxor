@@ -1,0 +1,75 @@
+section .data
+isr0_msg:        dw "isr0 timer tick, we are alive!", 10, 0
+sleep_time_msg:  dw "actual sleep time: ", 0
+newline_msg:     dw 10, 0
+
+section .text
+
+# interrupt 0 service
+# shows message that we are still alive during sleep()
+isr0:
+  push $sc              # preserve $sc on stack
+  push $a0              # preserve $a0 on stack
+
+  li $sc, 01h           # put id of print_string syscall into $sc register
+  la $a0, isr0_msg      # put address of isr0_msg to $a0 register
+  syscall
+
+  pop $a0               # restore $a0 from stack
+  pop $sc               # restore $sc from stack
+
+  reti                  # return from interrupt
+
+# sleep() based on steady_time syscall
+steady_time_sleep:
+  prol 0                # prologue without reserving space on stack
+
+  move $t0, $a0         # store argument $a0 in $t0 register
+
+  li $sc, 0ch           # put id of steady_time syscall into $sc register
+  li $a0, 3             # get time as milliseconds
+  syscall
+  move $t1, $v0         # store beginning time in $t1 register
+steady_time_sleep_loop:
+  li $sc, 0ch           # put id of steady_time syscall into $sc register
+  li $a0, 3             # get time as milliseconds
+  syscall
+
+  sub $t2, $v0, $t1     # calculate time difference
+
+  ble $t2, $t0, steady_time_sleep_loop   # loop as long time difference
+                                         # is smaller than requested sleep time
+
+  move $v0, $t2         # return actual sleeping time
+
+  epil                  # epilogue
+  jr $ra                # jump to linked point
+
+main:
+  la $t0, isr0          # put address of isr0 routine to $t0 register
+  sw $zero, 0, $t0      # set memory[0] (interrupt 0 pointer) to value of $t0
+
+  li $sc, 08h           # put id of create_timer syscall to $sc register
+  li $a0, 1000          # trigger timer every 1000 ticks (1 second)
+  syscall
+
+  li $a0, 5000          # request sleeping for 5000 ms
+  bal steady_time_sleep # call steady_time_sleep and link so it can return
+
+  move $t0, $v0         # store returned sleeping time in $t0 register
+
+  li $sc, 01h           # put id of print_string syscall into $sc register
+  la $a0, sleep_time_msg  # put address of sleep_time_msg string into $a0 register
+  syscall
+
+  li $sc, 02h           # put id of print_int syscall into $sc register
+  move $a0, $t0         # copy actual sleeping time (stored in $t0) into $a0 register
+  syscall
+
+  li $sc, 01h           # put id of print_string syscall into $sc register
+  la $a0, newline_msg   # put address of newline_msg string into $a0 register
+  syscall
+
+  li $sc, 07h           # put id of exit syscall into $sc register
+  li $a0, 0             # set exit code 0 in register $a0
+  syscall
