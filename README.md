@@ -261,7 +261,8 @@ Timer identificator is returned in _$v0_ register.
 
 Please note that because of way how syscalls are implemented they are not preemptive.
 It means that if you for example use _sleep_ syscall, timer interrupt may be fired *after* sleep.
-You can implement your own sleep routine based on _steady_time_ to bypass this limitation.
+You can implement your own sleep routine based on _steady_time_ to bypass this limitation
+(see example [here](examples/steady-time-sleep.hax)).
 
 ```
 la $t0, isr0     # load address of isr0 label into register $t0
