@@ -107,8 +107,8 @@ Please always use aliases and not register numbers.
 
 ## Language
 Haxor uses primitive asm-like syntax. Each command goes into separate line.
-You can add comments in code, but they also need to be separate lines, beginning
-from _#_. Program starts from _main_ label. Labels are created by putting name followed by colon.
+You can use comments using _#_. Program starts from _main_ label.
+Labels are created by putting name followed by colon.
 
 Most of instructions take 3 registers or 2 registers and immediate value.
 If not stated differently result goes to first specified register.
