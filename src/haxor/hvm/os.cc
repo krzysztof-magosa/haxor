@@ -160,16 +160,16 @@ namespace haxor {
     return 0;
   }
 
-  word_t os::sc_steady_time() {
-    const word_t return_as = vm.get_cpu().get_regs().read(reg_arg0);
-    auto now = std::chrono::steady_clock::now();
+  template <class T>
+  word_t os::time(const word_t return_as) {
+    auto now = T::now();
 
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::hours> hours;
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::minutes> minutes;
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::seconds> seconds;
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::milliseconds> milliseconds;
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::microseconds> microseconds;
-    std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> nanoseconds;
+    std::chrono::time_point<T, std::chrono::hours> hours;
+    std::chrono::time_point<T, std::chrono::minutes> minutes;
+    std::chrono::time_point<T, std::chrono::seconds> seconds;
+    std::chrono::time_point<T, std::chrono::milliseconds> milliseconds;
+    std::chrono::time_point<T, std::chrono::microseconds> microseconds;
+    std::chrono::time_point<T, std::chrono::nanoseconds> nanoseconds;
 
     switch (return_as) {
     case 0:
@@ -199,6 +199,14 @@ namespace haxor {
     default:
       throw std::invalid_argument("Invalid return_as parameter.");
     }
+  }
+
+  word_t os::sc_time() {
+    return time<std::chrono::system_clock>(vm.get_cpu().get_regs().read(reg_arg0));
+  }
+
+  word_t os::sc_steady_time() {
+    return time<std::chrono::steady_clock>(vm.get_cpu().get_regs().read(reg_arg0));
   }
 
   void os::discard_input() {

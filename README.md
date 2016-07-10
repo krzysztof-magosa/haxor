@@ -291,10 +291,7 @@ syscall
 ```
 
 ### time (0bh)
-*Reserved*
-
-### steady_time (0ch)
-Returns steady time which cannot be decreased. It's suitable for measuring intervals.
+Returns time in specified unit.
 
 |$a0|Return as    |
 |---|-------------|
@@ -304,6 +301,16 @@ Returns steady time which cannot be decreased. It's suitable for measuring inter
 |3  |milliseconds |
 |4  |microseconds |
 |5  |nanoseconds  |
+
+```
+li $sc, 0bh
+li $a0, 2
+syscall
+```
+
+### steady_time (0ch)
+Returns steady time which cannot be decreased. It's suitable for measuring intervals.
+Units are controlled in the same way as in _time_ syscall.
 
 ```
 li $sc, 0ch
