@@ -6,6 +6,8 @@ add_library(
 
 #
 
+find_package(CURSES)
+
 file(GLOB_RECURSE hvm_sources haxor/hvm/*.cc)
 
 add_library(
@@ -13,7 +15,7 @@ add_library(
   ${hvm_sources}
 )
 
-target_link_libraries(haxor_hvm haxor_common)
+target_link_libraries(haxor_hvm haxor_common ${CURSES_LIBRARIES})
 
 install(TARGETS haxor_hvm
   RUNTIME DESTINATION bin
