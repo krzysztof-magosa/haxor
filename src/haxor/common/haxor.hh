@@ -52,7 +52,29 @@ namespace haxor {
   class mem_misalign_error : public std::exception {};
   class mem_range_error : public std::exception {};
   class regs_fault_error : public std::exception {};
-  class segfault_error : public std::exception {};
+
+  class cpu_error : public std::exception {
+    public:
+    const int code;
+
+    protected:
+    explicit cpu_error(const int code) : code(code) {}
+  };
+
+  class div_by_zero_error : public cpu_error {
+    public:
+    div_by_zero_error() : cpu_error(0) {}
+  };
+
+  class broken_opcode_error : public cpu_error {
+    public:
+    broken_opcode_error() : cpu_error(1) {}
+  };
+
+  class segfault_error : public cpu_error {
+    public:
+    segfault_error() : cpu_error(2) {}
+  };
 }
 
 #endif

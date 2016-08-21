@@ -53,6 +53,7 @@ namespace haxor {
     void jump(const uint64_t target);
     void validate_reg_write(const uint8_t reg);
     void perform_int(const word_t int_no);
+    void raise_error(const word_t error_code);
 
     void sys_timer_loop();
 

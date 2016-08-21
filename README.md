@@ -319,6 +319,16 @@ li $a0, 3
 syscall
 ```
 
+## CPU Exceptions
+In some situations Haxor VM can raise exception.
+Every exception type has assigned specific interrupt.
+
+|Exception type|Interrupt number|
+|--------------|----------------|
+|Division by zero|0|
+|Broken opcode|1|
+|Segmentation fault|2|
+
 ## Useful knowledge related to (virtual) machines
 * [Reduced instruction set computing](https://en.wikipedia.org/wiki/Reduced_instruction_set_computing)
 * [Sigil](https://en.wikipedia.org/wiki/Sigil_(computer_programming))

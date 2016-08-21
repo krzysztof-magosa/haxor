@@ -68,18 +68,23 @@ namespace haxor {
   }
 
   void cpu::cycle() {
-    if (!vm.get_mem().get_page(ip).get_attrs().exec) {
-      throw segfault_error();
-    }
-
-    decode_opcode(vm.get_mem().read_word(ip), opcode);
-    ip += sizeof(word_t);
-    execute(opcode);
-
-    for (auto &item : timers) {
-      if (item.check()) {
-        perform_int(item.get_int_no());
+    try {
+      if (!vm.get_mem().get_page(ip).get_attrs().exec) {
+        throw segfault_error();
       }
+
+      decode_opcode(vm.get_mem().read_word(ip), opcode);
+      ip += sizeof(word_t);
+
+      execute(opcode);
+
+      for (auto &item : timers) {
+        if (item.check()) {
+          perform_int(item.get_int_no());
+        }
+      }
+    } catch (const cpu_error &e) {
+      raise_error(e.code);
     }
   }
 
@@ -116,6 +121,9 @@ namespace haxor {
 
     case cmd_div:
       validate_reg_write(op.reg1);
+      if (regs.read(op.reg3) == 0) {
+        throw div_by_zero_error();
+      }
       regs.write(op.reg1, regs.read(op.reg2) / regs.read(op.reg3));
       break;
 
@@ -266,7 +274,7 @@ namespace haxor {
       break;
 
     default:
-      std::cerr << "BROKEN OPCODE" << std::endl;
+      throw broken_opcode_error();
     }
   }
 
@@ -308,5 +316,9 @@ namespace haxor {
       vm.get_mem().write_word(regs.read(reg_stack), regs.read(reg_return));
 
       set_ip(vm.get_mem().read_word(int_no * sizeof(word_t)));
+  }
+
+  void cpu::raise_error(const word_t error_code) {
+    perform_int(error_code);
   }
 }
