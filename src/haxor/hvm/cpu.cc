@@ -315,7 +315,14 @@ namespace haxor {
       regs.add(reg_stack, -sizeof(word_t));
       vm.get_mem().write_word(regs.read(reg_stack), regs.read(reg_return));
 
-      set_ip(vm.get_mem().read_word(int_no * sizeof(word_t)));
+      word_t isr_ip = vm.get_mem().read_word(int_no * sizeof(word_t));
+      if (isr_ip == 0) {
+        // Check against 0 is fine because no code can reside under address 0.
+        std::cout << "Interrupt " << int_no << " has been requested but ISR is missing, aborting VM..." << std::endl;
+        vm.exit(1);
+      }
+
+      set_ip(isr_ip);
   }
 
   void cpu::raise_error(const word_t error_code) {
