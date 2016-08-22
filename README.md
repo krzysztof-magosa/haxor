@@ -319,6 +319,29 @@ li $a0, 3
 syscall
 ```
 
+## Interrupts
+Haxor VM provides 128 interrupts, first 32 are reserved for exceptions and internal things, you can use rest
+for your needs e.g. timers. To assign interrupt service routine to specific interrupt you need
+to put ISR address into relevant cell of interrupt vector table.
+
+The formula is
+```
+ivr_cell_address = interrupt_number * 8
+```
+
+Example of assigning ISR to interrupt 32
+```
+isr32:
+  # isr body
+  reti
+
+main:
+  la $t0, isr32
+  sw $zero, 256, $t0 # 32 * 8 = 256
+
+  # rest of code
+```
+
 ## CPU Exceptions
 In some situations Haxor VM can raise exception.
 Every exception type has assigned specific interrupt.
