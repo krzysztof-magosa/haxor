@@ -260,7 +260,7 @@ namespace haxor {
       break;
 
     case cmd_int:
-      perform_int(regs.read(op.reg1));
+      perform_int(op.imm);
       break;
 
     case cmd_reti:
