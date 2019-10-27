@@ -95,7 +95,7 @@ Please always use aliases and not register numbers.
 <img src="media/memory.png" width="75%">
 
 |Segment|Read              |Write             |Execute           |
-|-------|------------------|------------------|------------------|c
+|-------|------------------|------------------|------------------|
 |ivt    |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
 |code   |:no_entry_sign:   |:no_entry_sign:   |:white_check_mark:|
 |data   |:white_check_mark:|:white_check_mark:|:no_entry_sign:   |
